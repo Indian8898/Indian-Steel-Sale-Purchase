@@ -135,13 +135,14 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 /* Modal */
 .modal-bg{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.4);display:none;align-items:flex-end}
 .modal-bg.open{display:flex}
-.modal-sheet{background:var(--bg);border-radius:24px 24px 0 0;width:100%;max-height:92vh;overflow-y:auto;padding-bottom:calc(24px + var(--safe-b));animation:slideUp .3s cubic-bezier(.25,.8,.25,1)}
+.modal-sheet{background:var(--bg);border-radius:24px 24px 0 0;width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;animation:slideUp .3s cubic-bezier(.25,.8,.25,1)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:36px;height:4px;background:#D1D1D6;border-radius:4px;margin:12px auto 4px}
-.modal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 0}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 0;flex-shrink:0}
 .modal-header h2{font-size:17px;font-weight:700}
 .modal-close{font-size:13px;color:var(--blue);font-weight:600;padding:4px 0}
-.modal-body{padding:16px 20px 0}
+.modal-body{padding:16px 20px 0;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(20px + var(--safe-b))}
+.modal-footer{flex-shrink:0;padding:10px 20px calc(20px + var(--safe-b));background:var(--bg)}
+.modal-footer .btn-primary{margin-top:0}
 /* Form */
 .form-section{margin-top:16px}
 .form-section-title{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
@@ -188,7 +189,7 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .sale-mini-card{flex:1;background:var(--card);border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:5px;text-align:left;cursor:pointer;border:none;font-family:inherit}
 .sale-mini-label{font-size:11px;font-weight:600;color:var(--txt2);display:flex;align-items:center;gap:4px}
 .sale-mini-val{font-size:14px;font-weight:700;color:var(--txt)}
-.modal-header-3{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 0;position:relative}
+.modal-header-3{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 0;position:relative;flex-shrink:0}
 .modal-header-3 h2{font-size:17px;font-weight:700;position:absolute;left:50%;transform:translateX(-50%)}
 .modal-save{font-size:14px;font-weight:600;color:var(--blue);padding:4px 0}
 .modal-save:disabled{color:#C7C7CC}
@@ -338,7 +339,7 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 </div>
 
 <!-- MODAL: ADD SALE -->
-<div class="modal-bg" id="modal-sale"><div class="modal-sheet"><div class="modal-handle"></div>
+<div class="modal-bg" id="modal-sale"><div class="modal-sheet">
   <div class="modal-header-3">
     <button class="modal-close" onclick="closeModal('sale')">Cancel</button>
     <h2>New Sale</h2>
@@ -398,12 +399,14 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
       </div>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
+  </div>
+  <div class="modal-footer">
     <button class="btn-primary" onclick="saveSale()">Save Sale</button>
   </div>
 </div></div>
 
 <!-- MODAL: ADD PURCHASE -->
-<div class="modal-bg" id="modal-purchase"><div class="modal-sheet"><div class="modal-handle"></div>
+<div class="modal-bg" id="modal-purchase"><div class="modal-sheet">
   <div class="modal-header-3">
     <button class="modal-close" onclick="closeModal('purchase')">Cancel</button>
     <h2>New Purchase</h2>
@@ -463,12 +466,14 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
       </div>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
+  </div>
+  <div class="modal-footer">
     <button class="btn-primary" style="background:var(--orange);box-shadow:0 4px 14px rgba(255,149,0,.3)" onclick="savePurchase()">Save Purchase</button>
   </div>
 </div></div>
 
 <!-- MODAL: ADD ADVANCE -->
-<div class="modal-bg" id="modal-advance"><div class="modal-sheet"><div class="modal-handle"></div>
+<div class="modal-bg" id="modal-advance"><div class="modal-sheet">
   <div class="modal-header-3">
     <button class="modal-close" onclick="closeModal('advance')">Cancel</button>
     <h2>Advance Payment</h2>
@@ -528,6 +533,8 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
       </div>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
+  </div>
+  <div class="modal-footer">
     <button class="btn-primary" style="background:var(--green);box-shadow:0 4px 14px rgba(52,199,89,.3)" onclick="saveAdvance()">Save Advance</button>
   </div>
 </div></div>
@@ -537,7 +544,7 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 <div class="sync-toast" id="sync-toast"></div>
 
 <!-- MODAL: GITHUB SYNC SETUP -->
-<div class="modal-bg" id="modal-sync"><div class="modal-sheet"><div class="modal-handle"></div>
+<div class="modal-bg" id="modal-sync"><div class="modal-sheet">
   <div class="modal-header"><h2>&#9729; GitHub Sync</h2><button class="modal-close" onclick="closeModal('sync')">Done</button></div>
   <div class="modal-body">
     <p class="sync-info">Auto-sync saves your data to GitHub every time you add a sale, purchase or advance. Any device with the app will load the latest data automatically.<br><br>
