@@ -21,6 +21,7 @@ html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--
 button{font-family:inherit;border:none;cursor:pointer;background:none}
 input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:none;background:none}
 #app{max-width:480px;margin:0 auto;height:100vh;height:100dvh;position:relative;background:var(--bg);display:flex;flex-direction:column}
+body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;background:rgba(255,255,255,.95);pointer-events:none;z-index:99}
 .page{display:none;flex-direction:column;flex:1;overflow:hidden}
 .page.active{display:flex}
 .page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scrollbar-width:none;padding:0 16px calc(var(--nav-h) + var(--safe-b) + 16px)}
@@ -169,6 +170,7 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .empty-state span{font-size:11px}
 @media print{.bottom-nav,.fab-overlay,.fab-menu,.modal-bg{display:none!important}body{background:#fff}}
 @media (display-mode: standalone){
+  body::after{height:calc(var(--safe-b) + 22px)}
   .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 18px)}
   .bottom-nav{align-items:center;padding:10px clamp(12px,4vw,18px) calc(var(--safe-b) + 6px);min-height:calc(var(--nav-h) + var(--safe-b) + 26px)}
   .bottom-nav::before,.bottom-nav::after{display:block}
@@ -178,6 +180,7 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
   .nav-fab-wrap{align-items:flex-start;height:calc(var(--nav-h) + 8px);top:0}
   .nav-fab{position:relative;top:-12px}
 }
+body.standalone::after{height:calc(var(--safe-b) + 22px)}
 body.standalone .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 18px)}
 body.standalone .bottom-nav{align-items:center;padding:10px clamp(12px,4vw,18px) calc(var(--safe-b) + 6px);min-height:calc(var(--nav-h) + var(--safe-b) + 26px)}
 body.standalone .bottom-nav::before,body.standalone .bottom-nav::after{display:block}
@@ -1112,7 +1115,7 @@ function advCard(r){
   return`<div class="adv-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:2px">${r.receiptNumber}</div><div style="font-size:15px;font-weight:600">${r.customerName}${r.phone?" · "+r.phone:""}</div></div><div style="font-size:16px;font-weight:700;color:var(--green)">${fmt(r.advanceAmount)}</div></div>${r.itemName?`<div style="font-size:10px;color:var(--txt2);margin-top:4px">&#128230; ${r.itemName}${r.rate?" · ₹"+r.rate+"/unit":""}</div>`:""}<div style="font-size:10px;color:var(--txt2);margin-top:6px">${fmtDate(r.date)} · ${fmtTime(r.date)}</div></div>`;
 }
 function dueCard(t){
-  return`<div class="due-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:15px;font-weight:600">${t.party}</div>${t.phone?`<div style="font-size:10px;color:var(--txt2)">${t.phone}</div>`:""}</div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--red)">${fmt(t.dueAmount)}</div><span style="font-size:9px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:4px">DUE</span></div></div><div style="font-size:11px;color:var(--txt2);margin-top:6px">${t.notes?t.notes+" · ":""}${fmtDate(t.date)}</div><div style="display:flex;gap:14px;margin-top:8px"><div><div style="font-size:9px;color:var(--txt2)">Total</div><div style="font-size:13px;font-weight:700">${fmt(t.totalAmount)}</div></div>${t.cashPayment>0?`<div><div style="font-size:9px;color:var(--txt2)">Cash Paid</div><div style="font-size:13px;font-weight:700;color:var(--blue)">${fmt(t.cashPayment)}</div></div>`:""}</div></div>`;
+  return txCard(t);
 }
 
 // ─── SALE FORM (card-based) ──────────────────────────────────────────────────
