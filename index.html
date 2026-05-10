@@ -20,6 +20,9 @@
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--txt)}
 button{font-family:inherit;border:none;cursor:pointer;background:none}
 input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:none;background:none}
+input[type="number"]{-moz-appearance:textfield;appearance:textfield}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 #app{max-width:480px;margin:0 auto;height:100vh;height:100dvh;position:relative;background:var(--bg);display:flex;flex-direction:column}
 body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;background:rgba(255,255,255,.95);pointer-events:none;z-index:99}
 .page{display:none;flex-direction:column;flex:1;overflow:hidden}
@@ -29,10 +32,10 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;backgroun
 /* Header */
 .header{background:var(--bg);padding:calc(var(--safe-t) + 14px) 20px 10px;z-index:10;flex-shrink:0}
 .header-inner{display:flex;align-items:center;justify-content:space-between}
-.header-left{display:flex;align-items:center;gap:10px}
+.header-left{display:flex;align-items:center}
 .header-brand-icon{width:38px;height:38px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .header-title{font-size:20px;font-weight:700;color:var(--blue);letter-spacing:-.3px}
-.header-right{display:flex;align-items:center;gap:8px}
+.header-right{display:flex;align-items:center;gap:8px;margin-left:auto}
 .notif-btn{position:relative;width:38px;height:38px;background:var(--card);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .notif-dot{position:absolute;top:7px;right:7px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)}
 /* Sync button */
@@ -126,7 +129,7 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;backgroun
 .nav-fab:active{transform:scale(.92)}
 .nav-fab.open{transform:rotate(45deg)}
 /* FAB overlay */
-.fab-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .25s}
+.fab-overlay{position:fixed;inset:0;z-index:200;background:rgba(15,23,42,.34);backdrop-filter:blur(18px) saturate(1.08);-webkit-backdrop-filter:blur(18px) saturate(1.08);opacity:0;pointer-events:none;transition:opacity .25s}
 .fab-overlay.visible{opacity:1;pointer-events:all}
 .fab-menu{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 18px);left:50%;transform:translateX(-50%) translateY(20px);width:calc(100% - 48px);max-width:400px;display:flex;flex-direction:column;gap:10px;z-index:201;opacity:0;pointer-events:none;transition:all .25s}
 .fab-menu.visible{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
@@ -136,7 +139,7 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;backgroun
 .fab-action-text .sub{font-size:11px;color:var(--txt2);margin-top:1px}
 .fab-chevron{font-size:18px;color:#C7C7CC;margin-left:auto}
 /* Modal */
-.modal-bg{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.4);display:none;align-items:flex-end}
+.modal-bg{position:fixed;inset:0;z-index:300;background:rgba(15,23,42,.30);backdrop-filter:blur(18px) saturate(1.08);-webkit-backdrop-filter:blur(18px) saturate(1.08);display:none;align-items:flex-end}
 .modal-bg.open{display:flex}
 .modal-sheet{background:var(--bg);border-radius:24px 24px 0 0;width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;animation:slideUp .3s cubic-bezier(.25,.8,.25,1)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -223,7 +226,7 @@ body.standalone .nav-fab{position:relative;top:-12px}
 .modal-save{font-size:14px;font-weight:600;color:var(--blue);padding:4px 0}
 .modal-save:disabled{color:#C7C7CC}
 /* Sale overlays */
-.sale-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;padding:32px 16px 20px;overflow-y:auto}
+.sale-overlay{position:fixed;inset:0;z-index:400;background:rgba(15,23,42,.34);backdrop-filter:blur(18px) saturate(1.08);-webkit-backdrop-filter:blur(18px) saturate(1.08);display:none;align-items:flex-start;justify-content:center;padding:32px 16px 20px;overflow-y:auto}
 .sale-overlay.open{display:flex}
 .sale-ov-card{background:#fff;border-radius:24px;width:100%;max-width:440px;display:flex;flex-direction:column;overflow:hidden;margin:auto}
 .sale-ov-header{padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between}
@@ -246,10 +249,17 @@ body.standalone .nav-fab{position:relative;top:-12px}
 .prod-field{flex:1;display:flex;flex-direction:column;gap:3px}
 .prod-field-lbl{font-size:9px;font-weight:700;color:var(--txt2);letter-spacing:.5px;text-transform:uppercase}
 .prod-field-box{background:#fff;border-radius:9px;padding:7px 9px;display:flex;align-items:center;gap:3px;min-height:36px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.prod-field-box.qty-box{gap:8px}
 .prod-field-box.amt{background:rgba(0,122,255,.07)}
 .prod-field-box input{flex:1;font-size:13px;font-weight:600;background:none;border:none;outline:none;font-family:inherit;min-width:0;width:100%}
 .prod-field-box .amt-inp{color:var(--blue)}
-.unit-sel{font-size:8px;font-weight:700;color:var(--blue);background:rgba(0,122,255,.12);padding:2px 4px;border-radius:4px;border:none;outline:none;cursor:pointer;flex-shrink:0}
+.unit-btn{display:flex;align-items:center;justify-content:flex-end;margin-left:auto;font-size:10px;font-weight:700;color:var(--blue);background:none;padding:0;border:none;outline:none;cursor:pointer;flex-shrink:0;text-align:right}
+.unit-btn.orange{color:var(--orange)}
+.unit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.unit-option{padding:12px;border-radius:12px;border:none;background:rgba(0,122,255,.08);color:var(--blue);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.unit-option.sel{background:var(--blue);color:#fff}
+.header-action{font-size:13px;font-weight:600;color:var(--blue)}
+.header-action.orange{color:var(--orange)}
 /* Payment overlay */
 .pay-section-lbl{font-size:11px;font-weight:700;color:var(--txt2);letter-spacing:.4px;text-transform:uppercase;margin:12px 0 7px;display:flex;align-items:center;gap:5px}
 .pay-total-box{background:rgba(52,199,89,.08);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
@@ -282,9 +292,6 @@ body.standalone .nav-fab{position:relative;top:-12px}
   <div class="header">
     <div class="header-inner">
       <div class="header-left">
-        <div class="header-brand-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-        </div>
         <span class="header-title">Indian Steel</span>
       </div>
       <div class="header-right">
@@ -292,11 +299,6 @@ body.standalone .nav-fab{position:relative;top:-12px}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="notif-dot"></span>
         </button>
-        <button class="sync-btn" id="sync-btn" onclick="openSyncSetup()" title="Sync">
-          <svg id="sync-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-          <span class="sync-dot" id="sync-dot"></span>
-        </button>
-        <div class="avatar">IS</div>
       </div>
     </div>
   </div>
@@ -391,7 +393,7 @@ body.standalone .nav-fab{position:relative;top:-12px}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
           Sale No.
         </div>
-        <div class="sale-mini-val" id="s-saleno-display">#01</div>
+        <div class="sale-mini-val" id="s-saleno-display">#1</div>
       </button>
     </div>
     <!-- Customer card -->
@@ -610,7 +612,7 @@ body.standalone .nav-fab{position:relative;top:-12px}
     <div class="sale-ov-body" style="padding:16px">
       <div style="background:#F5F5FA;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center;gap:4px">
         <span style="font-size:20px;color:var(--txt2)">#</span>
-        <input id="s-saleno-input" type="number" style="font-size:24px;font-weight:700;width:70px;background:none;border:none;outline:none;text-align:center;font-family:inherit;color:var(--txt)" placeholder="01">
+        <input id="s-saleno-input" type="number" inputmode="numeric" pattern="[0-9]*" style="font-size:24px;font-weight:700;width:70px;background:none;border:none;outline:none;text-align:center;font-family:inherit;color:var(--txt)" placeholder="1">
         <span id="s-saleno-suffix" style="font-size:17px;color:var(--txt2)">-25/26</span>
       </div>
     </div>
@@ -665,12 +667,28 @@ body.standalone .nav-fab{position:relative;top:-12px}
 <!-- All Products overlay -->
 <div class="sale-overlay" id="sov-allprods" style="z-index:420">
   <div class="sale-ov-card">
-    <div class="sale-ov-header"><span class="sale-ov-title">All Products</span></div>
+    <div class="sale-ov-header">
+      <span class="sale-ov-title">All Products</span>
+      <button class="header-action" onclick="openAddProductPopup('sale')">Add</button>
+    </div>
     <div class="sale-ov-body">
       <div class="prod-pills-grid" id="s-all-prod-pills"></div>
     </div>
     <div class="sale-ov-footer">
       <button class="sale-ov-btn save" style="max-width:100%" onclick="closeAllProds()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Unit picker overlay -->
+<div class="sale-overlay" id="sov-unit" style="z-index:430">
+  <div class="sale-ov-card" style="max-width:320px">
+    <div class="sale-ov-header"><span class="sale-ov-title">Select Unit</span></div>
+    <div class="sale-ov-body">
+      <div class="unit-grid" id="s-unit-options"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" style="max-width:100%" onclick="closeSaleUnitPicker()">Close</button>
     </div>
   </div>
 </div>
@@ -790,7 +808,10 @@ body.standalone .nav-fab{position:relative;top:-12px}
 <!-- Purchase All Products overlay -->
 <div class="sale-overlay" id="sov-pallprods" style="z-index:420">
   <div class="sale-ov-card">
-    <div class="sale-ov-header"><span class="sale-ov-title">All Products</span></div>
+    <div class="sale-ov-header">
+      <span class="sale-ov-title">All Products</span>
+      <button class="header-action orange" onclick="openAddProductPopup('purchase')">Add</button>
+    </div>
     <div class="sale-ov-body">
       <div class="prod-pills-grid" id="p-all-prod-pills"></div>
     </div>
@@ -888,22 +909,49 @@ body.standalone .nav-fab{position:relative;top:-12px}
 <!-- Advance Item overlay -->
 <div class="sale-overlay" id="sov-aitem">
   <div class="sale-ov-card">
-    <div class="sale-ov-header"><span class="sale-ov-title">Item (Optional)</span></div>
+    <div class="sale-ov-header">
+      <span class="sale-ov-title">Product Details</span>
+      <button onclick="openAllAProds()" style="font-size:13px;font-weight:600;color:var(--blue)">View All</button>
+    </div>
     <div class="sale-ov-body">
-      <div class="cust-field">
-        <label>Item Name</label>
-        <input id="a-item-name" type="text" placeholder="e.g. TMT 12mm, MS Pipe..." autocomplete="off">
-      </div>
-      <div class="cust-field">
-        <label>Rate (&#8377;/unit)</label>
-        <input id="a-item-rate" type="number" inputmode="decimal" placeholder="0">
-      </div>
-      <div style="font-size:11px;font-weight:700;color:var(--txt2);margin:8px 0 6px;letter-spacing:.4px;text-transform:uppercase">Quick Select</div>
       <div class="prod-pills-grid" id="a-prod-pills"></div>
     </div>
     <div class="sale-ov-footer">
       <button class="sale-ov-btn cancel" onclick="closeAdvancePanel('item')">Close</button>
-      <button class="sale-ov-btn save" style="background:var(--green)" onclick="saveAdvItem()">Save</button>
+      <button class="sale-ov-btn save" onclick="saveAdvItem()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Advance All Products overlay -->
+<div class="sale-overlay" id="sov-aallprods" style="z-index:420">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header">
+      <span class="sale-ov-title">All Products</span>
+      <button class="header-action" onclick="openAddProductPopup('advance')">Add</button>
+    </div>
+    <div class="sale-ov-body">
+      <div class="prod-pills-grid" id="a-all-prod-pills"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn save" style="max-width:100%" onclick="closeAllAProds()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Product overlay -->
+<div class="sale-overlay" id="sov-addproduct" style="z-index:440">
+  <div class="sale-ov-card" style="max-width:360px">
+    <div class="sale-ov-header"><span class="sale-ov-title">Add Product</span></div>
+    <div class="sale-ov-body">
+      <div class="cust-field">
+        <label>Product Name</label>
+        <input id="new-product-name" type="text" placeholder="e.g. New Product Name" autocomplete="off">
+      </div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeAddProductPopup()">Cancel</button>
+      <button class="sale-ov-btn save" onclick="saveNewProduct()">Save</button>
     </div>
   </div>
 </div>
@@ -1119,22 +1167,86 @@ function dueCard(t){
 }
 
 // ─── SALE FORM (card-based) ──────────────────────────────────────────────────
-const SALE_PRODS = [
+const DEFAULT_SALE_PRODS = [
   "Old MS Round Pipe","Old MS Square Pipe","Old G.I. Round Pipe","Old G.I. Square Pipe",
   "TMT","Old Angle","Old Channel","Old T Angle",
   "Old Profile Sheet","Old Naali Sheet",
   "New MS Round Pipe","New MS Square Pipe","New G.I. Round Pipe","New G.I. Square Pipe",
   "New Profile Sheet","New Naali Sheet"
 ];
+let SALE_PRODS = [];
 const PAY_ACCTS = ["Sakira","Nazmeen","Ahsan Ali","Sahajad","Ajam","Sahbe"];
 const S_UNITS   = ["Kg","Pcs","Ft","Mtr","Bundle","MT"];
 
 let sDate=new Date(), sNoOvr="", sCustName="", sCustMobile="";
 let sProds={};  // { name: {qty, unit, rate, amount, manual} }
 let sOnlineAcct="Sakira", sCashAcct="Sakira";
+let sUnitTarget="";
+let pUnitTarget="";
+let addProductTarget="sale";
+
+function loadSaleProducts(){
+  const saved=JSON.parse(localStorage.getItem("ss_prod_catalog")||"null");
+  if(Array.isArray(saved)&&saved.length){
+    SALE_PRODS=[...new Set(saved.map(v=>String(v||"").trim()).filter(Boolean))];
+  }else{
+    SALE_PRODS=[...DEFAULT_SALE_PRODS];
+  }
+}
+
+function saveSaleProducts(){
+  localStorage.setItem("ss_prod_catalog",JSON.stringify(SALE_PRODS));
+}
+
+function normalizeProductName(name){
+  return String(name||"").replace(/\s+/g," ").trim();
+}
+
+function openAddProductPopup(target){
+  addProductTarget=target;
+  const input=document.getElementById("new-product-name");
+  if(input) input.value="";
+  document.getElementById("sov-addproduct").classList.add("open");
+  setTimeout(()=>{
+    if(input) input.focus();
+  },80);
+}
+
+function closeAddProductPopup(){
+  document.getElementById("sov-addproduct").classList.remove("open");
+}
+
+function refreshProductCatalogViews(target){
+  if(target==="sale"){
+    renderProdPills("s-all-prod-pills",true);
+    renderProdPills();
+    renderProdEntries();
+    return;
+  }
+  if(target==="purchase"){
+    renderPProdPills("p-all-prod-pills",true);
+    renderPProdPills();
+    renderPProdEntries();
+    return;
+  }
+  renderAdvProdPills("a-all-prod-pills",true);
+  renderAdvProdPills();
+}
+
+function saveNewProduct(){
+  const input=document.getElementById("new-product-name");
+  const name=normalizeProductName(input?.value);
+  if(!name) return;
+  if(!SALE_PRODS.some(p=>p.toLowerCase()===name.toLowerCase())){
+    SALE_PRODS.push(name);
+    saveSaleProducts();
+  }
+  refreshProductCatalogViews(addProductTarget);
+  closeAddProductPopup();
+}
 
 function sFY(d){const y=d.getFullYear(),m=d.getMonth()+1;return m>=4?`${y%100}/${(y+1)%100}`:`${(y-1)%100}/${y%100}`}
-function sSaleNo(){const n=DB.transactions.filter(t=>t.type==="sale").length+1;const num=sNoOvr||String(n).padStart(2,"0");return`${num}-${sFY(sDate)}`}
+function sSaleNo(){const n=DB.transactions.filter(t=>t.type==="sale").length+1;const num=sNoOvr||String(n);return`${num}-${sFY(sDate)}`}
 function sGrandTotal(){return Object.values(sProds).reduce((s,p)=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return s+a},0)}
 
 function initSaleForm(){
@@ -1182,9 +1294,15 @@ function openSalePanel(panel){
     document.getElementById("s-date-input").value=sDate.toISOString().split("T")[0];
     document.getElementById("sov-date").classList.add("open");
   }else if(panel==="saleno"){
+    const n=DB.transactions.filter(t=>t.type==="sale").length+1;
     document.getElementById("s-saleno-suffix").textContent=`-${sFY(sDate)}`;
-    document.getElementById("s-saleno-input").value=sNoOvr;
+    const input=document.getElementById("s-saleno-input");
+    input.value=sNoOvr||String(n);
     document.getElementById("sov-saleno").classList.add("open");
+    setTimeout(()=>{
+      input.focus();
+      input.select();
+    },80);
   }else if(panel==="customer"){
     document.getElementById("s-cust-name").value=sCustName;
     document.getElementById("s-cust-mobile").value=sCustMobile;
@@ -1218,7 +1336,13 @@ function saveSaleDate(){
 }
 
 function saveSaleNo(){
-  sNoOvr=document.getElementById("s-saleno-input").value.trim();
+  const raw=document.getElementById("s-saleno-input").value.trim();
+  if(!raw){
+    sNoOvr="";
+  }else{
+    const normalized=String(parseInt(raw,10));
+    sNoOvr=normalized==="NaN"?"":normalized;
+  }
   closeSalePanel("saleno");
 }
 
@@ -1276,7 +1400,6 @@ function renderProdEntries(){
   el.innerHTML=`<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--txt)">${names.length} Selected</div>`+
     names.map(name=>{
       const p=sProds[name];
-      const unitOpts=S_UNITS.map(u=>`<option${u===p.unit?" selected":""}>${u}</option>`).join("");
       return`<div class="prod-entry">
         <div class="prod-entry-top">
           <span class="prod-entry-name">${name}</span>
@@ -1285,9 +1408,11 @@ function renderProdEntries(){
         <div class="prod-fields">
           <div class="prod-field">
             <div class="prod-field-lbl">QTY</div>
-            <div class="prod-field-box" style="gap:4px">
+            <div class="prod-field-box qty-box">
               <input type="number" inputmode="decimal" placeholder="0" value="${p.qty}" oninput="updProd('${name.replace(/'/g,"\'")}','qty',this.value)">
-              <select class="unit-sel" onchange="updProd('${name.replace(/'/g,"\'")}','unit',this.value)">${unitOpts}</select>
+              <button class="unit-btn" type="button" onclick="openSaleUnitPicker('${name.replace(/'/g,"\\'")}')">
+                <span>${p.unit}</span>
+              </button>
             </div>
           </div>
           <div class="prod-field">
@@ -1307,6 +1432,27 @@ function renderProdEntries(){
         </div>
       </div>`;
     }).join("");
+}
+
+function openSaleUnitPicker(name){
+  sUnitTarget=name;
+  const current=sProds[name]?.unit||"Kg";
+  document.getElementById("s-unit-options").innerHTML=S_UNITS.map(u=>`<button class="unit-option${u===current?" sel":""}" onclick="pickSaleUnit('${u}')">${u}</button>`).join("");
+  document.getElementById("sov-unit").classList.add("open");
+}
+
+function closeSaleUnitPicker(){
+  sUnitTarget="";
+  pUnitTarget="";
+  document.getElementById("sov-unit").classList.remove("open");
+}
+
+function pickSaleUnit(unit){
+  if(sUnitTarget&&sProds[sUnitTarget]){
+    sProds[sUnitTarget].unit=unit;
+    renderProdEntries();
+  }
+  closeSaleUnitPicker();
 }
 
 function toggleProd(name){
@@ -1505,16 +1651,30 @@ function renderPProdEntries(){
   el.innerHTML=`<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--txt)">${names.length} Selected</div>`+
     names.map(name=>{
       const p=pProds[name];
-      const unitOpts=S_UNITS.map(u=>`<option${u===p.unit?" selected":""}>${u}</option>`).join("");
       return`<div class="prod-entry">
         <div class="prod-entry-top"><span class="prod-entry-name">${name}</span><button class="prod-entry-del" onclick="togglePProd('${name.replace(/'/g,"\\'")}');renderPProdPills();renderPProdEntries()">&#215;</button></div>
         <div class="prod-fields">
-          <div class="prod-field"><div class="prod-field-lbl">QTY</div><div class="prod-field-box" style="gap:4px"><input type="number" inputmode="decimal" placeholder="0" value="${p.qty}" oninput="updPProd('${name.replace(/'/g,"\\'")}','qty',this.value)"><select class="unit-sel" style="color:var(--orange);background:rgba(255,149,0,.12)" onchange="updPProd('${name.replace(/'/g,"\\'")}','unit',this.value)">${unitOpts}</select></div></div>
+          <div class="prod-field"><div class="prod-field-lbl">QTY</div><div class="prod-field-box qty-box"><input type="number" inputmode="decimal" placeholder="0" value="${p.qty}" oninput="updPProd('${name.replace(/'/g,"\\'")}','qty',this.value)"><button class="unit-btn orange" type="button" onclick="openPurchaseUnitPicker('${name.replace(/'/g,"\\'")}')"><span>${p.unit}</span></button></div></div>
           <div class="prod-field"><div class="prod-field-lbl">RATE</div><div class="prod-field-box"><span style="font-size:11px;color:var(--txt2)">&#8377;</span><input type="number" inputmode="decimal" placeholder="0" value="${p.rate}" oninput="updPProd('${name.replace(/'/g,"\\'")}','rate',this.value)"></div></div>
           <div class="prod-field"><div class="prod-field-lbl">AMOUNT</div><div class="prod-field-box" style="background:rgba(255,149,0,.07)"><span style="font-size:11px;color:var(--txt2)">&#8377;</span><input type="number" inputmode="decimal" placeholder="0" value="${p.amount}" oninput="updPProd('${name.replace(/'/g,"\\'")}','amount',this.value)" style="color:var(--orange)"></div></div>
         </div>
       </div>`;
     }).join("");
+}
+
+function openPurchaseUnitPicker(name){
+  pUnitTarget=name;
+  const current=pProds[name]?.unit||"Kg";
+  document.getElementById("s-unit-options").innerHTML=S_UNITS.map(u=>`<button class="unit-option${u===current?" sel":""}" onclick="pickPurchaseUnit('${u}')">${u}</button>`).join("");
+  document.getElementById("sov-unit").classList.add("open");
+}
+
+function pickPurchaseUnit(unit){
+  if(pUnitTarget&&pProds[pUnitTarget]){
+    pProds[pUnitTarget].unit=unit;
+    renderPProdEntries();
+  }
+  closeSaleUnitPicker();
 }
 
 function togglePProd(name){
@@ -1569,6 +1729,7 @@ function savePurchase(){
 // ─── ADVANCE FORM (card-based) ──────────────────────────────────────────────
 let aDate=new Date(), aReceiptNoOvr="", aCustName="", aCustMobile="";
 let aItemName="", aItemRate="";
+let aDraftItemName="", aDraftItemRate="";
 
 function aFY(d){const y=d.getFullYear(),m=d.getMonth()+1;return m>=4?`${y%100}/${(y+1)%100}`:`${(y-1)%100}/${y%100}`}
 function aReceiptNo(){const n=DB.advances.length+1;const num=aReceiptNoOvr||String(n).padStart(2,"0");return`ADV#${num}-${aFY(aDate)}`}
@@ -1615,8 +1776,8 @@ function openAdvancePanel(panel){
     document.getElementById("a-cust-sugg").style.display="none";
     document.getElementById("sov-acustomer").classList.add("open");
   }else if(panel==="item"){
-    document.getElementById("a-item-name").value=aItemName;
-    document.getElementById("a-item-rate").value=aItemRate;
+    aDraftItemName=aItemName;
+    aDraftItemRate=aItemRate;
     renderAdvProdPills();
     document.getElementById("sov-aitem").classList.add("open");
   }else if(panel==="payment"){
@@ -1662,17 +1823,31 @@ function saveAdvCustDetails(){
   closeAdvancePanel("customer");
 }
 
-function renderAdvProdPills(){
-  document.getElementById("a-prod-pills").innerHTML=SALE_PRODS.slice(0,8).map(p=>`<button class="prod-pill" style="background:rgba(88,86,214,.08);color:var(--purple)" onclick="pickAdvItem('${p.replace(/'/g,"\\'")}');document.querySelectorAll('#a-prod-pills .prod-pill').forEach(b=>b.style.background='rgba(88,86,214,.08)');this.style.background='var(--purple)';this.style.color='#fff'">${p}</button>`).join("");
+function renderAdvProdPills(container="a-prod-pills",all=false){
+  const list=all?SALE_PRODS:SALE_PRODS.slice(0,8);
+  document.getElementById(container).innerHTML=list.map(p=>{
+    const sel=aDraftItemName===p;
+    return `<button class="prod-pill${sel?" sel":""}" onclick="pickAdvItem('${p.replace(/'/g,"\\'")}');renderAdvProdPills();${all?"renderAdvProdPills('a-all-prod-pills',true);":""}" style="${sel?"":"background:rgba(0,122,255,.08);color:var(--blue)"}">${p}</button>`;
+  }).join("");
 }
 
 function pickAdvItem(name){
-  document.getElementById("a-item-name").value=name;
+  aDraftItemName=name;
+}
+
+function openAllAProds(){
+  renderAdvProdPills("a-all-prod-pills",true);
+  document.getElementById("sov-aallprods").classList.add("open");
+}
+
+function closeAllAProds(){
+  document.getElementById("sov-aallprods").classList.remove("open");
+  renderAdvProdPills();
 }
 
 function saveAdvItem(){
-  aItemName=document.getElementById("a-item-name").value.trim();
-  aItemRate=document.getElementById("a-item-rate").value.trim();
+  aItemName=aDraftItemName.trim();
+  aItemRate=aDraftItemRate.trim();
   closeAdvancePanel("item");
 }
 
@@ -1835,7 +2010,12 @@ function testSync(){githubPull(false);}
   if(localStorage.getItem("gh_token")){setSyncDot("busy");await githubPull(false);}
 })();
 
-if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./sw.js?v=32")
+    .then(reg=>reg.update())
+    .catch(()=>{});
+}
+loadSaleProducts();
 renderDashboard();
 </script>
 </body>

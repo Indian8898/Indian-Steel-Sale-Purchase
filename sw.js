@@ -1,4 +1,4 @@
-const CACHE = 'steelshop-v31';
+const CACHE = 'steelshop-v32';
 const ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e =>
@@ -11,6 +11,24 @@ self.addEventListener('activate', e =>
       .then(() => self.clients.claim())
   )
 );
-self.addEventListener('fetch', e =>
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('./index.html'))))
-);
+self.addEventListener('fetch', e => {
+  const req = e.request;
+  const isHTML =
+    req.mode === 'navigate' ||
+    (req.headers.get('accept') || '').includes('text/html');
+
+  if (isHTML) {
+    e.respondWith(
+      fetch(req)
+        .then(res => {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put('./index.html', copy));
+          return res;
+        })
+        .catch(() => caches.match(req).then(r => r || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  e.respondWith(caches.match(req).then(r => r || fetch(req).catch(() => caches.match('./index.html'))));
+});
