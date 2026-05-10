@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SteelShop">
+<meta name="theme-color" content="#F2F2F7">
+<link rel="manifest" href="manifest.json">
+<title>Steel Shop Manager</title>
+<style>
+:root{
+  --blue:#007AFF;--orange:#FF9500;--red:#FF3B30;--green:#34C759;
+  --purple:#5856D6;--bg:#F2F2F7;--card:#fff;--sep:rgba(0,0,0,.08);
+  --txt:#000;--txt2:#8E8E93;--nav-h:80px;
+  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--txt)}
+button{font-family:inherit;border:none;cursor:pointer;background:none}
+input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:none;background:none}
+#app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;background:var(--bg)}
+.page{display:none;flex-direction:column;min-height:100vh;padding-bottom:calc(var(--nav-h) + 8px)}
+.page.active{display:flex}
+.page-scroll{flex:1;overflow-y:auto;padding:0 16px 8px}
+/* Header */
+.header{background:var(--bg);padding:calc(var(--safe-t) + 14px) 20px 10px;position:sticky;top:0;z-index:10}
+.header-inner{display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-brand-icon{width:38px;height:38px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.header-title{font-size:20px;font-weight:700;color:var(--blue);letter-spacing:-.3px}
+.header-right{display:flex;align-items:center;gap:8px}
+.notif-btn{position:relative;width:38px;height:38px;background:var(--card);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.notif-dot{position:absolute;top:7px;right:7px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;letter-spacing:.5px}
+/* Today card */
+.today-card{background:var(--card);border-radius:20px;padding:18px;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;margin-top:4px}
+.today-left{flex:1;min-width:0}
+.today-label-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.today-sales-icon{width:26px;height:26px;border-radius:50%;background:rgba(0,122,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.today-label{font-size:13px;font-weight:600;color:var(--txt2)}
+.today-amount{font-size:30px;font-weight:700;color:var(--txt);letter-spacing:-.5px;margin-bottom:10px;line-height:1.1}
+.today-pay-row{display:flex;flex-direction:column;gap:5px}
+.today-pay-item{font-size:12px;color:var(--txt2);display:flex;align-items:center;gap:4px}
+.today-pay-item .pv{color:var(--blue);font-weight:700;margin-left:4px}
+/* 7-day chart */
+.today-right{width:115px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end}
+.chart-label{font-size:11px;color:var(--txt2);margin-bottom:6px;align-self:flex-start}
+.mini-chart{display:flex;align-items:flex-end;gap:3px;height:52px;width:100%}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.bar-fill{border-radius:3px 3px 0 0;width:100%;background:rgba(0,122,255,.18)}
+.bar-fill.act{background:var(--blue)}
+.bar-lbl{font-size:8px;color:var(--txt2);font-weight:500}
+/* KPI row */
+.kpi-row{display:flex;gap:10px;margin-bottom:14px}
+.kpi-card{flex:1;background:var(--card);border-radius:16px;padding:14px 12px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.kpi-icon-wrap{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.kpi-label{font-size:12px;color:var(--txt2);margin-bottom:3px;font-weight:500}
+.kpi-value{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Section header */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin:2px 0 12px}
+.section-header h2{font-size:18px;font-weight:700;color:var(--txt)}
+.see-all{font-size:14px;color:var(--blue);font-weight:600}
+.section-title{font-size:17px;font-weight:700;margin:14px 0 10px}
+/* TX card */
+.tx-card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 1px 6px rgba(0,0,0,.05);display:flex;gap:12px;align-items:flex-start;margin-bottom:8px}
+.tx-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tx-body{flex:1;min-width:0}
+.tx-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.tx-name{font-size:15px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.tx-amount{font-size:15px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.tx-meta{font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4}
+.tx-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.tx-chip{font-size:11px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(0,122,255,.10);color:var(--blue)}
+.tx-pay-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pay-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+/* Cards */
+.adv-card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 1px 6px rgba(0,0,0,.04);margin-bottom:8px}
+.due-card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(255,59,48,.06);border:1px solid rgba(255,59,48,.12);margin-bottom:8px}
+/* Search */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:12px;padding:10px 12px;box-shadow:0 1px 6px rgba(0,0,0,.04);margin-bottom:12px}
+.search-bar input{flex:1;font-size:15px;color:var(--txt)}
+.search-bar input::placeholder{color:var(--txt2)}
+/* Reports header */
+.reports-header{background:var(--bg);padding:calc(var(--safe-t) + 14px) 20px 10px;position:sticky;top:0;z-index:10}
+.reports-header-inner{display:flex;align-items:center;justify-content:space-between}
+.reports-title{font-size:22px;font-weight:700}
+/* Stat grid */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.stat-card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s}
+.stat-card.selected{color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.16);transform:scale(1.03)}
+.stat-card .label{font-size:11px;font-weight:500;opacity:.85;margin-bottom:6px}
+.stat-card .value{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-card.selected .label,.stat-card.selected .value{color:#fff}
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--sep);display:flex;align-items:center;justify-content:space-around;padding-bottom:var(--safe-b);z-index:100;height:var(--nav-h)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;gap:4px;font-size:11px;font-weight:500;color:var(--txt2);height:100%}
+.nav-btn-bg{width:52px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.nav-btn.active .nav-btn-bg{background:rgba(0,122,255,.12)}
+.nav-btn.active{color:var(--blue)}
+.nav-fab-wrap{flex:1;display:flex;justify-content:center;align-items:center}
+.nav-fab{width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#007AFF,#2196F3);color:#fff;font-size:28px;box-shadow:0 4px 18px rgba(0,122,255,.5);display:flex;align-items:center;justify-content:center;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.nav-fab:active{transform:scale(.92)}
+.nav-fab.open{transform:rotate(45deg)}
+/* FAB overlay */
+.fab-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .25s}
+.fab-overlay.visible{opacity:1;pointer-events:all}
+.fab-menu{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 10px);left:50%;transform:translateX(-50%) translateY(20px);width:calc(100% - 48px);max-width:400px;display:flex;flex-direction:column;gap:10px;z-index:201;opacity:0;pointer-events:none;transition:all .25s}
+.fab-menu.visible{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
+.fab-action{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 6px 20px rgba(0,0,0,.12);text-align:left}
+.fab-action-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.fab-action-text .title{font-size:15px;font-weight:600;color:var(--txt)}
+.fab-action-text .sub{font-size:12px;color:var(--txt2);margin-top:1px}
+.fab-chevron{font-size:18px;color:#C7C7CC;margin-left:auto}
+/* Modal */
+.modal-bg{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.4);display:none;align-items:flex-end}
+.modal-bg.open{display:flex}
+.modal-sheet{background:var(--bg);border-radius:24px 24px 0 0;width:100%;max-height:92vh;overflow-y:auto;padding-bottom:calc(24px + var(--safe-b));animation:slideUp .3s cubic-bezier(.25,.8,.25,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:#D1D1D6;border-radius:4px;margin:12px auto 4px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 0}
+.modal-header h2{font-size:18px;font-weight:700}
+.modal-close{font-size:15px;color:var(--blue);font-weight:600;padding:4px 0}
+.modal-body{padding:16px 20px 0}
+/* Form */
+.form-section{margin-top:16px}
+.form-section-title{font-size:13px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.form-card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.form-row{display:flex;align-items:center;padding:12px 14px;border-bottom:0.5px solid var(--sep)}
+.form-row:last-child{border-bottom:none}
+.form-row label{font-size:13px;color:var(--txt2);width:90px;flex-shrink:0}
+.form-row input,.form-row select{flex:1;font-size:15px;color:var(--txt);text-align:right}
+.form-row input::placeholder{color:#C7C7CC}
+.form-row select{direction:rtl}
+.form-row.total-row{background:#F8F8FF}
+.form-row.total-row label{font-weight:700;color:var(--txt)}
+.form-row.total-row span{font-size:16px;font-weight:700;color:var(--blue);margin-left:auto}
+.line-item-row{display:flex;gap:8px;align-items:center;background:var(--card);border-radius:12px;padding:10px 12px;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:8px}
+.li-remove{color:var(--red);font-size:18px;padding:0 4px}
+.add-line-btn{display:flex;align-items:center;gap:6px;color:var(--blue);font-size:14px;font-weight:600;padding:8px 0}
+.btn-primary{width:100%;padding:16px;border-radius:14px;background:var(--blue);color:#fff;font-size:16px;font-weight:700;margin-top:20px;box-shadow:0 4px 14px rgba(0,122,255,.3);transition:opacity .15s}
+.btn-primary:active{opacity:.85}
+.empty-state{text-align:center;padding:48px 20px;color:var(--txt2)}
+.empty-state .emoji{font-size:52px;margin-bottom:14px}
+.empty-state p{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--txt)}
+.empty-state span{font-size:13px}
+@media print{.bottom-nav,.fab-overlay,.fab-menu,.modal-bg{display:none!important}body{background:#fff}}
+@media(min-width:768px){
+  #app{max-width:960px;display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+  .bottom-nav{position:fixed;left:0;bottom:0;top:0;width:260px;height:auto;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:40px 0 20px;border-top:none;border-right:0.5px solid var(--sep);max-width:260px;transform:none;background:var(--card)}
+  .nav-btn{flex-direction:row;justify-content:flex-start;padding:12px 24px;gap:12px;font-size:15px;border-radius:12px;margin:2px 12px;height:auto}
+  .nav-btn-bg{width:auto;height:auto;background:none!important;border-radius:0}
+  .nav-fab-wrap{flex:none;margin:8px 12px;justify-content:flex-start;padding-left:24px}
+  .nav-fab{width:44px;height:44px;font-size:22px}
+  .fab-overlay{display:none!important}
+  .fab-menu{position:fixed;bottom:auto;left:270px;top:auto;transform:none;width:280px}
+  .fab-menu.visible{transform:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- DASHBOARD -->
+<div id="page-home" class="page active">
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="header-brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </div>
+        <span class="header-title">Indian Steel</span>
+      </div>
+      <div class="header-right">
+        <button class="notif-btn" title="Export CSV" onclick="exportCSV()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="avatar">IS</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-scroll">
+    <div id="today-card-wrap"></div>
+    <div id="kpi-row-wrap"></div>
+    <div class="section-header">
+      <h2>Recent Activity</h2>
+      <button class="see-all" onclick="showPage('reports')">See All</button>
+    </div>
+    <div id="recent-list"></div>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div id="page-reports" class="page">
+  <div class="reports-header">
+    <div class="reports-header-inner">
+      <span class="reports-title">Reports</span>
+      <button onclick="window.print()" style="color:var(--blue);font-size:13px;font-weight:600">&#128424; Print</button>
+    </div>
+  </div>
+  <div class="page-scroll">
+    <div class="stat-grid" id="report-cards"></div>
+    <div class="section-title" id="report-section-title">All Transactions</div>
+    <div class="search-bar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="report-search" type="text" placeholder="Name, mobile, sale no, dateâ¦" oninput="renderReportList()">
+    </div>
+    <div id="report-list"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="showPage('home')">
+    <div class="nav-btn-bg"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+    <span>Home</span>
+  </button>
+  <div class="nav-fab-wrap">
+    <button class="nav-fab" id="nav-fab" onclick="toggleFab()">+</button>
+  </div>
+  <button class="nav-btn" id="nav-reports" onclick="showPage('reports')">
+    <div class="nav-btn-bg"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M5 9h4v11H5zm5-4h4v15h-4zm5 8h4v7h-4z"/></svg></div>
+    <span>Reports</span>
+  </button>
+</nav>
+
+<!-- FAB -->
+<div class="fab-overlay" id="fab-overlay" onclick="closeFab()"></div>
+<div class="fab-menu" id="fab-menu">
+  <button class="fab-action" onclick="closeFab();openModal('sale')">
+    <div class="fab-action-icon" style="background:rgba(0,122,255,.12);color:var(--blue)">&#8593;</div>
+    <div class="fab-action-text"><div class="title">Add Sale</div><div class="sub">Record a new sale</div></div>
+    <span class="fab-chevron">&#8250;</span>
+  </button>
+  <button class="fab-action" onclick="closeFab();openModal('purchase')">
+    <div class="fab-action-icon" style="background:rgba(255,149,0,.12);color:var(--orange)">&#8595;</div>
+    <div class="fab-action-text"><div class="title">Add Purchase</div><div class="sub">Record a new purchase</div></div>
+    <span class="fab-chevron">&#8250;</span>
+  </button>
+  <button class="fab-action" onclick="closeFab();openModal('advance')">
+    <div class="fab-action-icon" style="background:rgba(52,199,89,.12);color:var(--green)">&#10003;</div>
+    <div class="fab-action-text"><div class="title">Advance Payment</div><div class="sub">Record advance from customer</div></div>
+    <span class="fab-chevron">&#8250;</span>
+  </button>
+</div>
+
+<!-- MODAL: ADD SALE -->
+<div class="modal-bg" id="modal-sale"><div class="modal-sheet"><div class="modal-handle"></div>
+  <div class="modal-header"><h2>New Sale</h2><button class="modal-close" onclick="closeModal('sale')">Cancel</button></div>
+  <div class="modal-body">
+    <div class="form-section"><div class="form-section-title">Customer</div>
+      <div class="form-card">
+        <div class="form-row"><label>Name</label><input id="s-party" type="text" placeholder="Party name"></div>
+        <div class="form-row"><label>Mobile</label><input id="s-phone" type="tel" placeholder="Phone number"></div>
+        <div class="form-row"><label>Sale No.</label><input id="s-notes" type="text" placeholder="e.g. Sale #01-26/27"></div>
+        <div class="form-row"><label>Date</label><input id="s-date" type="date"></div>
+      </div>
+    </div>
+    <div class="form-section"><div class="form-section-title">Products</div>
+      <div id="line-items-container"></div>
+      <button class="add-line-btn" onclick="addLineItem()">&#65291; Add Product</button>
+    </div>
+    <div class="form-section"><div class="form-section-title">Payment</div>
+      <div class="form-card">
+        <div class="form-row total-row"><label>Total Amount</label><span id="s-total-display">&#8377;0</span></div>
+        <div class="form-row"><label>Cash (&#8377;)</label><input id="s-cash" type="number" placeholder="0" oninput="calcSaleDue()"></div>
+        <div class="form-row"><label>Online (&#8377;)</label><input id="s-online" type="number" placeholder="0" oninput="calcSaleDue()"></div>
+        <div class="form-row"><label>Due (&#8377;)</label><input id="s-due" type="number" placeholder="Auto-calculated" oninput="calcSaleFromDue()"></div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="saveSale()">Save Sale</button>
+  </div>
+</div></div>
+
+<!-- MODAL: ADD PURCHASE -->
+<div class="modal-bg" id="modal-purchase"><div class="modal-sheet"><div class="modal-handle"></div>
+  <div class="modal-header"><h2>New Purchase</h2><button class="modal-close" onclick="closeModal('purchase')">Cancel</button></div>
+  <div class="modal-body">
+    <div class="form-section"><div class="form-section-title">Supplier</div>
+      <div class="form-card">
+        <div class="form-row"><label>Name</label><input id="p-party" type="text" placeholder="Supplier name"></div>
+        <div class="form-row"><label>Mobile</label><input id="p-phone" type="tel" placeholder="Phone number"></div>
+        <div class="form-row"><label>Date</label><input id="p-date" type="date"></div>
+      </div>
+    </div>
+    <div class="form-section"><div class="form-section-title">Product</div>
+      <div class="form-card">
+        <div class="form-row"><label>Category</label><select id="p-category" style="flex:1;text-align:right"><option>TMT Bars</option><option>MS Sheet</option><option>MS Pipe</option><option>MS Angle</option><option>MS Channel</option><option>I-Beam</option><option>Chequered Plate</option><option>Other</option></select></div>
+        <div class="form-row"><label>Quantity</label><input id="p-qty" type="number" placeholder="0" oninput="calcPurchaseTotal()"></div>
+        <div class="form-row"><label>Unit</label><select id="p-unit" style="flex:1;text-align:right"><option>MT</option><option>Kg</option><option>Pcs</option><option>Ft</option><option>Mtr</option></select></div>
+        <div class="form-row"><label>Rate/Unit</label><input id="p-rate" type="number" placeholder="0" oninput="calcPurchaseTotal()"></div>
+        <div class="form-row total-row"><label>Total Amount</label><span id="p-total-display">&#8377;0</span></div>
+      </div>
+    </div>
+    <div class="form-section"><div class="form-section-title">Payment</div>
+      <div class="form-card">
+        <div class="form-row"><label>Cash (&#8377;)</label><input id="p-cash" type="number" placeholder="0"></div>
+        <div class="form-row"><label>Online (&#8377;)</label><input id="p-online" type="number" placeholder="0"></div>
+      </div>
+    </div>
+    <button class="btn-primary" style="background:var(--orange);box-shadow:0 4px 14px rgba(255,149,0,.3)" onclick="savePurchase()">Save Purchase</button>
+  </div>
+</div></div>
+
+<!-- MODAL: ADD ADVANCE -->
+<div class="modal-bg" id="modal-advance"><div class="modal-sheet"><div class="modal-handle"></div>
+  <div class="modal-header"><h2>Advance Payment</h2><button class="modal-close" onclick="closeModal('advance')">Cancel</button></div>
+  <div class="modal-body">
+    <div class="form-section"><div class="form-section-title">Customer</div>
+      <div class="form-card">
+        <div class="form-row"><label>Name</label><input id="a-name" type="text" placeholder="Customer name"></div>
+        <div class="form-row"><label>Mobile</label><input id="a-phone" type="tel" placeholder="Phone number"></div>
+        <div class="form-row"><label>Receipt No</label><input id="a-receipt" type="text" placeholder="e.g. ADV-001"></div>
+        <div class="form-row"><label>Date</label><input id="a-date" type="date"></div>
+      </div>
+    </div>
+    <div class="form-section"><div class="form-section-title">Item (Optional)</div>
+      <div class="form-card">
+        <div class="form-row"><label>Item Name</label><input id="a-item" type="text" placeholder="e.g. TMT 12mm"></div>
+        <div class="form-row"><label>Rate (&#8377;/unit)</label><input id="a-rate" type="number" placeholder="0"></div>
+      </div>
+    </div>
+    <div class="form-section"><div class="form-section-title">Amount</div>
+      <div class="form-card">
+        <div class="form-row total-row"><label>Advance (&#8377;)</label><input id="a-amount" type="number" placeholder="0" style="font-size:16px;font-weight:700;color:var(--green);text-align:right"></div>
+        <div class="form-row"><label>Cash (&#8377;)</label><input id="a-cash" type="number" placeholder="0"></div>
+        <div class="form-row"><label>Online (&#8377;)</label><input id="a-online" type="number" placeholder="0"></div>
+      </div>
+    </div>
+    <button class="btn-primary" style="background:var(--green);box-shadow:0 4px 14px rgba(52,199,89,.3)" onclick="saveAdvance()">Save Advance</button>
+  </div>
+</div></div>
+
+</div><!-- #app -->
+<script>
+const uuid=()=>([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16));
+const fmt=n=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n||0);
+const today=()=>new Date().toISOString().split("T")[0];
+const isToday=d=>new Date(d).toDateString()===new Date().toDateString();
+const fmtDate=d=>new Date(d).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+const fmtTime=d=>new Date(d).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+const dayLetter=d=>["S","M","T","W","T","F","S"][d.getDay()];
+
+const DB={
+  get transactions(){return JSON.parse(localStorage.getItem("ss_tx")||"[]")},
+  get advances(){return JSON.parse(localStorage.getItem("ss_adv")||"[]")},
+  saveTx(a){localStorage.setItem("ss_tx",JSON.stringify(a))},
+  saveAdv(a){localStorage.setItem("ss_adv",JSON.stringify(a))},
+  addTx(t){const a=this.transactions;a.unshift(t);this.saveTx(a)},
+  addAdv(r){const a=this.advances;a.unshift(r);this.saveAdv(a)},
+};
+
+function stats(){
+  const tx=DB.transactions,adv=DB.advances,ttx=tx.filter(t=>isToday(t.date));
+  return{
+    totalSales:tx.filter(t=>t.type==="sale").reduce((s,t)=>s+t.totalAmount,0),
+    totalPurchases:tx.filter(t=>t.type==="purchase").reduce((s,t)=>s+t.totalAmount,0),
+    totalDue:tx.filter(t=>t.type==="sale").reduce((s,t)=>s+(t.dueAmount||0),0),
+    totalAdvance:adv.filter(a=>!a.isSettled).reduce((s,a)=>s+a.advanceAmount,0),
+    todaySales:ttx.filter(t=>t.type==="sale").reduce((s,t)=>s+t.totalAmount,0),
+    todayCash:ttx.reduce((s,t)=>s+t.cashPayment,0),
+    todayOnline:ttx.reduce((s,t)=>s+t.onlinePayment,0),
+    todayPurchases:ttx.filter(t=>t.type==="purchase").reduce((s,t)=>s+t.totalAmount,0),
+    todayCount:ttx.length,
+  };
+}
+
+function sevenDay(){
+  const tx=DB.transactions,res=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const ds=d.toDateString();
+    res.push({lbl:dayLetter(d),total:tx.filter(t=>t.type==="sale"&&new Date(t.date).toDateString()===ds).reduce((s,t)=>s+t.totalAmount,0),isToday:i===0});
+  }
+  return res;
+}
+
+let currentPage="home",reportFilter=0;
+function showPage(p){
+  document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+  document.getElementById("page-"+p).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(e=>e.classList.remove("active"));
+  document.getElementById("nav-"+p)?.classList.add("active");
+  currentPage=p;
+  if(p==="home")renderDashboard();
+  if(p==="reports")renderReports();
+}
+
+let fabOpen=false;
+function toggleFab(){fabOpen?closeFab():openFab()}
+function openFab(){fabOpen=true;document.getElementById("fab-overlay").classList.add("visible");document.getElementById("fab-menu").classList.add("visible");document.getElementById("nav-fab").classList.add("open")}
+function closeFab(){fabOpen=false;document.getElementById("fab-overlay").classList.remove("visible");document.getElementById("fab-menu").classList.remove("visible");document.getElementById("nav-fab").classList.remove("open")}
+
+function openModal(t){document.getElementById("modal-"+t).classList.add("open");if(t==="sale")initSaleForm();if(t==="purchase")initPurchaseForm();if(t==="advance")initAdvanceForm()}
+function closeModal(t){document.getElementById("modal-"+t).classList.remove("open")}
+
+function renderDashboard(){
+  const s=stats(),days=sevenDay(),mx=Math.max(...days.map(d=>d.total),1);
+  document.getElementById("today-card-wrap").innerHTML=`
+    <div class="today-card">
+      <div class="today-left">
+        <div class="today-label-row">
+          <div class="today-sales-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+          <span class="today-label">Today's Sales</span>
+        </div>
+        <div class="today-amount">${fmt(s.todaySales)}</div>
+        <div class="today-pay-row">
+          <div class="today-pay-item">&#x20B9; Cash Payment<span class="pv">${fmt(s.todayCash)}</span></div>
+          <div class="today-pay-item">&#128241; Online Payment<span class="pv">${fmt(s.todayOnline)}</span></div>
+        </div>
+      </div>
+      <div class="today-right">
+        <div class="chart-label">7-Day Overview</div>
+        <div class="mini-chart">${days.map(d=>{const h=Math.max(4,Math.round((d.total/mx)*48));return`<div class="bar-col"><div class="bar-fill${d.isToday?" act":""}" style="height:${h}px"></div><div class="bar-lbl">${d.lbl}</div></div>`}).join("")}</div>
+      </div>
+    </div>`;
+  document.getElementById("kpi-row-wrap").innerHTML=`
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap" style="background:rgba(255,149,0,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+        <div class="kpi-label">Purchase</div><div class="kpi-value" style="color:var(--orange)">${fmt(s.todayPurchases)}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap" style="background:rgba(255,59,48,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--red)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+        <div class="kpi-label">Due</div><div class="kpi-value" style="color:var(--red)">${fmt(s.totalDue)}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap" style="background:rgba(52,199,89,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="kpi-label">Advance</div><div class="kpi-value" style="color:var(--green)">${fmt(s.totalAdvance)}</div>
+      </div>
+    </div>`;
+  const all=DB.transactions.slice(0,20);
+  document.getElementById("recent-list").innerHTML=all.length?all.map(txCard).join(""):emptyState("No transactions yet","Tap + to add your first sale");
+}
+
+function txCard(t){
+  const isSale=t.type==="sale";
+  const col=isSale?"var(--blue)":"var(--orange)";
+  const bg=isSale?"rgba(0,122,255,.10)":"rgba(255,149,0,.10)";
+  const amtCol=isSale?"var(--green)":"var(--red)";
+  const arrow=isSale?`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>`;
+  const chips=t.lineItems&&t.lineItems.length?`<div class="tx-chips">${t.lineItems.map(l=>`<span class="tx-chip">${l}</span>`).join("")}</div>`:"";
+  let pills="";
+  if(t.cashPayment>0)pills+=`<span class="pay-pill" style="background:rgba(0,122,255,.08);color:var(--blue)">&#x20B9; ${fmt(t.cashPayment)}</span>`;
+  if(t.onlinePayment>0)pills+=`<span class="pay-pill" style="background:rgba(88,86,214,.08);color:var(--purple)">&#128241; ${fmt(t.onlinePayment)}</span>`;
+  if(t.dueAmount>0)pills+=`<span class="pay-pill" style="background:rgba(255,59,48,.08);color:var(--red)">&#9888; ${fmt(t.dueAmount)}</span>`;
+  const meta=[t.notes?t.notes.substring(0,16)+(t.notes.length>16?"...":""):null,fmtDate(t.date),fmtTime(t.date)].filter(Boolean).join(" · ");
+  return`<div class="tx-card"><div class="tx-icon" style="background:${bg}">${arrow}</div>
+    <div class="tx-body">
+      <div class="tx-top"><div class="tx-name">${t.party}</div><div class="tx-amount" style="color:${amtCol}">${fmt(t.totalAmount)}</div></div>
+      <div class="tx-meta">${meta}</div>${chips}${pills?`<div class="tx-pay-pills">${pills}</div>`:""}
+    </div></div>`;
+}
+
+function emptyState(t,s){return`<div class="empty-state"><div class="emoji">&#128203;</div><p>${t}</p><span>${s}</span></div>`}
+
+const RCOLORS=["var(--blue)","var(--blue)","var(--orange)","var(--red)","var(--green)"];
+function renderReports(){
+  const s=stats();
+  const vals=[0,s.totalSales,s.totalPurchases,s.totalDue,s.totalAdvance];
+  const lbls=["","Sales","Purchases","Due Payments","Advance"];
+  document.getElementById("report-cards").innerHTML=[1,2,3,4].map(i=>`<div class="stat-card${reportFilter===i?" selected":""}" style="${reportFilter===i?`background:${RCOLORS[i]}`:"color:"+RCOLORS[i]}" onclick="setReportFilter(${i})"><div class="label">${lbls[i]}</div><div class="value">${fmt(vals[i])}</div></div>`).join("");
+  renderReportList();
+}
+function setReportFilter(f){reportFilter=f;renderReports()}
+function renderReportList(){
+  const q=(document.getElementById("report-search")?.value||"").toLowerCase().trim();
+  const titles=["","Sales Transactions","Purchase Transactions","Due Payments","Advance Payments"];
+  document.getElementById("report-section-title").textContent=titles[reportFilter]||"Transactions";
+  const el=document.getElementById("report-list");
+  if(reportFilter===4){
+    let list=DB.advances;
+    if(q)list=list.filter(r=>r.customerName.toLowerCase().includes(q)||(r.phone||"").includes(q)||r.receiptNumber.toLowerCase().includes(q)||(r.itemName||"").toLowerCase().includes(q));
+    el.innerHTML=list.length?list.map(advCard).join(""):emptyState("No advance records","Add advance payments via +");
+    return;
+  }
+  let list=DB.transactions;
+  if(reportFilter===1)list=list.filter(t=>t.type==="sale");
+  if(reportFilter===2)list=list.filter(t=>t.type==="purchase");
+  if(reportFilter===3)list=list.filter(t=>t.type==="sale"&&t.dueAmount>0);
+  if(q)list=list.filter(t=>t.party.toLowerCase().includes(q)||(t.phone||"").includes(q)||(t.notes||"").toLowerCase().includes(q)||fmtDate(t.date).toLowerCase().includes(q)||(t.lineItems||[]).some(l=>l.toLowerCase().includes(q)));
+  el.innerHTML=list.length?list.map(reportFilter===3?dueCard:txCard).join(""):emptyState("No transactions found","Try a different search");
+}
+
+function advCard(r){
+  return`<div class="adv-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px">${r.receiptNumber}</div><div style="font-size:15px;font-weight:600">${r.customerName}${r.phone?" · "+r.phone:""}</div></div><div style="font-size:16px;font-weight:700;color:var(--green)">${fmt(r.advanceAmount)}</div></div>${r.itemName?`<div style="font-size:12px;color:var(--txt2);margin-top:4px">&#128230; ${r.itemName}${r.rate?" · ₹"+r.rate+"/unit":""}</div>`:""}<div style="font-size:11px;color:var(--txt2);margin-top:6px">${fmtDate(r.date)} · ${fmtTime(r.date)}</div></div>`;
+}
+function dueCard(t){
+  return`<div class="due-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:15px;font-weight:600">${t.party}</div>${t.phone?`<div style="font-size:12px;color:var(--txt2)">${t.phone}</div>`:""}</div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--red)">${fmt(t.dueAmount)}</div><span style="font-size:10px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:4px">DUE</span></div></div><div style="font-size:11px;color:var(--txt2);margin-top:6px">${t.notes?t.notes+" · ":""}${fmtDate(t.date)}</div><div style="display:flex;gap:14px;margin-top:8px"><div><div style="font-size:10px;color:var(--txt2)">Total</div><div style="font-size:13px;font-weight:700">${fmt(t.totalAmount)}</div></div>${t.cashPayment>0?`<div><div style="font-size:10px;color:var(--txt2)">Cash Paid</div><div style="font-size:13px;font-weight:700;color:var(--blue)">${fmt(t.cashPayment)}</div></div>`:""}</div></div>`;
+}
+
+let lineItems=[];
+function initSaleForm(){
+  document.getElementById("s-date").value=today();
+  ["s-party","s-phone","s-notes","s-cash","s-online","s-due"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("s-total-display").textContent="₹0";
+  lineItems=[{id:uuid(),name:"",qty:"",unit:"MT",rate:""}];renderLineItems();
+}
+function renderLineItems(){
+  document.getElementById("line-items-container").innerHTML=lineItems.map((li,i)=>`<div class="line-item-row">
+    <input placeholder="Product name" value="${li.name}" oninput="updateLI(${i},'name',this.value)" style="flex:2;min-width:80px;font-size:14px;border-bottom:0.5px solid var(--sep);padding-bottom:2px">
+    <input type="number" placeholder="Qty" value="${li.qty}" oninput="updateLI(${i},'qty',this.value);calcSaleTotal()" style="width:55px;text-align:center;font-size:14px;border-bottom:0.5px solid var(--sep);padding-bottom:2px">
+    <select oninput="updateLI(${i},'unit',this.value)" style="width:50px;font-size:13px">${["MT","Kg","Pcs","Ft","Mtr"].map(u=>`<option${u===li.unit?" selected":""}>${u}</option>`).join("")}</select>
+    <input type="number" placeholder="Rate" value="${li.rate}" oninput="updateLI(${i},'rate',this.value);calcSaleTotal()" style="width:75px;text-align:right;font-size:14px;border-bottom:0.5px solid var(--sep);padding-bottom:2px">
+    ${lineItems.length>1?`<button class="li-remove" onclick="removeLI(${i})">&#10005;</button>`:""}
+  </div>`).join("");
+}
+function updateLI(i,k,v){lineItems[i][k]=v}
+function addLineItem(){lineItems.push({id:uuid(),name:"",qty:"",unit:"MT",rate:""});renderLineItems()}
+function removeLI(i){lineItems.splice(i,1);renderLineItems();calcSaleTotal()}
+function calcSaleTotal(){const t=lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0)*(parseFloat(li.rate)||0),0);document.getElementById("s-total-display").textContent=fmt(t);calcSaleDue();return t}
+function calcSaleDue(){const t=calcSaleTotal(),c=parseFloat(document.getElementById("s-cash").value)||0,o=parseFloat(document.getElementById("s-online").value)||0,d=Math.max(0,t-c-o);document.getElementById("s-due").value=d>0?Math.round(d):""}
+function calcSaleFromDue(){const t=calcSaleTotal(),d=parseFloat(document.getElementById("s-due").value)||0,o=parseFloat(document.getElementById("s-online").value)||0;document.getElementById("s-cash").value=Math.max(0,t-o-d)||""}
+function saveSale(){
+  const party=document.getElementById("s-party").value.trim();
+  if(!party){alert("Please enter party name");return}
+  const total=lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0)*(parseFloat(li.rate)||0),0);
+  DB.addTx({id:uuid(),type:"sale",category:lineItems[0]?.name||"Other",party,phone:document.getElementById("s-phone").value.trim(),quantity:lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0),0),unit:"MT",ratePerUnit:lineItems[0]?.rate||0,totalAmount:total,date:new Date(document.getElementById("s-date").value).toISOString(),notes:document.getElementById("s-notes").value.trim(),cashPayment:parseFloat(document.getElementById("s-cash").value)||0,onlinePayment:parseFloat(document.getElementById("s-online").value)||0,dueAmount:parseFloat(document.getElementById("s-due").value)||0,lineItems:lineItems.filter(li=>li.name).map(li=>`${li.name} ${li.qty}${li.unit}`)});
+  closeModal("sale");renderDashboard();
+}
+
+function initPurchaseForm(){
+  document.getElementById("p-date").value=today();
+  ["p-party","p-phone","p-qty","p-rate","p-cash","p-online"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("p-total-display").textContent="₹0";
+}
+function calcPurchaseTotal(){const q=parseFloat(document.getElementById("p-qty").value)||0,r=parseFloat(document.getElementById("p-rate").value)||0;document.getElementById("p-total-display").textContent=fmt(q*r)}
+function savePurchase(){
+  const party=document.getElementById("p-party").value.trim();
+  if(!party){alert("Please enter supplier name");return}
+  const q=parseFloat(document.getElementById("p-qty").value)||0,r=parseFloat(document.getElementById("p-rate").value)||0;
+  DB.addTx({id:uuid(),type:"purchase",category:document.getElementById("p-category").value,party,phone:document.getElementById("p-phone").value.trim(),quantity:q,unit:document.getElementById("p-unit").value,ratePerUnit:r,totalAmount:q*r,date:new Date(document.getElementById("p-date").value).toISOString(),notes:"",cashPayment:parseFloat(document.getElementById("p-cash").value)||0,onlinePayment:parseFloat(document.getElementById("p-online").value)||0,dueAmount:0,lineItems:[]});
+  closeModal("purchase");renderDashboard();
+}
+
+function initAdvanceForm(){
+  document.getElementById("a-date").value=today();
+  ["a-name","a-phone","a-receipt","a-item","a-amount","a-cash","a-online"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("a-rate").value="";
+  document.getElementById("a-receipt").value="ADV-"+String(DB.advances.length+1).padStart(3,"0");
+}
+function saveAdvance(){
+  const name=document.getElementById("a-name").value.trim();
+  if(!name){alert("Please enter customer name");return}
+  const amount=parseFloat(document.getElementById("a-amount").value)||0;
+  if(!amount){alert("Please enter advance amount");return}
+  DB.addAdv({id:uuid(),date:new Date(document.getElementById("a-date").value).toISOString(),receiptNumber:document.getElementById("a-receipt").value.trim(),customerName:name,phone:document.getElementById("a-phone").value.trim(),itemName:document.getElementById("a-item").value.trim(),rate:parseFloat(document.getElementById("a-rate").value)||0,advanceAmount:amount,cashPayment:parseFloat(document.getElementById("a-cash").value)||0,onlinePayment:parseFloat(document.getElementById("a-online").value)||0,isSettled:false});
+  closeModal("advance");renderDashboard();
+}
+
+function exportCSV(){
+  const tx=DB.transactions;
+  const rows=[["Type","Party","Phone","Category","Qty","Unit","Rate","Total","Cash","Online","Due","Notes","Date"]];
+  tx.forEach(t=>rows.push([t.type,t.party,t.phone||"",t.category,t.quantity,t.unit,t.ratePerUnit,t.totalAmount,t.cashPayment,t.onlinePayment,t.dueAmount||0,t.notes||"",fmtDate(t.date)]));
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");
+  const a=document.createElement("a");a.href="data:text/csv;charset=utf-8,\ufeff"+encodeURIComponent(csv);a.download="steelshop_"+today()+".csv";a.click();
+}
+
+if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}
+renderDashboard();
+</script>
+</body>
+</html>
