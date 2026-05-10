@@ -28,7 +28,7 @@ TIMESTAMP=$(date "+%d %b %Y %H:%M")
 git commit -m "Update app — $TIMESTAMP" 2>/dev/null || echo "(no changes to commit)"
 echo ""
 echo "Pushing to GitHub..."
-git push origin main 2>&1
+git push --force origin main 2>&1
 
 echo ""
 echo "================================================"
