@@ -89,8 +89,9 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .tx-name{font-size:13px;font-weight:600;color:var(--txt);flex:1;min-width:0}
 .tx-amount{font-size:14px;font-weight:700;white-space:nowrap;flex-shrink:0}
 .tx-meta{font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4}
-.tx-chips{display:flex;flex-direction:column;gap:3px;margin-top:6px}
-.tx-chip{font-size:10px;font-weight:500;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.06);color:#4A4A4A;display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
+.tx-chips{display:flex;flex-wrap:nowrap;gap:8px;margin-top:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tx-chips::-webkit-scrollbar{display:none}
+.tx-chip{font-size:10px;font-weight:500;color:#4A4A4A;white-space:nowrap;flex-shrink:0}
 .tx-pay-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .pay-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
 /* Cards */
