@@ -735,7 +735,7 @@ function txCard(t){
   const meta=[t.notes?t.notes.substring(0,16)+(t.notes.length>16?"...":""):null,fmtDate(t.date),fmtTime(t.date)].filter(Boolean).join(" · ");
   return`<div class="tx-card"><div class="tx-icon" style="background:${bg}">${arrow}</div>
     <div class="tx-body">
-      <div class="tx-top"><div class="tx-name">${t.party}</div><div class="tx-amount" style="color:${amtCol}">${fmt(t.totalAmount)}</div></div>
+      <div class="tx-top"><div class="tx-name" style="display:flex;align-items:baseline;gap:0;overflow:hidden"><span style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${t.party}</span>${t.phone?`<span style="color:var(--txt2);font-weight:400;font-size:12px;white-space:nowrap;flex-shrink:0;margin-left:5px">— ${t.phone}</span>`:""}</div><div class="tx-amount" style="color:${amtCol}">${fmt(t.totalAmount)}</div></div>
       <div class="tx-meta">${meta}</div>${chips}${pills?`<div class="tx-pay-pills">${pills}</div>`:""}
     </div></div>`;
 }
