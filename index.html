@@ -176,6 +176,8 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
   .fab-menu.visible{transform:none}
 }
 
+/* ── Home: sticky today card ─────────────────────────────────────── */
+.home-today-pad{padding:4px 16px 8px;background:var(--bg)}
 /* ── New Sale card-based UI ─────────────────────────────────────── */
 .sale-info-card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;align-items:center;gap:12px;text-align:left;width:100%;cursor:pointer;border:none;font-family:inherit;margin-bottom:10px}
 .sale-info-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -267,8 +269,10 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
       </div>
     </div>
   </div>
-  <div class="page-scroll">
+  <div class="home-today-pad">
     <div id="today-card-wrap"></div>
+  </div>
+  <div class="page-scroll" style="padding-top:2px">
     <div id="kpi-row-wrap"></div>
     <div class="section-header">
       <h2>Recent Activity</h2>
@@ -683,11 +687,11 @@ function renderDashboard(){
         <div class="today-amount">${fmt(s.todaySales)}</div>
         <div class="today-pay-row">
           <div class="today-pay-item">
-            <span style="font-size:11px;color:var(--txt2)">Cash Payment</span>
+            <span style="font-size:11px;color:var(--txt2);white-space:nowrap">&#x1F4B5; Cash</span>
             <span style="font-size:14px;font-weight:700;color:var(--blue)">${fmt(s.todayCash)}</span>
           </div>
           <div class="today-pay-item">
-            <span style="font-size:11px;color:var(--txt2)">Online Payment</span>
+            <span style="font-size:11px;color:var(--txt2);white-space:nowrap">&#128241; Online</span>
             <span style="font-size:14px;font-weight:700;color:var(--purple)">${fmt(s.todayOnline)}</span>
           </div>
         </div>
