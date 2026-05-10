@@ -175,6 +175,70 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
   .fab-menu{position:fixed;bottom:auto;left:270px;top:auto;transform:none;width:280px}
   .fab-menu.visible{transform:none}
 }
+
+/* ── New Sale card-based UI ─────────────────────────────────────── */
+.sale-info-card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;align-items:center;gap:12px;text-align:left;width:100%;cursor:pointer;border:none;font-family:inherit;margin-bottom:10px}
+.sale-info-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sale-info-label{font-size:11px;font-weight:600;color:var(--txt2);margin-bottom:2px}
+.sale-info-val{font-size:14px;color:var(--txt2)}
+.sale-mini-cards{display:flex;gap:10px;margin-bottom:10px}
+.sale-mini-card{flex:1;background:var(--card);border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:5px;text-align:left;cursor:pointer;border:none;font-family:inherit}
+.sale-mini-label{font-size:11px;font-weight:600;color:var(--txt2);display:flex;align-items:center;gap:4px}
+.sale-mini-val{font-size:14px;font-weight:700;color:var(--txt)}
+.modal-header-3{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 0;position:relative}
+.modal-header-3 h2{font-size:17px;font-weight:700;position:absolute;left:50%;transform:translateX(-50%)}
+.modal-save{font-size:14px;font-weight:600;color:var(--blue);padding:4px 0}
+.modal-save:disabled{color:#C7C7CC}
+/* Sale overlays */
+.sale-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;padding:32px 16px 20px;overflow-y:auto}
+.sale-overlay.open{display:flex}
+.sale-ov-card{background:#fff;border-radius:24px;width:100%;max-width:440px;display:flex;flex-direction:column;overflow:hidden;margin:auto}
+.sale-ov-header{padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between}
+.sale-ov-title{font-size:18px;font-weight:700}
+.sale-ov-body{padding:4px 16px 8px;overflow-y:auto;max-height:60vh}
+.sale-ov-footer{padding:12px 16px 20px;border-top:.5px solid var(--sep);display:flex;gap:10px}
+.sale-ov-btn{flex:1;padding:14px;border-radius:12px;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:inherit}
+.sale-ov-btn.cancel{background:rgba(0,0,0,.07);color:var(--txt)}
+.sale-ov-btn.save{background:var(--blue);color:#fff}
+/* Product pills */
+.prod-pills-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.prod-pill{padding:10px 12px;border-radius:10px;border:none;background:rgba(0,122,255,.08);color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center;line-height:1.3;transition:all .15s}
+.prod-pill.sel{background:var(--blue);color:#fff}
+/* Product entry rows */
+.prod-entry{background:#F9F9FC;border-radius:12px;padding:12px;margin-bottom:8px}
+.prod-entry-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prod-entry-name{font-size:13px;font-weight:600}
+.prod-entry-del{color:#C7C7CC;font-size:20px;line-height:1;background:none;border:none;cursor:pointer;padding:0 2px}
+.prod-fields{display:flex;gap:6px}
+.prod-field{flex:1;display:flex;flex-direction:column;gap:3px}
+.prod-field-lbl{font-size:9px;font-weight:700;color:var(--txt2);letter-spacing:.5px;text-transform:uppercase}
+.prod-field-box{background:#fff;border-radius:9px;padding:7px 9px;display:flex;align-items:center;gap:3px;min-height:36px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.prod-field-box.amt{background:rgba(0,122,255,.07)}
+.prod-field-box input{flex:1;font-size:13px;font-weight:600;background:none;border:none;outline:none;font-family:inherit;min-width:0;width:100%}
+.prod-field-box .amt-inp{color:var(--blue)}
+.unit-sel{font-size:8px;font-weight:700;color:var(--blue);background:rgba(0,122,255,.12);padding:2px 4px;border-radius:4px;border:none;outline:none;cursor:pointer;flex-shrink:0}
+/* Payment overlay */
+.pay-section-lbl{font-size:11px;font-weight:700;color:var(--txt2);letter-spacing:.4px;text-transform:uppercase;margin:12px 0 7px;display:flex;align-items:center;gap:5px}
+.pay-total-box{background:rgba(52,199,89,.08);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pay-field-box{border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.pay-field-box.online{background:rgba(0,122,255,.07)}
+.pay-field-box.cash{background:rgba(52,199,89,.07)}
+.pay-field-box.due{background:rgba(255,59,48,.07)}
+.pay-field-box input{flex:1;font-size:20px;font-weight:600;border:none;outline:none;background:none;font-family:inherit}
+.pay-field-box.online input{color:var(--blue)}
+.pay-field-box.cash input{color:var(--green)}
+.pay-field-box.due input{color:var(--red)}
+.pay-accts{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;-webkit-overflow-scrolling:touch}
+.pay-acct{padding:6px 13px;border-radius:20px;background:rgba(0,122,255,.08);color:var(--blue);font-size:12px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;transition:all .15s}
+.pay-acct.sel-o{background:var(--blue);color:#fff}
+.pay-acct.sel-c{background:var(--green);color:#fff}
+/* Customer form */
+.cust-field{background:var(--card);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.cust-field label{font-size:11px;font-weight:600;color:var(--txt2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.cust-field input{font-size:15px;width:100%;background:none;border:none;outline:none;font-family:inherit;color:var(--txt)}
+.cust-suggest{background:#fff;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.12);margin-top:4px;overflow:hidden;z-index:10}
+.cust-sug-item{padding:10px 14px;font-size:14px;border-bottom:.5px solid var(--sep);display:flex;align-items:center;gap:8px;cursor:pointer}
+.cust-sug-item:last-child{border-bottom:none}
 </style>
 </head>
 <body>
@@ -270,28 +334,65 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 
 <!-- MODAL: ADD SALE -->
 <div class="modal-bg" id="modal-sale"><div class="modal-sheet"><div class="modal-handle"></div>
-  <div class="modal-header"><h2>New Sale</h2><button class="modal-close" onclick="closeModal('sale')">Cancel</button></div>
-  <div class="modal-body">
-    <div class="form-section"><div class="form-section-title">Customer</div>
-      <div class="form-card">
-        <div class="form-row"><label>Name</label><input id="s-party" type="text" placeholder="Party name"></div>
-        <div class="form-row"><label>Mobile</label><input id="s-phone" type="tel" placeholder="Phone number"></div>
-        <div class="form-row"><label>Sale No.</label><input id="s-notes" type="text" placeholder="e.g. Sale #01-26/27"></div>
-        <div class="form-row"><label>Date</label><input id="s-date" type="date"></div>
+  <div class="modal-header-3">
+    <button class="modal-close" onclick="closeModal('sale')">Cancel</button>
+    <h2>New Sale</h2>
+    <button id="s-save-btn" class="modal-save" onclick="saveSale()" disabled style="color:#C7C7CC">Save</button>
+  </div>
+  <div class="modal-body" style="padding-top:14px">
+    <!-- Row 1: Date + Sale No. -->
+    <div class="sale-mini-cards">
+      <button class="sale-mini-card" onclick="openSalePanel('date')">
+        <div class="sale-mini-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Date
+        </div>
+        <div class="sale-mini-val" id="s-date-display">Today</div>
+      </button>
+      <button class="sale-mini-card" onclick="openSalePanel('saleno')">
+        <div class="sale-mini-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+          Sale No.
+        </div>
+        <div class="sale-mini-val" id="s-saleno-display">#01</div>
+      </button>
+    </div>
+    <!-- Customer card -->
+    <button class="sale-info-card" onclick="openSalePanel('customer')">
+      <div class="sale-info-icon" style="background:rgba(0,122,255,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </div>
-    </div>
-    <div class="form-section"><div class="form-section-title">Products</div>
-      <div id="line-items-container"></div>
-      <button class="add-line-btn" onclick="addLineItem()">&#65291; Add Product</button>
-    </div>
-    <div class="form-section"><div class="form-section-title">Payment</div>
-      <div class="form-card">
-        <div class="form-row total-row"><label>Total Amount</label><span id="s-total-display">&#8377;0</span></div>
-        <div class="form-row"><label>Cash (&#8377;)</label><input id="s-cash" type="number" placeholder="0" oninput="calcSaleDue()"></div>
-        <div class="form-row"><label>Online (&#8377;)</label><input id="s-online" type="number" placeholder="0" oninput="calcSaleDue()"></div>
-        <div class="form-row"><label>Due (&#8377;)</label><input id="s-due" type="number" placeholder="Auto-calculated" oninput="calcSaleFromDue()"></div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Customer</div>
+        <div class="sale-info-val" id="s-customer-val">Tap to add customer</div>
+        <div class="sale-info-val" id="s-customer-sub" style="display:none;font-size:12px;margin-top:1px"></div>
       </div>
-    </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <!-- Products card -->
+    <button class="sale-info-card" onclick="openSalePanel('products')">
+      <div class="sale-info-icon" style="background:rgba(255,149,0,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Products</div>
+        <div class="sale-info-val" id="s-products-val">Tap to add products</div>
+        <div class="sale-info-val" id="s-products-sub" style="display:none;font-size:12px;margin-top:1px"></div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <!-- Payment card -->
+    <button class="sale-info-card" onclick="openSalePanel('payment')">
+      <div class="sale-info-icon" style="background:rgba(52,199,89,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"/><path d="M12 6v2M12 16v2"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Payment</div>
+        <div class="sale-info-val" id="s-payment-val">Tap to add payment</div>
+        <div class="sale-info-val" id="s-payment-sub" style="display:none;font-size:12px;margin-top:1px"></div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
     <button class="btn-primary" onclick="saveSale()">Save Sale</button>
   </div>
 </div></div>
@@ -379,6 +480,133 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
     <button class="btn-primary" onclick="clearToken()" style="margin-top:8px;background:var(--red);box-shadow:0 4px 14px rgba(255,59,48,.25)">&#128465; Remove Token</button>
   </div>
 </div></div>
+
+
+<!-- ── SALE OVERLAYS ─────────────────────────────────────────────── -->
+
+<!-- Date overlay -->
+<div class="sale-overlay" id="sov-date">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Select Date</span></div>
+    <div class="sale-ov-body" style="padding:16px">
+      <input type="date" id="s-date-input" style="width:100%;font-size:17px;padding:14px;border-radius:14px;background:#F5F5FA;border:none;outline:none;font-family:inherit;color:var(--txt)">
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeSalePanel('date')">Cancel</button>
+      <button class="sale-ov-btn save" onclick="saveSaleDate()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sale No. overlay -->
+<div class="sale-overlay" id="sov-saleno">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Edit Sale Number</span></div>
+    <div class="sale-ov-body" style="padding:16px">
+      <div style="background:#F5F5FA;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center;gap:4px">
+        <span style="font-size:20px;color:var(--txt2)">#</span>
+        <input id="s-saleno-input" type="number" style="font-size:24px;font-weight:700;width:70px;background:none;border:none;outline:none;text-align:center;font-family:inherit;color:var(--txt)" placeholder="01">
+        <span id="s-saleno-suffix" style="font-size:17px;color:var(--txt2)">-25/26</span>
+      </div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeSalePanel('saleno')">Cancel</button>
+      <button class="sale-ov-btn save" onclick="saveSaleNo()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Customer overlay -->
+<div class="sale-overlay" id="sov-customer">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Customer Details</span></div>
+    <div class="sale-ov-body" id="sov-cust-body">
+      <div class="cust-field" style="position:relative">
+        <label>Customer Name</label>
+        <input id="s-cust-name" type="text" placeholder="e.g. Ravi Constructions" oninput="onCustNameInput()" autocomplete="off">
+        <div id="s-cust-sugg" class="cust-suggest" style="display:none"></div>
+      </div>
+      <div class="cust-field">
+        <label>Mobile Number</label>
+        <input id="s-cust-mobile" type="tel" placeholder="10-digit mobile" oninput="renderCustHistory()">
+      </div>
+      <div id="s-cust-history"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="saveCustDetails()">Close</button>
+      <button class="sale-ov-btn save" onclick="saveCustDetails()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Products overlay -->
+<div class="sale-overlay" id="sov-products">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header">
+      <span class="sale-ov-title">Product Details</span>
+      <button onclick="openAllProds()" style="font-size:13px;font-weight:600;color:var(--blue)">View All</button>
+    </div>
+    <div class="sale-ov-body">
+      <div class="prod-pills-grid" id="s-prod-pills"></div>
+      <div id="s-prod-entries"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeSalePanel('products')">Close</button>
+      <button class="sale-ov-btn save" onclick="closeSalePanel('products')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- All Products overlay -->
+<div class="sale-overlay" id="sov-allprods" style="z-index:420">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">All Products</span></div>
+    <div class="sale-ov-body">
+      <div class="prod-pills-grid" id="s-all-prod-pills"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn save" style="max-width:100%" onclick="closeAllProds()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment overlay -->
+<div class="sale-overlay" id="sov-payment">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Payment Details</span></div>
+    <div class="sale-ov-body">
+      <div class="pay-total-box">
+        <span style="font-size:15px;font-weight:600">Grand Total</span>
+        <span style="font-size:18px;font-weight:700;color:var(--green)" id="s-grand-total">&#8377;0</span>
+      </div>
+      <div class="pay-section-lbl">Online Payment</div>
+      <div class="pay-field-box online">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="s-online" type="number" inputmode="numeric" placeholder="0" oninput="onPayChange('online')">
+      </div>
+      <div class="pay-accts" id="s-online-accts"></div>
+      <div class="pay-section-lbl">Cash Payment</div>
+      <div class="pay-field-box cash">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="s-cash" type="number" inputmode="numeric" placeholder="0" oninput="onPayChange('cash')">
+      </div>
+      <div class="pay-accts" id="s-cash-accts"></div>
+      <div class="pay-section-lbl">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--red)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Due (Pay Later)
+      </div>
+      <div class="pay-field-box due">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="s-due" type="number" inputmode="numeric" placeholder="0" oninput="onPayChange('due')">
+      </div>
+      <div id="s-due-note" style="display:none;font-size:11px;color:var(--red);padding:0 4px;margin-bottom:8px"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeSalePanel('payment')">Close</button>
+      <button class="sale-ov-btn save" onclick="closeSalePanel('payment')">Save</button>
+    </div>
+  </div>
+</div>
 
 </div><!-- #app -->
 <script>
@@ -544,33 +772,263 @@ function dueCard(t){
   return`<div class="due-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:15px;font-weight:600">${t.party}</div>${t.phone?`<div style="font-size:10px;color:var(--txt2)">${t.phone}</div>`:""}</div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--red)">${fmt(t.dueAmount)}</div><span style="font-size:9px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:4px">DUE</span></div></div><div style="font-size:11px;color:var(--txt2);margin-top:6px">${t.notes?t.notes+" · ":""}${fmtDate(t.date)}</div><div style="display:flex;gap:14px;margin-top:8px"><div><div style="font-size:9px;color:var(--txt2)">Total</div><div style="font-size:13px;font-weight:700">${fmt(t.totalAmount)}</div></div>${t.cashPayment>0?`<div><div style="font-size:9px;color:var(--txt2)">Cash Paid</div><div style="font-size:13px;font-weight:700;color:var(--blue)">${fmt(t.cashPayment)}</div></div>`:""}</div></div>`;
 }
 
-let lineItems=[];
+// ─── SALE FORM (card-based) ──────────────────────────────────────────────────
+const SALE_PRODS = [
+  "Old MS Round Pipe","Old MS Square Pipe","Old G.I. Round Pipe","Old G.I. Square Pipe",
+  "TMT","Old Angle","Old Channel","Old T Angle",
+  "Old Profile Sheet","Old Naali Sheet",
+  "New MS Round Pipe","New MS Square Pipe","New G.I. Round Pipe","New G.I. Square Pipe",
+  "New Profile Sheet","New Naali Sheet"
+];
+const PAY_ACCTS = ["Sakira","Nazmeen","Ahsan Ali","Sahajad","Ajam","Sahbe"];
+const S_UNITS   = ["Kg","Pcs","Ft","Mtr","Bundle","MT"];
+
+let sDate=new Date(), sNoOvr="", sCustName="", sCustMobile="";
+let sProds={};  // { name: {qty, unit, rate, amount, manual} }
+let sOnlineAcct="Sakira", sCashAcct="Sakira";
+
+function sFY(d){const y=d.getFullYear(),m=d.getMonth()+1;return m>=4?`${y%100}/${(y+1)%100}`:`${(y-1)%100}/${y%100}`}
+function sSaleNo(){const n=DB.transactions.filter(t=>t.type==="sale").length+1;const num=sNoOvr||String(n).padStart(2,"0");return`${num}-${sFY(sDate)}`}
+function sGrandTotal(){return Object.values(sProds).reduce((s,p)=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return s+a},0)}
+
 function initSaleForm(){
-  document.getElementById("s-date").value=today();
-  ["s-party","s-phone","s-notes","s-cash","s-online","s-due"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("s-total-display").textContent="₹0";
-  lineItems=[{id:uuid(),name:"",qty:"",unit:"MT",rate:""}];renderLineItems();
+  sDate=new Date(); sNoOvr=""; sCustName=""; sCustMobile=""; sProds={};
+  sOnlineAcct="Sakira"; sCashAcct="Sakira";
+  const c=document.getElementById("s-cash"); if(c) c.value="";
+  const o=document.getElementById("s-online"); if(o) o.value="";
+  const d=document.getElementById("s-due"); if(d) d.value="";
+  updateSaleCards();
 }
-function renderLineItems(){
-  document.getElementById("line-items-container").innerHTML=lineItems.map((li,i)=>`<div class="line-item-row">
-    <input placeholder="Product name" value="${li.name}" oninput="updateLI(${i},'name',this.value)" style="flex:2;min-width:80px;font-size:14px;border-bottom:0.5px solid var(--sep);padding-bottom:2px">
-    <input type="number" placeholder="Qty" value="${li.qty}" oninput="updateLI(${i},'qty',this.value);calcSaleTotal()" style="width:55px;text-align:center;font-size:14px;border-bottom:0.5px solid var(--sep);padding-bottom:2px">
-    <select oninput="updateLI(${i},'unit',this.value)" style="width:50px;font-size:13px">${["MT","Kg","Pcs","Ft","Mtr"].map(u=>`<option${u===li.unit?" selected":""}>${u}</option>`).join("")}</select>
-    <input type="number" placeholder="Rate" value="${li.rate}" oninput="updateLI(${i},'rate',this.value);calcSaleTotal()" style="width:75px;text-align:right;font-size:14px;border-bottom:0.5px solid var(--sep);padding-bottom:2px">
-    ${lineItems.length>1?`<button class="li-remove" onclick="removeLI(${i})">&#10005;</button>`:""}
-  </div>`).join("");
+
+function updateSaleCards(){
+  // Date
+  const opts={day:"numeric",month:"short",year:"numeric"};
+  const dd=document.getElementById("s-date-display");
+  if(dd) dd.textContent=sDate.toLocaleDateString("en-IN",opts);
+  // Sale No.
+  const sn=sSaleNo(), parts=sn.split("-");
+  const sd=document.getElementById("s-saleno-display");
+  if(sd) sd.innerHTML=parts.length===2
+    ?`<span style="color:var(--txt2);font-weight:400;font-size:12px">#</span>${parts[0]}<span style="font-size:11px;color:var(--txt2);font-weight:400">-${parts[1]}</span>`
+    :"#"+sn;
+  // Customer
+  const cv=document.getElementById("s-customer-val"),cs=document.getElementById("s-customer-sub");
+  if(cv){if(sCustName){cv.textContent=sCustName;cv.style.color="var(--txt)";cv.style.fontWeight="600";cv.style.fontSize="15px";if(sCustMobile&&cs){cs.textContent=sCustMobile;cs.style.display="block";}else if(cs)cs.style.display="none";}else{cv.textContent="Tap to add customer";cv.style.color="var(--txt2)";cv.style.fontWeight="400";cv.style.fontSize="14px";if(cs)cs.style.display="none";}}
+  // Products
+  const pv=document.getElementById("s-products-val"),ps=document.getElementById("s-products-sub");
+  const pc=Object.keys(sProds).length;
+  if(pv){if(pc>0){pv.textContent=`${pc} product${pc>1?"s":""} selected`;pv.style.color="var(--txt)";pv.style.fontWeight="600";pv.style.fontSize="15px";const gt=sGrandTotal();if(gt>0&&ps){ps.textContent=fmt(gt);ps.style.display="block";}else if(ps)ps.style.display="none";}else{pv.textContent="Tap to add products";pv.style.color="var(--txt2)";pv.style.fontWeight="400";pv.style.fontSize="14px";if(ps)ps.style.display="none";}}
+  // Payment
+  const payv=document.getElementById("s-payment-val");
+  const cash=parseFloat(document.getElementById("s-cash")?.value)||0;
+  const online=parseFloat(document.getElementById("s-online")?.value)||0;
+  const due=parseFloat(document.getElementById("s-due")?.value)||0;
+  const gt=sGrandTotal();
+  if(payv){if(gt>0){const parts=[];if(online>0)parts.push(`Online: ${fmt(online)}`);if(cash>0)parts.push(`Cash: ${fmt(cash)}`);if(due>0)parts.push(`Due: ${fmt(due)}`);payv.textContent=parts.length?parts.join(" · "):`${fmt(gt)} (Cash)`;payv.style.color="var(--txt)";payv.style.fontWeight="600";payv.style.fontSize="14px";}else{payv.textContent="Tap to add payment";payv.style.color="var(--txt2)";payv.style.fontWeight="400";payv.style.fontSize="14px";}}
+  // Save button
+  const canSave=sCustName.trim()&&Object.values(sProds).some(p=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return a>0});
+  const btn=document.getElementById("s-save-btn");
+  if(btn){btn.disabled=!canSave;btn.style.color=canSave?"var(--blue)":"#C7C7CC";}
 }
-function updateLI(i,k,v){lineItems[i][k]=v}
-function addLineItem(){lineItems.push({id:uuid(),name:"",qty:"",unit:"MT",rate:""});renderLineItems()}
-function removeLI(i){lineItems.splice(i,1);renderLineItems();calcSaleTotal()}
-function calcSaleTotal(){const t=lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0)*(parseFloat(li.rate)||0),0);document.getElementById("s-total-display").textContent=fmt(t);calcSaleDue();return t}
-function calcSaleDue(){const t=calcSaleTotal(),c=parseFloat(document.getElementById("s-cash").value)||0,o=parseFloat(document.getElementById("s-online").value)||0,d=Math.max(0,t-c-o);document.getElementById("s-due").value=d>0?Math.round(d):""}
-function calcSaleFromDue(){const t=calcSaleTotal(),d=parseFloat(document.getElementById("s-due").value)||0,o=parseFloat(document.getElementById("s-online").value)||0;document.getElementById("s-cash").value=Math.max(0,t-o-d)||""}
+
+function openSalePanel(panel){
+  if(panel==="date"){
+    document.getElementById("s-date-input").value=sDate.toISOString().split("T")[0];
+    document.getElementById("sov-date").classList.add("open");
+  }else if(panel==="saleno"){
+    document.getElementById("s-saleno-suffix").textContent=`-${sFY(sDate)}`;
+    document.getElementById("s-saleno-input").value=sNoOvr;
+    document.getElementById("sov-saleno").classList.add("open");
+  }else if(panel==="customer"){
+    document.getElementById("s-cust-name").value=sCustName;
+    document.getElementById("s-cust-mobile").value=sCustMobile;
+    document.getElementById("s-cust-sugg").style.display="none";
+    renderCustHistory();
+    document.getElementById("sov-customer").classList.add("open");
+  }else if(panel==="products"){
+    renderProdPills();
+    renderProdEntries();
+    document.getElementById("sov-products").classList.add("open");
+  }else if(panel==="payment"){
+    const gt=sGrandTotal();
+    document.getElementById("s-grand-total").textContent=fmt(gt);
+    const c=document.getElementById("s-cash"),o=document.getElementById("s-online");
+    if(!c.value&&!o.value&&gt>0) c.value=Math.round(gt);
+    renderPayAccts();
+    updateDueNote();
+    document.getElementById("sov-payment").classList.add("open");
+  }
+}
+
+function closeSalePanel(panel){
+  document.getElementById("sov-"+panel).classList.remove("open");
+  updateSaleCards();
+}
+
+function saveSaleDate(){
+  const v=document.getElementById("s-date-input").value;
+  if(v) sDate=new Date(v+"T00:00:00");
+  closeSalePanel("date");
+}
+
+function saveSaleNo(){
+  sNoOvr=document.getElementById("s-saleno-input").value.trim();
+  closeSalePanel("saleno");
+}
+
+// ── Customer ──────────────────────────────────────────────────────────────────
+function onCustNameInput(){
+  const v=document.getElementById("s-cust-name").value;
+  const sugg=document.getElementById("s-cust-sugg");
+  if(v.length<1){sugg.style.display="none";return;}
+  const parties=[...new Set(DB.transactions.map(t=>t.party))].filter(p=>p.toLowerCase().includes(v.toLowerCase())&&p!==v).slice(0,5);
+  if(!parties.length){sugg.style.display="none";return;}
+  sugg.innerHTML=parties.map(p=>`<div class="cust-sug-item" onclick="pickCust('${p.replace(/'/g,"\'")}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>${p}</div>`).join("");
+  sugg.style.display="block";
+}
+
+function pickCust(name){
+  document.getElementById("s-cust-name").value=name;
+  document.getElementById("s-cust-sugg").style.display="none";
+  renderCustHistory();
+}
+
+function renderCustHistory(){
+  const name=document.getElementById("s-cust-name").value.trim();
+  const mobile=document.getElementById("s-cust-mobile").value.trim();
+  const el=document.getElementById("s-cust-history");
+  if(!el)return;
+  if(!name&&!mobile){el.innerHTML="";return;}
+  const past=DB.transactions.filter(t=>(name&&t.party.toLowerCase().includes(name.toLowerCase()))||(mobile&&(t.phone||"").includes(mobile))).slice(0,5);
+  if(!past.length){el.innerHTML="";return;}
+  el.innerHTML=`<div style="font-size:13px;font-weight:700;margin:12px 0 8px;color:var(--txt)">Past Transactions</div>`+
+    past.map(t=>`<div style="background:var(--card);border-radius:12px;padding:10px 12px;margin-bottom:6px;box-shadow:0 1px 4px rgba(0,0,0,.04);display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:13px;font-weight:600">${t.notes||t.category}</div><div style="font-size:11px;color:var(--txt2)">${fmtDate(t.date)} · ${fmtTime(t.date)}</div></div>
+      <div style="font-size:13px;font-weight:700;color:${t.type==="sale"?"var(--green)":"var(--red)"}">${fmt(t.totalAmount)}</div>
+    </div>`).join("");
+}
+
+function saveCustDetails(){
+  sCustName=document.getElementById("s-cust-name").value.trim();
+  sCustMobile=document.getElementById("s-cust-mobile").value.trim();
+  closeSalePanel("customer");
+}
+
+// ── Products ──────────────────────────────────────────────────────────────────
+function renderProdPills(container="s-prod-pills",all=false){
+  const list=all?SALE_PRODS:SALE_PRODS.slice(0,8);
+  document.getElementById(container).innerHTML=list.map(p=>{
+    const sel=sProds.hasOwnProperty(p);
+    return`<button class="prod-pill${sel?" sel":""}" onclick="toggleProd('${p.replace(/'/g,"\'")}');renderProdPills();renderProdEntries();${all?"renderProdPills('s-all-prod-pills',true);":""}">${p}</button>`;
+  }).join("");
+}
+
+function renderProdEntries(){
+  const names=Object.keys(sProds);
+  const el=document.getElementById("s-prod-entries");
+  if(!names.length){el.innerHTML="";return;}
+  el.innerHTML=`<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--txt)">${names.length} Selected</div>`+
+    names.map(name=>{
+      const p=sProds[name];
+      const unitOpts=S_UNITS.map(u=>`<option${u===p.unit?" selected":""}>${u}</option>`).join("");
+      return`<div class="prod-entry">
+        <div class="prod-entry-top">
+          <span class="prod-entry-name">${name}</span>
+          <button class="prod-entry-del" onclick="toggleProd('${name.replace(/'/g,"\'")}');renderProdPills();renderProdEntries()">&#215;</button>
+        </div>
+        <div class="prod-fields">
+          <div class="prod-field">
+            <div class="prod-field-lbl">QTY</div>
+            <div class="prod-field-box" style="gap:4px">
+              <input type="number" inputmode="decimal" placeholder="0" value="${p.qty}" oninput="updProd('${name.replace(/'/g,"\'")}','qty',this.value)">
+              <select class="unit-sel" onchange="updProd('${name.replace(/'/g,"\'")}','unit',this.value)">${unitOpts}</select>
+            </div>
+          </div>
+          <div class="prod-field">
+            <div class="prod-field-lbl">RATE</div>
+            <div class="prod-field-box">
+              <span style="font-size:11px;color:var(--txt2)">&#8377;</span>
+              <input type="number" inputmode="decimal" placeholder="0" value="${p.rate}" oninput="updProd('${name.replace(/'/g,"\'")}','rate',this.value)">
+            </div>
+          </div>
+          <div class="prod-field">
+            <div class="prod-field-lbl">AMOUNT</div>
+            <div class="prod-field-box amt">
+              <span style="font-size:11px;color:var(--txt2)">&#8377;</span>
+              <input type="number" inputmode="decimal" placeholder="0" value="${p.amount}" class="amt-inp" oninput="updProd('${name.replace(/'/g,"\'")}','amount',this.value)" style="color:var(--blue)">
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+}
+
+function toggleProd(name){
+  if(sProds.hasOwnProperty(name))delete sProds[name];
+  else sProds[name]={qty:"",unit:"Kg",rate:"",amount:"",manual:false};
+}
+
+function updProd(name,field,val){
+  if(!sProds[name])return;
+  sProds[name][field]=val;
+  if(field==="qty"||field==="rate"){
+    sProds[name].manual=false;
+    const q=parseFloat(sProds[name].qty)||0,r=parseFloat(sProds[name].rate)||0;
+    if(q>0&&r>0){sProds[name].amount=String(Math.round(q*r));const el=document.getElementById("s-prod-entries");if(el){const ents=el.querySelectorAll(".prod-entry");ents.forEach(e=>{if(e.querySelector(".prod-entry-name")?.textContent===name){const inp=e.querySelectorAll(".prod-field-box input")[2];if(inp)inp.value=sProds[name].amount;}});}}
+  }else if(field==="amount"){
+    sProds[name].manual=true;
+    const a=parseFloat(val)||0,q=parseFloat(sProds[name].qty)||0;
+    if(q>0&&a>0){sProds[name].rate=String(Math.round(a/q));const el=document.getElementById("s-prod-entries");if(el){const ents=el.querySelectorAll(".prod-entry");ents.forEach(e=>{if(e.querySelector(".prod-entry-name")?.textContent===name){const inp=e.querySelectorAll(".prod-field-box input")[1];if(inp)inp.value=sProds[name].rate;}});}}
+  }
+}
+
+function openAllProds(){
+  renderProdPills("s-all-prod-pills",true);
+  document.getElementById("sov-allprods").classList.add("open");
+}
+function closeAllProds(){
+  document.getElementById("sov-allprods").classList.remove("open");
+  renderProdPills();
+  renderProdEntries();
+}
+
+// ── Payment ───────────────────────────────────────────────────────────────────
+function renderPayAccts(){
+  document.getElementById("s-online-accts").innerHTML=PAY_ACCTS.map(a=>`<button class="pay-acct${a===sOnlineAcct?" sel-o":""}" onclick="sOnlineAcct='${a}';renderPayAccts()">${a}</button>`).join("");
+  document.getElementById("s-cash-accts").innerHTML=PAY_ACCTS.map(a=>`<button class="pay-acct${a===sCashAcct?" sel-c":""}" onclick="sCashAcct='${a}';renderPayAccts()">${a}</button>`).join("");
+}
+
+function onPayChange(field){
+  const gt=sGrandTotal();
+  const o=parseFloat(document.getElementById("s-online").value)||0;
+  const c=parseFloat(document.getElementById("s-cash").value)||0;
+  const d=parseFloat(document.getElementById("s-due").value)||0;
+  if(field==="cash"||field==="online"){const nd=Math.max(0,gt-c-o);document.getElementById("s-due").value=nd>0?Math.round(nd):"";}
+  else if(field==="due"){const nc=Math.max(0,gt-o-d);document.getElementById("s-cash").value=nc>0?Math.round(nc):"";}
+  updateDueNote();
+}
+
+function updateDueNote(){
+  const due=parseFloat(document.getElementById("s-due")?.value)||0;
+  const el=document.getElementById("s-due-note");
+  if(!el)return;
+  if(due>0){el.textContent=`₹${Math.round(due)} will be recorded as due payment`;el.style.display="block";}
+  else el.style.display="none";
+}
+
+// ── Save Sale ─────────────────────────────────────────────────────────────────
 function saveSale(){
-  const party=document.getElementById("s-party").value.trim();
-  if(!party){alert("Please enter party name");return}
-  const total=lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0)*(parseFloat(li.rate)||0),0);
-  DB.addTx({id:uuid(),type:"sale",category:lineItems[0]?.name||"Other",party,phone:document.getElementById("s-phone").value.trim(),quantity:lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0),0),unit:"MT",ratePerUnit:lineItems[0]?.rate||0,totalAmount:total,date:new Date(document.getElementById("s-date").value).toISOString(),notes:document.getElementById("s-notes").value.trim(),cashPayment:parseFloat(document.getElementById("s-cash").value)||0,onlinePayment:parseFloat(document.getElementById("s-online").value)||0,dueAmount:parseFloat(document.getElementById("s-due").value)||0,lineItems:lineItems.filter(li=>li.name).map(li=>`${li.name} ${li.qty}${li.unit}`)});
+  if(!sCustName.trim()){openSalePanel("customer");return;}
+  const valid=Object.entries(sProds).filter(([n,p])=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return a>0});
+  if(!valid.length){openSalePanel("products");return;}
+  const totalAmount=valid.reduce((s,[n,p])=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return s+a},0);
+  const totalQty=valid.reduce((s,[n,p])=>s+(parseFloat(p.qty)||0),0);
+  const chips=valid.map(([n,p])=>{const q=parseFloat(p.qty)||0;const qs=q%1===0?String(Math.round(q)):q.toFixed(1);return`${n} ${qs}${p.unit}`;});
+  const online=parseFloat(document.getElementById("s-online").value)||0;
+  const due=parseFloat(document.getElementById("s-due").value)||0;
+  const cashRaw=parseFloat(document.getElementById("s-cash").value);
+  const cash=isNaN(cashRaw)?Math.max(0,totalAmount-online-due):cashRaw;
+  DB.addTx({id:uuid(),type:"sale",category:"Other",party:sCustName,phone:sCustMobile,quantity:totalQty,unit:valid[0]?.[1]?.unit||"Kg",ratePerUnit:totalQty>0?totalAmount/totalQty:0,totalAmount,date:sDate.toISOString(),notes:"Sale #"+sSaleNo(),cashPayment:cash,onlinePayment:online,dueAmount:due,lineItems:chips});
   closeModal("sale");renderDashboard();githubPush();
 }
 
