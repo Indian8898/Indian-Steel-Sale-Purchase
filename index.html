@@ -86,12 +86,11 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .tx-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
 .tx-body{flex:1;min-width:0}
 .tx-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.tx-name{font-size:15px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.tx-amount{font-size:15px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.tx-name{font-size:13px;font-weight:600;color:var(--txt);flex:1;min-width:0}
+.tx-amount{font-size:14px;font-weight:700;white-space:nowrap;flex-shrink:0}
 .tx-meta{font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4}
-.tx-chips{display:flex;flex-wrap:nowrap;gap:6px;margin-top:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}
-.tx-chips::-webkit-scrollbar{display:none}
-.tx-chip{font-size:11px;font-weight:600;padding:3px 10px;border-radius:8px;background:rgba(0,122,255,.10);color:var(--blue);white-space:nowrap;flex-shrink:0}
+.tx-chips{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.tx-chip{font-size:10px;font-weight:500;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.06);color:#4A4A4A;display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
 .tx-pay-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .pay-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
 /* Cards */
@@ -735,7 +734,7 @@ function txCard(t){
   const meta=[t.notes?t.notes.substring(0,16)+(t.notes.length>16?"...":""):null,fmtDate(t.date),fmtTime(t.date)].filter(Boolean).join(" · ");
   return`<div class="tx-card"><div class="tx-icon" style="background:${bg}">${arrow}</div>
     <div class="tx-body">
-      <div class="tx-top"><div class="tx-name" style="display:flex;align-items:baseline;gap:0;overflow:hidden"><span style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${t.party}</span>${t.phone?`<span style="color:var(--txt2);font-weight:400;font-size:12px;white-space:nowrap;flex-shrink:0;margin-left:5px">— ${t.phone}</span>`:""}</div><div class="tx-amount" style="color:${amtCol}">${fmt(t.totalAmount)}</div></div>
+      <div class="tx-top"><div class="tx-name"><span style="font-size:13px;font-weight:600">${t.party}</span>${t.phone?`<span style="color:var(--txt2);font-weight:400;font-size:11px;margin-left:4px">— ${t.phone}</span>`:""}</div><div class="tx-amount" style="color:${amtCol}">${fmt(t.totalAmount)}</div></div>
       <div class="tx-meta">${meta}</div>${chips}${pills?`<div class="tx-pay-pills">${pills}</div>`:""}
     </div></div>`;
 }

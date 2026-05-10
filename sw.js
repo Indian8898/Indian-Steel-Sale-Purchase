@@ -1,4 +1,4 @@
-const CACHE = 'steelshop-v16';
+const CACHE = 'steelshop-v17';
 const ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e =>
