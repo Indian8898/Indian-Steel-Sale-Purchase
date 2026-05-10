@@ -71,11 +71,11 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .bar-fill.act{background:var(--blue)}
 .bar-lbl{font-size:7px;color:var(--txt2);font-weight:500}
 /* KPI row */
-.kpi-row{display:flex;gap:10px;margin-bottom:14px}
-.kpi-card{flex:1;background:var(--card);border-radius:16px;padding:14px 12px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.kpi-icon-wrap{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
-.kpi-label{font-size:12px;color:var(--txt2);margin-bottom:3px;font-weight:500}
-.kpi-value{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-row{display:flex;gap:8px;margin-bottom:12px}
+.kpi-card{flex:1;background:var(--card);border-radius:14px;padding:10px 10px 10px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.kpi-top{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.kpi-label{font-size:11px;color:var(--txt2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-value{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* Section header */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin:2px 0 12px}
 .section-header h2{font-size:18px;font-weight:700;color:var(--txt)}
@@ -704,16 +704,16 @@ function renderDashboard(){
   document.getElementById("kpi-row-wrap").innerHTML=`
     <div class="kpi-row">
       <div class="kpi-card">
-        <div class="kpi-icon-wrap" style="background:rgba(255,149,0,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-        <div class="kpi-label">Purchase</div><div class="kpi-value" style="color:var(--orange)">${fmt(s.todayPurchases)}</div>
+        <div class="kpi-top"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--orange)"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 13H11v-2h2v2zm0-4H11V7h2v4z" opacity=".15"/><circle cx="12" cy="12" r="10" fill="none" stroke="var(--orange)" stroke-width="2"/><path d="M12 5v14M5 12l7 7 7-7" fill="none" stroke="var(--orange)" stroke-width="2.2" stroke-linecap="round"/></svg><span class="kpi-label">Purchase</span></div>
+        <div class="kpi-value" style="color:var(--orange)">${fmt(s.todayPurchases)}</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-icon-wrap" style="background:rgba(255,59,48,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--red)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
-        <div class="kpi-label">Due</div><div class="kpi-value" style="color:var(--red)">${fmt(s.totalDue)}</div>
+        <div class="kpi-top"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--red)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg><span class="kpi-label">Due</span></div>
+        <div class="kpi-value" style="color:var(--red)">${fmt(s.totalDue)}</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-icon-wrap" style="background:rgba(52,199,89,.12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-        <div class="kpi-label">Advance</div><div class="kpi-value" style="color:var(--green)">${fmt(s.totalAdvance)}</div>
+        <div class="kpi-top"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--green)"><circle cx="12" cy="12" r="10"/><path d="M7 13l3 3 7-7" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span class="kpi-label">Advance</span></div>
+        <div class="kpi-value" style="color:var(--green)">${fmt(s.totalAdvance)}</div>
       </div>
     </div>`;
   const all=DB.transactions.slice(0,20);
