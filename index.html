@@ -404,59 +404,130 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 
 <!-- MODAL: ADD PURCHASE -->
 <div class="modal-bg" id="modal-purchase"><div class="modal-sheet"><div class="modal-handle"></div>
-  <div class="modal-header"><h2>New Purchase</h2><button class="modal-close" onclick="closeModal('purchase')">Cancel</button></div>
-  <div class="modal-body">
-    <div class="form-section"><div class="form-section-title">Supplier</div>
-      <div class="form-card">
-        <div class="form-row"><label>Name</label><input id="p-party" type="text" placeholder="Supplier name"></div>
-        <div class="form-row"><label>Mobile</label><input id="p-phone" type="tel" placeholder="Phone number"></div>
-        <div class="form-row"><label>Date</label><input id="p-date" type="date"></div>
-      </div>
+  <div class="modal-header-3">
+    <button class="modal-close" onclick="closeModal('purchase')">Cancel</button>
+    <h2>New Purchase</h2>
+    <button id="p-save-btn" class="modal-save" onclick="savePurchase()" disabled style="color:#C7C7CC">Save</button>
+  </div>
+  <div class="modal-body" style="padding-top:14px">
+    <!-- Row 1: Date + Bill No. -->
+    <div class="sale-mini-cards">
+      <button class="sale-mini-card" onclick="openPurchasePanel('date')">
+        <div class="sale-mini-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Date
+        </div>
+        <div class="sale-mini-val" id="p-date-display">Today</div>
+      </button>
+      <button class="sale-mini-card" onclick="openPurchasePanel('billno')">
+        <div class="sale-mini-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Bill No.
+        </div>
+        <div class="sale-mini-val" id="p-billno-display">#01</div>
+      </button>
     </div>
-    <div class="form-section"><div class="form-section-title">Product</div>
-      <div class="form-card">
-        <div class="form-row"><label>Category</label><select id="p-category" style="flex:1;text-align:right"><option>TMT Bars</option><option>MS Sheet</option><option>MS Pipe</option><option>MS Angle</option><option>MS Channel</option><option>I-Beam</option><option>Chequered Plate</option><option>Other</option></select></div>
-        <div class="form-row"><label>Quantity</label><input id="p-qty" type="number" placeholder="0" oninput="calcPurchaseTotal()"></div>
-        <div class="form-row"><label>Unit</label><select id="p-unit" style="flex:1;text-align:right"><option>MT</option><option>Kg</option><option>Pcs</option><option>Ft</option><option>Mtr</option></select></div>
-        <div class="form-row"><label>Rate/Unit</label><input id="p-rate" type="number" placeholder="0" oninput="calcPurchaseTotal()"></div>
-        <div class="form-row total-row"><label>Total Amount</label><span id="p-total-display">&#8377;0</span></div>
+    <!-- Supplier card -->
+    <button class="sale-info-card" onclick="openPurchasePanel('supplier')">
+      <div class="sale-info-icon" style="background:rgba(255,149,0,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </div>
-    </div>
-    <div class="form-section"><div class="form-section-title">Payment</div>
-      <div class="form-card">
-        <div class="form-row"><label>Cash (&#8377;)</label><input id="p-cash" type="number" placeholder="0"></div>
-        <div class="form-row"><label>Online (&#8377;)</label><input id="p-online" type="number" placeholder="0"></div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Supplier</div>
+        <div class="sale-info-val" id="p-supplier-val">Tap to add supplier</div>
+        <div class="sale-info-val" id="p-supplier-sub" style="display:none;font-size:12px;margin-top:1px"></div>
       </div>
-    </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <!-- Products card -->
+    <button class="sale-info-card" onclick="openPurchasePanel('products')">
+      <div class="sale-info-icon" style="background:rgba(255,149,0,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Products</div>
+        <div class="sale-info-val" id="p-products-val">Tap to add products</div>
+        <div class="sale-info-val" id="p-products-sub" style="display:none;font-size:12px;margin-top:1px"></div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <!-- Payment card -->
+    <button class="sale-info-card" onclick="openPurchasePanel('payment')">
+      <div class="sale-info-icon" style="background:rgba(52,199,89,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"/><path d="M12 6v2M12 16v2"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Payment</div>
+        <div class="sale-info-val" id="p-payment-val">Tap to add payment</div>
+        <div class="sale-info-val" id="p-payment-sub" style="display:none;font-size:12px;margin-top:1px"></div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
     <button class="btn-primary" style="background:var(--orange);box-shadow:0 4px 14px rgba(255,149,0,.3)" onclick="savePurchase()">Save Purchase</button>
   </div>
 </div></div>
 
 <!-- MODAL: ADD ADVANCE -->
 <div class="modal-bg" id="modal-advance"><div class="modal-sheet"><div class="modal-handle"></div>
-  <div class="modal-header"><h2>Advance Payment</h2><button class="modal-close" onclick="closeModal('advance')">Cancel</button></div>
-  <div class="modal-body">
-    <div class="form-section"><div class="form-section-title">Customer</div>
-      <div class="form-card">
-        <div class="form-row"><label>Name</label><input id="a-name" type="text" placeholder="Customer name"></div>
-        <div class="form-row"><label>Mobile</label><input id="a-phone" type="tel" placeholder="Phone number"></div>
-        <div class="form-row"><label>Receipt No</label><input id="a-receipt" type="text" placeholder="e.g. ADV-001"></div>
-        <div class="form-row"><label>Date</label><input id="a-date" type="date"></div>
-      </div>
+  <div class="modal-header-3">
+    <button class="modal-close" onclick="closeModal('advance')">Cancel</button>
+    <h2>Advance Payment</h2>
+    <button id="a-save-btn" class="modal-save" onclick="saveAdvance()" disabled style="color:#C7C7CC">Save</button>
+  </div>
+  <div class="modal-body" style="padding-top:14px">
+    <!-- Row 1: Date + Receipt No. -->
+    <div class="sale-mini-cards">
+      <button class="sale-mini-card" onclick="openAdvancePanel('date')">
+        <div class="sale-mini-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Date
+        </div>
+        <div class="sale-mini-val" id="a-date-display">Today</div>
+      </button>
+      <button class="sale-mini-card" onclick="openAdvancePanel('receiptno')">
+        <div class="sale-mini-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
+          Receipt No.
+        </div>
+        <div class="sale-mini-val" id="a-receiptno-display">ADV#01</div>
+      </button>
     </div>
-    <div class="form-section"><div class="form-section-title">Item (Optional)</div>
-      <div class="form-card">
-        <div class="form-row"><label>Item Name</label><input id="a-item" type="text" placeholder="e.g. TMT 12mm"></div>
-        <div class="form-row"><label>Rate (&#8377;/unit)</label><input id="a-rate" type="number" placeholder="0"></div>
+    <!-- Customer card -->
+    <button class="sale-info-card" onclick="openAdvancePanel('customer')">
+      <div class="sale-info-icon" style="background:rgba(52,199,89,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </div>
-    </div>
-    <div class="form-section"><div class="form-section-title">Amount</div>
-      <div class="form-card">
-        <div class="form-row total-row"><label>Advance (&#8377;)</label><input id="a-amount" type="number" placeholder="0" style="font-size:14px;font-weight:700;color:var(--green);text-align:right"></div>
-        <div class="form-row"><label>Cash (&#8377;)</label><input id="a-cash" type="number" placeholder="0"></div>
-        <div class="form-row"><label>Online (&#8377;)</label><input id="a-online" type="number" placeholder="0"></div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Customer</div>
+        <div class="sale-info-val" id="a-customer-val">Tap to add customer</div>
+        <div class="sale-info-val" id="a-customer-sub" style="display:none;font-size:12px;margin-top:1px"></div>
       </div>
-    </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <!-- Item card (optional) -->
+    <button class="sale-info-card" onclick="openAdvancePanel('item')">
+      <div class="sale-info-icon" style="background:rgba(88,86,214,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Item <span style="font-size:10px;color:var(--txt2);font-weight:400;text-transform:none;letter-spacing:0">(Optional)</span></div>
+        <div class="sale-info-val" id="a-item-val">Tap to add item</div>
+        <div class="sale-info-val" id="a-item-sub" style="display:none;font-size:12px;margin-top:1px"></div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <!-- Amount card -->
+    <button class="sale-info-card" onclick="openAdvancePanel('payment')">
+      <div class="sale-info-icon" style="background:rgba(52,199,89,.10)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"/><path d="M12 6v2M12 16v2"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="sale-info-label">Amount</div>
+        <div class="sale-info-val" id="a-payment-val">Tap to add amount</div>
+        <div class="sale-info-val" id="a-payment-sub" style="display:none;font-size:12px;margin-top:1px"></div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C7C7CC" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
     <button class="btn-primary" style="background:var(--green);box-shadow:0 4px 14px rgba(52,199,89,.3)" onclick="saveAdvance()">Save Advance</button>
   </div>
 </div></div>
@@ -609,6 +680,233 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
     <div class="sale-ov-footer">
       <button class="sale-ov-btn cancel" onclick="closeSalePanel('payment')">Close</button>
       <button class="sale-ov-btn save" onclick="closeSalePanel('payment')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PURCHASE OVERLAYS ─────────────────────────────────────────────── -->
+
+<!-- Purchase Date overlay -->
+<div class="sale-overlay" id="sov-pdate">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Select Date</span></div>
+    <div class="sale-ov-body" style="padding:16px">
+      <input type="date" id="p-date-input" style="width:100%;font-size:17px;padding:14px;border-radius:14px;background:#F5F5FA;border:none;outline:none;font-family:inherit;color:var(--txt)">
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closePurchasePanel('date')">Cancel</button>
+      <button class="sale-ov-btn save" style="background:var(--orange)" onclick="savePurchaseDate()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Purchase Bill No. overlay -->
+<div class="sale-overlay" id="sov-pbillno">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Edit Bill Number</span></div>
+    <div class="sale-ov-body" style="padding:16px">
+      <div style="background:#F5F5FA;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center;gap:4px">
+        <span style="font-size:20px;color:var(--txt2)">#</span>
+        <input id="p-billno-input" type="number" style="font-size:24px;font-weight:700;width:70px;background:none;border:none;outline:none;text-align:center;font-family:inherit;color:var(--txt)" placeholder="01">
+        <span id="p-billno-suffix" style="font-size:17px;color:var(--txt2)">-25/26</span>
+      </div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closePurchasePanel('billno')">Cancel</button>
+      <button class="sale-ov-btn save" style="background:var(--orange)" onclick="savePurchaseBillNo()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Purchase Supplier overlay -->
+<div class="sale-overlay" id="sov-psupplier">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Supplier Details</span></div>
+    <div class="sale-ov-body" id="sov-supp-body">
+      <div class="cust-field" style="position:relative">
+        <label>Supplier Name</label>
+        <input id="p-supp-name" type="text" placeholder="e.g. Steel India Ltd" oninput="onSuppNameInput()" autocomplete="off">
+        <div id="p-supp-sugg" class="cust-suggest" style="display:none"></div>
+      </div>
+      <div class="cust-field">
+        <label>Mobile Number</label>
+        <input id="p-supp-mobile" type="tel" placeholder="10-digit mobile">
+      </div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="saveSuppDetails()">Close</button>
+      <button class="sale-ov-btn save" style="background:var(--orange)" onclick="saveSuppDetails()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Purchase Products overlay -->
+<div class="sale-overlay" id="sov-pproducts">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header">
+      <span class="sale-ov-title">Product Details</span>
+      <button onclick="openAllPProds()" style="font-size:13px;font-weight:600;color:var(--orange)">View All</button>
+    </div>
+    <div class="sale-ov-body">
+      <div class="prod-pills-grid" id="p-prod-pills"></div>
+      <div id="p-prod-entries"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closePurchasePanel('products')">Close</button>
+      <button class="sale-ov-btn save" style="background:var(--orange)" onclick="closePurchasePanel('products')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Purchase All Products overlay -->
+<div class="sale-overlay" id="sov-pallprods" style="z-index:420">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">All Products</span></div>
+    <div class="sale-ov-body">
+      <div class="prod-pills-grid" id="p-all-prod-pills"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn save" style="max-width:100%;background:var(--orange)" onclick="closeAllPProds()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Purchase Payment overlay -->
+<div class="sale-overlay" id="sov-ppayment">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Payment Details</span></div>
+    <div class="sale-ov-body">
+      <div class="pay-total-box" style="background:rgba(255,149,0,.08)">
+        <span style="font-size:15px;font-weight:600">Grand Total</span>
+        <span style="font-size:18px;font-weight:700;color:var(--orange)" id="p-grand-total">&#8377;0</span>
+      </div>
+      <div class="pay-section-lbl">Online / UPI</div>
+      <div class="pay-field-box online">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="p-online" type="number" inputmode="numeric" placeholder="0" oninput="onPurchasePayChange()">
+      </div>
+      <div class="pay-accts" id="p-online-accts"></div>
+      <div class="pay-section-lbl">Cash Payment</div>
+      <div class="pay-field-box cash">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="p-cash" type="number" inputmode="numeric" placeholder="0" oninput="onPurchasePayChange()">
+      </div>
+      <div class="pay-accts" id="p-cash-accts"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closePurchasePanel('payment')">Close</button>
+      <button class="sale-ov-btn save" style="background:var(--orange)" onclick="closePurchasePanel('payment')">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADVANCE OVERLAYS ─────────────────────────────────────────────── -->
+
+<!-- Advance Date overlay -->
+<div class="sale-overlay" id="sov-adate">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Select Date</span></div>
+    <div class="sale-ov-body" style="padding:16px">
+      <input type="date" id="a-date-input" style="width:100%;font-size:17px;padding:14px;border-radius:14px;background:#F5F5FA;border:none;outline:none;font-family:inherit;color:var(--txt)">
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeAdvancePanel('date')">Cancel</button>
+      <button class="sale-ov-btn save" style="background:var(--green)" onclick="saveAdvanceDate()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Advance Receipt No. overlay -->
+<div class="sale-overlay" id="sov-areceiptno">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Edit Receipt Number</span></div>
+    <div class="sale-ov-body" style="padding:16px">
+      <div style="background:#F5F5FA;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center;gap:4px">
+        <span style="font-size:18px;color:var(--txt2)">ADV#</span>
+        <input id="a-receiptno-input" type="number" style="font-size:24px;font-weight:700;width:70px;background:none;border:none;outline:none;text-align:center;font-family:inherit;color:var(--txt)" placeholder="01">
+        <span id="a-receiptno-suffix" style="font-size:17px;color:var(--txt2)">-25/26</span>
+      </div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeAdvancePanel('receiptno')">Cancel</button>
+      <button class="sale-ov-btn save" style="background:var(--green)" onclick="saveAdvanceReceiptNo()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Advance Customer overlay -->
+<div class="sale-overlay" id="sov-acustomer">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Customer Details</span></div>
+    <div class="sale-ov-body" id="sov-acust-body">
+      <div class="cust-field" style="position:relative">
+        <label>Customer Name</label>
+        <input id="a-cust-name" type="text" placeholder="e.g. Ravi Constructions" oninput="onAdvCustNameInput()" autocomplete="off">
+        <div id="a-cust-sugg" class="cust-suggest" style="display:none"></div>
+      </div>
+      <div class="cust-field">
+        <label>Mobile Number</label>
+        <input id="a-cust-mobile" type="tel" placeholder="10-digit mobile">
+      </div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="saveAdvCustDetails()">Close</button>
+      <button class="sale-ov-btn save" style="background:var(--green)" onclick="saveAdvCustDetails()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Advance Item overlay -->
+<div class="sale-overlay" id="sov-aitem">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Item (Optional)</span></div>
+    <div class="sale-ov-body">
+      <div class="cust-field">
+        <label>Item Name</label>
+        <input id="a-item-name" type="text" placeholder="e.g. TMT 12mm, MS Pipe..." autocomplete="off">
+      </div>
+      <div class="cust-field">
+        <label>Rate (&#8377;/unit)</label>
+        <input id="a-item-rate" type="number" inputmode="decimal" placeholder="0">
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--txt2);margin:8px 0 6px;letter-spacing:.4px;text-transform:uppercase">Quick Select</div>
+      <div class="prod-pills-grid" id="a-prod-pills"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeAdvancePanel('item')">Close</button>
+      <button class="sale-ov-btn save" style="background:var(--green)" onclick="saveAdvItem()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Advance Payment overlay -->
+<div class="sale-overlay" id="sov-apayment">
+  <div class="sale-ov-card">
+    <div class="sale-ov-header"><span class="sale-ov-title">Advance Amount</span></div>
+    <div class="sale-ov-body">
+      <div class="pay-section-lbl" style="margin-top:4px">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--green)"><circle cx="12" cy="12" r="10"/><path d="M7 13l3 3 7-7" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        Total Advance
+      </div>
+      <div class="pay-field-box" style="background:rgba(52,199,89,.08)">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="a-adv-amount" type="number" inputmode="numeric" placeholder="0" style="font-size:20px;font-weight:600;color:var(--green);flex:1;border:none;outline:none;background:none;font-family:inherit" oninput="onAdvPayChange()">
+      </div>
+      <div class="pay-section-lbl">Online / UPI</div>
+      <div class="pay-field-box online">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="a-online" type="number" inputmode="numeric" placeholder="0" oninput="onAdvPayChange()">
+      </div>
+      <div class="pay-section-lbl">Cash (auto)</div>
+      <div class="pay-field-box cash">
+        <span style="color:var(--txt2);font-size:16px">&#8377;</span>
+        <input id="a-cash" type="number" inputmode="numeric" placeholder="auto-calculated" readonly style="cursor:default;color:var(--green)">
+      </div>
+      <div id="a-pay-note" style="display:none;font-size:11px;color:var(--green);padding:0 4px;margin-bottom:8px"></div>
+    </div>
+    <div class="sale-ov-footer">
+      <button class="sale-ov-btn cancel" onclick="closeAdvancePanel('payment')">Close</button>
+      <button class="sale-ov-btn save" style="background:var(--green)" onclick="closeAdvancePanel('payment')">Save</button>
     </div>
   </div>
 </div>
@@ -1037,32 +1335,313 @@ function saveSale(){
   closeModal("sale");renderDashboard();githubPush();
 }
 
+// ─── PURCHASE FORM (card-based) ─────────────────────────────────────────────
+let pDate=new Date(), pBillNoOvr="", pSupplierName="", pSupplierMobile="";
+let pProds={};
+
+function pFY(d){const y=d.getFullYear(),m=d.getMonth()+1;return m>=4?`${y%100}/${(y+1)%100}`:`${(y-1)%100}/${y%100}`}
+function pBillNo(){const n=DB.transactions.filter(t=>t.type==="purchase").length+1;const num=pBillNoOvr||String(n).padStart(2,"0");return`${num}-${pFY(pDate)}`}
+function pGrandTotal(){return Object.values(pProds).reduce((s,p)=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return s+a},0)}
+
 function initPurchaseForm(){
-  document.getElementById("p-date").value=today();
-  ["p-party","p-phone","p-qty","p-rate","p-cash","p-online"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("p-total-display").textContent="₹0";
+  pDate=new Date(); pBillNoOvr=""; pSupplierName=""; pSupplierMobile=""; pProds={};
+  const c=document.getElementById("p-cash"); if(c) c.value="";
+  const o=document.getElementById("p-online"); if(o) o.value="";
+  updatePurchaseCards();
 }
-function calcPurchaseTotal(){const q=parseFloat(document.getElementById("p-qty").value)||0,r=parseFloat(document.getElementById("p-rate").value)||0;document.getElementById("p-total-display").textContent=fmt(q*r)}
+
+function updatePurchaseCards(){
+  const opts={day:"numeric",month:"short",year:"numeric"};
+  const dd=document.getElementById("p-date-display");
+  if(dd) dd.textContent=pDate.toLocaleDateString("en-IN",opts);
+  const bn=pBillNo(),bparts=bn.split("-");
+  const bd=document.getElementById("p-billno-display");
+  if(bd) bd.innerHTML=bparts.length===2
+    ?`<span style="color:var(--txt2);font-weight:400;font-size:12px">#</span>${bparts[0]}<span style="font-size:11px;color:var(--txt2);font-weight:400">-${bparts[1]}</span>`
+    :"#"+bn;
+  const sv=document.getElementById("p-supplier-val"),ss=document.getElementById("p-supplier-sub");
+  if(sv){if(pSupplierName){sv.textContent=pSupplierName;sv.style.color="var(--txt)";sv.style.fontWeight="600";sv.style.fontSize="15px";if(pSupplierMobile&&ss){ss.textContent=pSupplierMobile;ss.style.display="block";}else if(ss)ss.style.display="none";}else{sv.textContent="Tap to add supplier";sv.style.color="var(--txt2)";sv.style.fontWeight="400";sv.style.fontSize="14px";if(ss)ss.style.display="none";}}
+  const pv=document.getElementById("p-products-val"),ps=document.getElementById("p-products-sub");
+  const pc=Object.keys(pProds).length;
+  if(pv){if(pc>0){pv.textContent=`${pc} product${pc>1?"s":""} selected`;pv.style.color="var(--txt)";pv.style.fontWeight="600";pv.style.fontSize="15px";const gt=pGrandTotal();if(gt>0&&ps){ps.textContent=fmt(gt);ps.style.display="block";}else if(ps)ps.style.display="none";}else{pv.textContent="Tap to add products";pv.style.color="var(--txt2)";pv.style.fontWeight="400";pv.style.fontSize="14px";if(ps)ps.style.display="none";}}
+  const payv=document.getElementById("p-payment-val");
+  const cash=parseFloat(document.getElementById("p-cash")?.value)||0;
+  const online=parseFloat(document.getElementById("p-online")?.value)||0;
+  const gt=pGrandTotal();
+  if(payv){if(gt>0){const pts=[];if(online>0)pts.push(`Online: ${fmt(online)}`);if(cash>0)pts.push(`Cash: ${fmt(cash)}`);payv.textContent=pts.length?pts.join(" · "):`${fmt(gt)} (Cash)`;payv.style.color="var(--txt)";payv.style.fontWeight="600";payv.style.fontSize="14px";}else{payv.textContent="Tap to add payment";payv.style.color="var(--txt2)";payv.style.fontWeight="400";payv.style.fontSize="14px";}}
+  const canSave=pSupplierName.trim()&&Object.values(pProds).some(p=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return a>0});
+  const btn=document.getElementById("p-save-btn");
+  if(btn){btn.disabled=!canSave;btn.style.color=canSave?"var(--orange)":"#C7C7CC";}
+}
+
+function openPurchasePanel(panel){
+  if(panel==="date"){
+    document.getElementById("p-date-input").value=pDate.toISOString().split("T")[0];
+    document.getElementById("sov-pdate").classList.add("open");
+  }else if(panel==="billno"){
+    document.getElementById("p-billno-suffix").textContent=`-${pFY(pDate)}`;
+    document.getElementById("p-billno-input").value=pBillNoOvr;
+    document.getElementById("sov-pbillno").classList.add("open");
+  }else if(panel==="supplier"){
+    document.getElementById("p-supp-name").value=pSupplierName;
+    document.getElementById("p-supp-mobile").value=pSupplierMobile;
+    document.getElementById("p-supp-sugg").style.display="none";
+    document.getElementById("sov-psupplier").classList.add("open");
+  }else if(panel==="products"){
+    renderPProdPills();
+    renderPProdEntries();
+    document.getElementById("sov-pproducts").classList.add("open");
+  }else if(panel==="payment"){
+    const gt=pGrandTotal();
+    document.getElementById("p-grand-total").textContent=fmt(gt);
+    const c=document.getElementById("p-cash"),o=document.getElementById("p-online");
+    if(!c.value&&!o.value&&gt>0) c.value=Math.round(gt);
+    renderPurchasePayAccts();
+    document.getElementById("sov-ppayment").classList.add("open");
+  }
+}
+
+function closePurchasePanel(panel){
+  document.getElementById("sov-p"+panel).classList.remove("open");
+  updatePurchaseCards();
+}
+
+function savePurchaseDate(){
+  const v=document.getElementById("p-date-input").value;
+  if(v) pDate=new Date(v+"T00:00:00");
+  closePurchasePanel("date");
+}
+
+function savePurchaseBillNo(){
+  pBillNoOvr=document.getElementById("p-billno-input").value.trim();
+  closePurchasePanel("billno");
+}
+
+function onSuppNameInput(){
+  const v=document.getElementById("p-supp-name").value;
+  const sugg=document.getElementById("p-supp-sugg");
+  if(v.length<1){sugg.style.display="none";return;}
+  const parties=[...new Set(DB.transactions.filter(t=>t.type==="purchase").map(t=>t.party))].filter(p=>p.toLowerCase().includes(v.toLowerCase())&&p!==v).slice(0,5);
+  if(!parties.length){sugg.style.display="none";return;}
+  sugg.innerHTML=parties.map(p=>`<div class="cust-sug-item" onclick="pickSupp('${p.replace(/'/g,"\\'")}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>${p}</div>`).join("");
+  sugg.style.display="block";
+}
+
+function pickSupp(name){
+  document.getElementById("p-supp-name").value=name;
+  document.getElementById("p-supp-sugg").style.display="none";
+}
+
+function saveSuppDetails(){
+  pSupplierName=document.getElementById("p-supp-name").value.trim();
+  pSupplierMobile=document.getElementById("p-supp-mobile").value.trim();
+  closePurchasePanel("supplier");
+}
+
+function renderPProdPills(container="p-prod-pills",all=false){
+  const list=all?SALE_PRODS:SALE_PRODS.slice(0,8);
+  document.getElementById(container).innerHTML=list.map(p=>{
+    const sel=pProds.hasOwnProperty(p);
+    return`<button class="prod-pill${sel?" sel":""}" style="${sel?"background:var(--orange)":"background:rgba(255,149,0,.08);color:var(--orange)"}" onclick="togglePProd('${p.replace(/'/g,"\\'")}');renderPProdPills();renderPProdEntries();${all?"renderPProdPills('p-all-prod-pills',true);":""}">${p}</button>`;
+  }).join("");
+}
+
+function renderPProdEntries(){
+  const names=Object.keys(pProds);
+  const el=document.getElementById("p-prod-entries");
+  if(!names.length){el.innerHTML="";return;}
+  el.innerHTML=`<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--txt)">${names.length} Selected</div>`+
+    names.map(name=>{
+      const p=pProds[name];
+      const unitOpts=S_UNITS.map(u=>`<option${u===p.unit?" selected":""}>${u}</option>`).join("");
+      return`<div class="prod-entry">
+        <div class="prod-entry-top"><span class="prod-entry-name">${name}</span><button class="prod-entry-del" onclick="togglePProd('${name.replace(/'/g,"\\'")}');renderPProdPills();renderPProdEntries()">&#215;</button></div>
+        <div class="prod-fields">
+          <div class="prod-field"><div class="prod-field-lbl">QTY</div><div class="prod-field-box" style="gap:4px"><input type="number" inputmode="decimal" placeholder="0" value="${p.qty}" oninput="updPProd('${name.replace(/'/g,"\\'")}','qty',this.value)"><select class="unit-sel" style="color:var(--orange);background:rgba(255,149,0,.12)" onchange="updPProd('${name.replace(/'/g,"\\'")}','unit',this.value)">${unitOpts}</select></div></div>
+          <div class="prod-field"><div class="prod-field-lbl">RATE</div><div class="prod-field-box"><span style="font-size:11px;color:var(--txt2)">&#8377;</span><input type="number" inputmode="decimal" placeholder="0" value="${p.rate}" oninput="updPProd('${name.replace(/'/g,"\\'")}','rate',this.value)"></div></div>
+          <div class="prod-field"><div class="prod-field-lbl">AMOUNT</div><div class="prod-field-box" style="background:rgba(255,149,0,.07)"><span style="font-size:11px;color:var(--txt2)">&#8377;</span><input type="number" inputmode="decimal" placeholder="0" value="${p.amount}" oninput="updPProd('${name.replace(/'/g,"\\'")}','amount',this.value)" style="color:var(--orange)"></div></div>
+        </div>
+      </div>`;
+    }).join("");
+}
+
+function togglePProd(name){
+  if(pProds.hasOwnProperty(name))delete pProds[name];
+  else pProds[name]={qty:"",unit:"Kg",rate:"",amount:"",manual:false};
+}
+
+function updPProd(name,field,val){
+  if(!pProds[name])return;
+  pProds[name][field]=val;
+  if(field==="qty"||field==="rate"){
+    pProds[name].manual=false;
+    const q=parseFloat(pProds[name].qty)||0,r=parseFloat(pProds[name].rate)||0;
+    if(q>0&&r>0){pProds[name].amount=String(Math.round(q*r));const el=document.getElementById("p-prod-entries");if(el){el.querySelectorAll(".prod-entry").forEach(e=>{if(e.querySelector(".prod-entry-name")?.textContent===name){const inp=e.querySelectorAll(".prod-field-box input")[2];if(inp)inp.value=pProds[name].amount;}});}}
+  }else if(field==="amount"){
+    pProds[name].manual=true;
+    const a=parseFloat(val)||0,q=parseFloat(pProds[name].qty)||0;
+    if(q>0&&a>0){pProds[name].rate=String(Math.round(a/q));const el=document.getElementById("p-prod-entries");if(el){el.querySelectorAll(".prod-entry").forEach(e=>{if(e.querySelector(".prod-entry-name")?.textContent===name){const inp=e.querySelectorAll(".prod-field-box input")[1];if(inp)inp.value=pProds[name].rate;}});}}
+  }
+}
+
+function openAllPProds(){
+  renderPProdPills("p-all-prod-pills",true);
+  document.getElementById("sov-pallprods").classList.add("open");
+}
+function closeAllPProds(){
+  document.getElementById("sov-pallprods").classList.remove("open");
+  renderPProdPills();renderPProdEntries();
+}
+
+function renderPurchasePayAccts(){
+  document.getElementById("p-online-accts").innerHTML=PAY_ACCTS.map(a=>`<button class="pay-acct${a===sOnlineAcct?" sel-o":""}" onclick="sOnlineAcct='${a}';renderPurchasePayAccts()">${a}</button>`).join("");
+  document.getElementById("p-cash-accts").innerHTML=PAY_ACCTS.map(a=>`<button class="pay-acct${a===sCashAcct?" sel-c":""}" style="${a===sCashAcct?"background:var(--orange);color:#fff":""}" onclick="sCashAcct='${a}';renderPurchasePayAccts()">${a}</button>`).join("");
+}
+
+function onPurchasePayChange(){updatePurchaseCards();}
+
 function savePurchase(){
-  const party=document.getElementById("p-party").value.trim();
-  if(!party){alert("Please enter supplier name");return}
-  const q=parseFloat(document.getElementById("p-qty").value)||0,r=parseFloat(document.getElementById("p-rate").value)||0;
-  DB.addTx({id:uuid(),type:"purchase",category:document.getElementById("p-category").value,party,phone:document.getElementById("p-phone").value.trim(),quantity:q,unit:document.getElementById("p-unit").value,ratePerUnit:r,totalAmount:q*r,date:new Date(document.getElementById("p-date").value).toISOString(),notes:"",cashPayment:parseFloat(document.getElementById("p-cash").value)||0,onlinePayment:parseFloat(document.getElementById("p-online").value)||0,dueAmount:0,lineItems:[]});
+  if(!pSupplierName.trim()){openPurchasePanel("supplier");return;}
+  const valid=Object.entries(pProds).filter(([n,p])=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return a>0});
+  if(!valid.length){openPurchasePanel("products");return;}
+  const totalAmount=valid.reduce((s,[n,p])=>{const a=p.manual&&parseFloat(p.amount)>0?parseFloat(p.amount):(parseFloat(p.qty)||0)*(parseFloat(p.rate)||0);return s+a},0);
+  const totalQty=valid.reduce((s,[n,p])=>s+(parseFloat(p.qty)||0),0);
+  const chips=valid.map(([n,p])=>{const q=parseFloat(p.qty)||0;const qs=q%1===0?String(Math.round(q)):q.toFixed(1);return`${n} ${qs}${p.unit}`;});
+  const online=parseFloat(document.getElementById("p-online").value)||0;
+  const cashRaw=parseFloat(document.getElementById("p-cash").value);
+  const cash=isNaN(cashRaw)?Math.max(0,totalAmount-online):cashRaw;
+  DB.addTx({id:uuid(),type:"purchase",category:"Other",party:pSupplierName,phone:pSupplierMobile,quantity:totalQty,unit:valid[0]?.[1]?.unit||"Kg",ratePerUnit:totalQty>0?totalAmount/totalQty:0,totalAmount,date:pDate.toISOString(),notes:"Purchase #"+pBillNo(),cashPayment:cash,onlinePayment:online,dueAmount:0,lineItems:chips});
   closeModal("purchase");renderDashboard();githubPush();
 }
 
+// ─── ADVANCE FORM (card-based) ──────────────────────────────────────────────
+let aDate=new Date(), aReceiptNoOvr="", aCustName="", aCustMobile="";
+let aItemName="", aItemRate="";
+
+function aFY(d){const y=d.getFullYear(),m=d.getMonth()+1;return m>=4?`${y%100}/${(y+1)%100}`:`${(y-1)%100}/${y%100}`}
+function aReceiptNo(){const n=DB.advances.length+1;const num=aReceiptNoOvr||String(n).padStart(2,"0");return`ADV#${num}-${aFY(aDate)}`}
+
 function initAdvanceForm(){
-  document.getElementById("a-date").value=today();
-  ["a-name","a-phone","a-receipt","a-item","a-amount","a-cash","a-online"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("a-rate").value="";
-  document.getElementById("a-receipt").value="ADV-"+String(DB.advances.length+1).padStart(3,"0");
+  aDate=new Date(); aReceiptNoOvr=""; aCustName=""; aCustMobile=""; aItemName=""; aItemRate="";
+  ["a-adv-amount","a-online","a-cash"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  updateAdvanceCards();
 }
+
+function updateAdvanceCards(){
+  const opts={day:"numeric",month:"short",year:"numeric"};
+  const dd=document.getElementById("a-date-display");
+  if(dd) dd.textContent=aDate.toLocaleDateString("en-IN",opts);
+  const rn=aReceiptNo(),rparts=rn.split("-");
+  const rd=document.getElementById("a-receiptno-display");
+  if(rd) rd.innerHTML=`<span style="font-size:11px;color:var(--txt2);font-weight:400">ADV#</span>${rparts[0].replace("ADV#","")}<span style="font-size:11px;color:var(--txt2);font-weight:400">-${rparts[1]}</span>`;
+  const cv=document.getElementById("a-customer-val"),cs=document.getElementById("a-customer-sub");
+  if(cv){if(aCustName){cv.textContent=aCustName;cv.style.color="var(--txt)";cv.style.fontWeight="600";cv.style.fontSize="15px";if(aCustMobile&&cs){cs.textContent=aCustMobile;cs.style.display="block";}else if(cs)cs.style.display="none";}else{cv.textContent="Tap to add customer";cv.style.color="var(--txt2)";cv.style.fontWeight="400";cv.style.fontSize="14px";if(cs)cs.style.display="none";}}
+  const iv=document.getElementById("a-item-val"),is_=document.getElementById("a-item-sub");
+  if(iv){if(aItemName){iv.textContent=aItemName;iv.style.color="var(--txt)";iv.style.fontWeight="600";iv.style.fontSize="15px";if(aItemRate&&is_){is_.textContent="&#8377;"+aItemRate+"/unit";is_.style.display="block";}else if(is_)is_.style.display="none";}else{iv.textContent="Tap to add item";iv.style.color="var(--txt2)";iv.style.fontWeight="400";iv.style.fontSize="14px";if(is_)is_.style.display="none";}}
+  const pv=document.getElementById("a-payment-val");
+  const adv=parseFloat(document.getElementById("a-adv-amount")?.value)||0;
+  const online=parseFloat(document.getElementById("a-online")?.value)||0;
+  const cash=Math.max(0,adv-online);
+  if(pv){if(adv>0){const pts=[];if(online>0)pts.push(`Online: ${fmt(online)}`);if(cash>0)pts.push(`Cash: ${fmt(cash)}`);pv.textContent=pts.length?pts.join(" · "):fmt(adv);pv.style.color="var(--txt)";pv.style.fontWeight="600";pv.style.fontSize="14px";}else{pv.textContent="Tap to add amount";pv.style.color="var(--txt2)";pv.style.fontWeight="400";pv.style.fontSize="14px";}}
+  const canSave=aCustName.trim()&&(parseFloat(document.getElementById("a-adv-amount")?.value)||0)>0;
+  const btn=document.getElementById("a-save-btn");
+  if(btn){btn.disabled=!canSave;btn.style.color=canSave?"var(--green)":"#C7C7CC";}
+}
+
+function openAdvancePanel(panel){
+  if(panel==="date"){
+    document.getElementById("a-date-input").value=aDate.toISOString().split("T")[0];
+    document.getElementById("sov-adate").classList.add("open");
+  }else if(panel==="receiptno"){
+    document.getElementById("a-receiptno-suffix").textContent=`-${aFY(aDate)}`;
+    const n=DB.advances.length+1;
+    document.getElementById("a-receiptno-input").value=aReceiptNoOvr||String(n).padStart(2,"0");
+    document.getElementById("sov-areceiptno").classList.add("open");
+  }else if(panel==="customer"){
+    document.getElementById("a-cust-name").value=aCustName;
+    document.getElementById("a-cust-mobile").value=aCustMobile;
+    document.getElementById("a-cust-sugg").style.display="none";
+    document.getElementById("sov-acustomer").classList.add("open");
+  }else if(panel==="item"){
+    document.getElementById("a-item-name").value=aItemName;
+    document.getElementById("a-item-rate").value=aItemRate;
+    renderAdvProdPills();
+    document.getElementById("sov-aitem").classList.add("open");
+  }else if(panel==="payment"){
+    document.getElementById("sov-apayment").classList.add("open");
+  }
+}
+
+function closeAdvancePanel(panel){
+  document.getElementById("sov-a"+panel).classList.remove("open");
+  if(panel==="payment") onAdvPayChange();
+  updateAdvanceCards();
+}
+
+function saveAdvanceDate(){
+  const v=document.getElementById("a-date-input").value;
+  if(v) aDate=new Date(v+"T00:00:00");
+  closeAdvancePanel("date");
+}
+
+function saveAdvanceReceiptNo(){
+  aReceiptNoOvr=document.getElementById("a-receiptno-input").value.trim();
+  closeAdvancePanel("receiptno");
+}
+
+function onAdvCustNameInput(){
+  const v=document.getElementById("a-cust-name").value;
+  const sugg=document.getElementById("a-cust-sugg");
+  if(v.length<1){sugg.style.display="none";return;}
+  const parties=[...new Set([...DB.transactions.map(t=>t.party),...DB.advances.map(a=>a.customerName)])].filter(p=>p.toLowerCase().includes(v.toLowerCase())&&p!==v).slice(0,5);
+  if(!parties.length){sugg.style.display="none";return;}
+  sugg.innerHTML=parties.map(p=>`<div class="cust-sug-item" onclick="pickAdvCust('${p.replace(/'/g,"\\'")}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>${p}</div>`).join("");
+  sugg.style.display="block";
+}
+
+function pickAdvCust(name){
+  document.getElementById("a-cust-name").value=name;
+  document.getElementById("a-cust-sugg").style.display="none";
+}
+
+function saveAdvCustDetails(){
+  aCustName=document.getElementById("a-cust-name").value.trim();
+  aCustMobile=document.getElementById("a-cust-mobile").value.trim();
+  closeAdvancePanel("customer");
+}
+
+function renderAdvProdPills(){
+  document.getElementById("a-prod-pills").innerHTML=SALE_PRODS.slice(0,8).map(p=>`<button class="prod-pill" style="background:rgba(88,86,214,.08);color:var(--purple)" onclick="pickAdvItem('${p.replace(/'/g,"\\'")}');document.querySelectorAll('#a-prod-pills .prod-pill').forEach(b=>b.style.background='rgba(88,86,214,.08)');this.style.background='var(--purple)';this.style.color='#fff'">${p}</button>`).join("");
+}
+
+function pickAdvItem(name){
+  document.getElementById("a-item-name").value=name;
+}
+
+function saveAdvItem(){
+  aItemName=document.getElementById("a-item-name").value.trim();
+  aItemRate=document.getElementById("a-item-rate").value.trim();
+  closeAdvancePanel("item");
+}
+
+function onAdvPayChange(){
+  const adv=parseFloat(document.getElementById("a-adv-amount")?.value)||0;
+  const online=parseFloat(document.getElementById("a-online")?.value)||0;
+  const cash=Math.max(0,adv-online);
+  const cashEl=document.getElementById("a-cash");
+  if(cashEl) cashEl.value=cash>0?Math.round(cash):"";
+  const note=document.getElementById("a-pay-note");
+  if(note){if(adv>0){note.textContent=`${fmt(adv)} advance recorded`;note.style.display="block";}else note.style.display="none";}
+  updateAdvanceCards();
+}
+
 function saveAdvance(){
-  const name=document.getElementById("a-name").value.trim();
-  if(!name){alert("Please enter customer name");return}
-  const amount=parseFloat(document.getElementById("a-amount").value)||0;
-  if(!amount){alert("Please enter advance amount");return}
-  DB.addAdv({id:uuid(),date:new Date(document.getElementById("a-date").value).toISOString(),receiptNumber:document.getElementById("a-receipt").value.trim(),customerName:name,phone:document.getElementById("a-phone").value.trim(),itemName:document.getElementById("a-item").value.trim(),rate:parseFloat(document.getElementById("a-rate").value)||0,advanceAmount:amount,cashPayment:parseFloat(document.getElementById("a-cash").value)||0,onlinePayment:parseFloat(document.getElementById("a-online").value)||0,isSettled:false});
+  if(!aCustName.trim()){openAdvancePanel("customer");return;}
+  const amount=parseFloat(document.getElementById("a-adv-amount")?.value)||0;
+  if(!amount){openAdvancePanel("payment");return;}
+  const online=parseFloat(document.getElementById("a-online")?.value)||0;
+  const cash=Math.max(0,amount-online);
+  DB.addAdv({id:uuid(),date:aDate.toISOString(),receiptNumber:aReceiptNo(),customerName:aCustName,phone:aCustMobile,itemName:aItemName,rate:parseFloat(aItemRate)||0,advanceAmount:amount,cashPayment:Math.round(cash),onlinePayment:online,isSettled:false});
   closeModal("advance");renderDashboard();githubPush();
 }
 
