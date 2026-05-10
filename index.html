@@ -168,11 +168,17 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .empty-state span{font-size:11px}
 @media print{.bottom-nav,.fab-overlay,.fab-menu,.modal-bg{display:none!important}body{background:#fff}}
 @media (display-mode: standalone){
-  .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 4px)}
-  .bottom-nav{padding-bottom:0}
+  .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 18px)}
+  .bottom-nav{align-items:center;padding:10px clamp(12px,4vw,18px) calc(var(--safe-b) + 6px);min-height:calc(var(--nav-h) + var(--safe-b) + 26px)}
+  .nav-btn{justify-content:center;height:calc(var(--nav-h) + 8px)}
+  .nav-fab-wrap{align-items:flex-start;height:calc(var(--nav-h) + 8px)}
+  .nav-fab{position:relative;top:-12px}
 }
-body.standalone .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 4px)}
-body.standalone .bottom-nav{padding-bottom:0}
+body.standalone .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 18px)}
+body.standalone .bottom-nav{align-items:center;padding:10px clamp(12px,4vw,18px) calc(var(--safe-b) + 6px);min-height:calc(var(--nav-h) + var(--safe-b) + 26px)}
+body.standalone .nav-btn{justify-content:center;height:calc(var(--nav-h) + 8px)}
+body.standalone .nav-fab-wrap{align-items:flex-start;height:calc(var(--nav-h) + 8px)}
+body.standalone .nav-fab{position:relative;top:-12px}
 @media(min-width:768px){
   #app{max-width:960px;display:grid;grid-template-columns:260px 1fr;min-height:100vh}
   .bottom-nav{position:fixed;left:0;bottom:0;top:0;width:260px;height:auto;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:40px 0 20px;border-top:none;border-right:0.5px solid var(--sep);max-width:260px;transform:none;background:var(--card)}
