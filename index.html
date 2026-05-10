@@ -19,7 +19,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--txt)}
 button{font-family:inherit;border:none;cursor:pointer;background:none}
-input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:none;background:none}
+input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:none;background:none}
 #app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;background:var(--bg)}
 .page{display:none;flex-direction:column;min-height:100vh;padding-bottom:calc(var(--nav-h) + 8px)}
 .page.active{display:flex}
@@ -33,31 +33,49 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
 .header-right{display:flex;align-items:center;gap:8px}
 .notif-btn{position:relative;width:38px;height:38px;background:var(--card);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .notif-dot{position:absolute;top:7px;right:7px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)}
-.avatar{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;letter-spacing:.5px}
+/* Sync button */
+.sync-btn{position:relative;width:34px;height:34px;background:var(--card);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.sync-dot{position:absolute;bottom:5px;right:5px;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--bg);background:#C7C7CC}
+.sync-dot.ok{background:var(--green)}
+.sync-dot.busy{background:var(--orange)}
+.sync-dot.err{background:var(--red)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sync-spinning{animation:spin 1s linear infinite}
+/* Sync toast */
+.sync-toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 12px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:20px;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.sync-toast.show{opacity:1}
+/* Sync setup modal content */
+.sync-info{font-size:12px;color:var(--txt2);line-height:1.6;margin-bottom:16px}
+.sync-info a{color:var(--blue)}
+.sync-token-input{width:100%;font-size:13px;padding:12px 14px;border-radius:12px;background:var(--card);border:1.5px solid var(--sep);color:var(--txt);margin-bottom:12px}
+.sync-token-input:focus{border-color:var(--blue)}
+.sync-status-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt2);margin-bottom:8px}
+
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;letter-spacing:.5px}
 /* Today card */
-.today-card{background:var(--card);border-radius:20px;padding:18px;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;margin-top:4px}
+.today-card{background:var(--card);border-radius:20px;padding:16px;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:10px;display:flex;gap:12px;align-items:stretch;margin-top:4px}
 .today-left{flex:1;min-width:0}
-.today-label-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.today-label-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .today-sales-icon{width:26px;height:26px;border-radius:50%;background:rgba(0,122,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .today-label{font-size:13px;font-weight:600;color:var(--txt2)}
-.today-amount{font-size:30px;font-weight:700;color:var(--txt);letter-spacing:-.5px;margin-bottom:10px;line-height:1.1}
-.today-pay-row{display:flex;flex-direction:column;gap:5px}
-.today-pay-item{font-size:12px;color:var(--txt2);display:flex;align-items:center;gap:4px}
+.today-amount{font-size:30px;font-weight:700;color:var(--txt);letter-spacing:-.5px;margin-bottom:8px;line-height:1.1}
+.today-pay-row{display:flex;flex-direction:row;gap:16px;align-items:flex-start}
+.today-pay-item{display:flex;flex-direction:column;gap:2px}
 .today-pay-item .pv{color:var(--blue);font-weight:700;margin-left:4px}
 /* 7-day chart */
-.today-right{width:115px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end}
-.chart-label{font-size:11px;color:var(--txt2);margin-bottom:6px;align-self:flex-start}
-.mini-chart{display:flex;align-items:flex-end;gap:3px;height:52px;width:100%}
+.today-right{width:120px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start}
+.chart-label{font-size:11px;color:var(--txt2);font-weight:500;margin-bottom:6px}
+.mini-chart{display:flex;align-items:flex-end;gap:3px;height:72px;width:100%;flex:1}
 .bar-col{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
 .bar-fill{border-radius:3px 3px 0 0;width:100%;background:rgba(0,122,255,.18)}
 .bar-fill.act{background:var(--blue)}
-.bar-lbl{font-size:8px;color:var(--txt2);font-weight:500}
+.bar-lbl{font-size:7px;color:var(--txt2);font-weight:500}
 /* KPI row */
 .kpi-row{display:flex;gap:10px;margin-bottom:14px}
 .kpi-card{flex:1;background:var(--card);border-radius:16px;padding:14px 12px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .kpi-icon-wrap{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
 .kpi-label{font-size:12px;color:var(--txt2);margin-bottom:3px;font-weight:500}
-.kpi-value{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-value{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* Section header */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin:2px 0 12px}
 .section-header h2{font-size:18px;font-weight:700;color:var(--txt)}
@@ -90,12 +108,12 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
 .stat-card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s}
 .stat-card.selected{color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.16);transform:scale(1.03)}
-.stat-card .label{font-size:11px;font-weight:500;opacity:.85;margin-bottom:6px}
-.stat-card .value{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-card .label{font-size:12px;font-weight:500;opacity:.85;margin-bottom:6px}
+.stat-card .value{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat-card.selected .label,.stat-card.selected .value{color:#fff}
 /* Bottom nav */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--sep);display:flex;align-items:center;justify-content:space-around;padding-bottom:var(--safe-b);z-index:100;height:var(--nav-h)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;gap:4px;font-size:11px;font-weight:500;color:var(--txt2);height:100%}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;gap:4px;font-size:10px;font-weight:500;color:var(--txt2);height:100%}
 .nav-btn-bg{width:52px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .nav-btn.active .nav-btn-bg{background:rgba(0,122,255,.12)}
 .nav-btn.active{color:var(--blue)}
@@ -110,8 +128,8 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
 .fab-menu.visible{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
 .fab-action{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 6px 20px rgba(0,0,0,.12);text-align:left}
 .fab-action-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.fab-action-text .title{font-size:15px;font-weight:600;color:var(--txt)}
-.fab-action-text .sub{font-size:12px;color:var(--txt2);margin-top:1px}
+.fab-action-text .title{font-size:13px;font-weight:600;color:var(--txt)}
+.fab-action-text .sub{font-size:11px;color:var(--txt2);margin-top:1px}
 .fab-chevron{font-size:18px;color:#C7C7CC;margin-left:auto}
 /* Modal */
 .modal-bg{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.4);display:none;align-items:flex-end}
@@ -120,12 +138,12 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-handle{width:36px;height:4px;background:#D1D1D6;border-radius:4px;margin:12px auto 4px}
 .modal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 0}
-.modal-header h2{font-size:18px;font-weight:700}
-.modal-close{font-size:15px;color:var(--blue);font-weight:600;padding:4px 0}
+.modal-header h2{font-size:17px;font-weight:700}
+.modal-close{font-size:13px;color:var(--blue);font-weight:600;padding:4px 0}
 .modal-body{padding:16px 20px 0}
 /* Form */
 .form-section{margin-top:16px}
-.form-section-title{font-size:13px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.form-section-title{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
 .form-card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.04)}
 .form-row{display:flex;align-items:center;padding:12px 14px;border-bottom:0.5px solid var(--sep)}
 .form-row:last-child{border-bottom:none}
@@ -137,19 +155,19 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
 .form-row.total-row label{font-weight:700;color:var(--txt)}
 .form-row.total-row span{font-size:16px;font-weight:700;color:var(--blue);margin-left:auto}
 .line-item-row{display:flex;gap:8px;align-items:center;background:var(--card);border-radius:12px;padding:10px 12px;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:8px}
-.li-remove{color:var(--red);font-size:18px;padding:0 4px}
-.add-line-btn{display:flex;align-items:center;gap:6px;color:var(--blue);font-size:14px;font-weight:600;padding:8px 0}
+.li-remove{color:var(--red);font-size:15px;padding:0 4px}
+.add-line-btn{display:flex;align-items:center;gap:6px;color:var(--blue);font-size:12px;font-weight:600;padding:8px 0}
 .btn-primary{width:100%;padding:16px;border-radius:14px;background:var(--blue);color:#fff;font-size:16px;font-weight:700;margin-top:20px;box-shadow:0 4px 14px rgba(0,122,255,.3);transition:opacity .15s}
 .btn-primary:active{opacity:.85}
 .empty-state{text-align:center;padding:48px 20px;color:var(--txt2)}
-.empty-state .emoji{font-size:52px;margin-bottom:14px}
+.empty-state .emoji{font-size:42px;margin-bottom:14px}
 .empty-state p{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--txt)}
-.empty-state span{font-size:13px}
+.empty-state span{font-size:11px}
 @media print{.bottom-nav,.fab-overlay,.fab-menu,.modal-bg{display:none!important}body{background:#fff}}
 @media(min-width:768px){
   #app{max-width:960px;display:grid;grid-template-columns:260px 1fr;min-height:100vh}
   .bottom-nav{position:fixed;left:0;bottom:0;top:0;width:260px;height:auto;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:40px 0 20px;border-top:none;border-right:0.5px solid var(--sep);max-width:260px;transform:none;background:var(--card)}
-  .nav-btn{flex-direction:row;justify-content:flex-start;padding:12px 24px;gap:12px;font-size:15px;border-radius:12px;margin:2px 12px;height:auto}
+  .nav-btn{flex-direction:row;justify-content:flex-start;padding:12px 24px;gap:12px;font-size:13px;border-radius:12px;margin:2px 12px;height:auto}
   .nav-btn-bg{width:auto;height:auto;background:none!important;border-radius:0}
   .nav-fab-wrap{flex:none;margin:8px 12px;justify-content:flex-start;padding-left:24px}
   .nav-fab{width:44px;height:44px;font-size:22px}
@@ -177,6 +195,10 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="notif-dot"></span>
         </button>
+        <button class="sync-btn" id="sync-btn" onclick="openSyncSetup()" title="Sync">
+          <svg id="sync-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          <span class="sync-dot" id="sync-dot"></span>
+        </button>
         <div class="avatar">IS</div>
       </div>
     </div>
@@ -197,7 +219,7 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
   <div class="reports-header">
     <div class="reports-header-inner">
       <span class="reports-title">Reports</span>
-      <button onclick="window.print()" style="color:var(--blue);font-size:13px;font-weight:600">&#128424; Print</button>
+      <button onclick="window.print()" style="color:var(--blue);font-size:11px;font-weight:600">&#128424; Print</button>
     </div>
   </div>
   <div class="page-scroll">
@@ -324,12 +346,37 @@ input,select,textarea{font-family:inherit;font-size:16px;border:none;outline:non
     </div>
     <div class="form-section"><div class="form-section-title">Amount</div>
       <div class="form-card">
-        <div class="form-row total-row"><label>Advance (&#8377;)</label><input id="a-amount" type="number" placeholder="0" style="font-size:16px;font-weight:700;color:var(--green);text-align:right"></div>
+        <div class="form-row total-row"><label>Advance (&#8377;)</label><input id="a-amount" type="number" placeholder="0" style="font-size:14px;font-weight:700;color:var(--green);text-align:right"></div>
         <div class="form-row"><label>Cash (&#8377;)</label><input id="a-cash" type="number" placeholder="0"></div>
         <div class="form-row"><label>Online (&#8377;)</label><input id="a-online" type="number" placeholder="0"></div>
       </div>
     </div>
     <button class="btn-primary" style="background:var(--green);box-shadow:0 4px 14px rgba(52,199,89,.3)" onclick="saveAdvance()">Save Advance</button>
+  </div>
+</div></div>
+
+
+<!-- Sync toast -->
+<div class="sync-toast" id="sync-toast"></div>
+
+<!-- MODAL: GITHUB SYNC SETUP -->
+<div class="modal-bg" id="modal-sync"><div class="modal-sheet"><div class="modal-handle"></div>
+  <div class="modal-header"><h2>&#9729; GitHub Sync</h2><button class="modal-close" onclick="closeModal('sync')">Done</button></div>
+  <div class="modal-body">
+    <p class="sync-info">Auto-sync saves your data to GitHub every time you add a sale, purchase or advance. Any device with the app will load the latest data automatically.<br><br>
+    You need a <strong>GitHub Personal Access Token</strong>:<br>
+    1. Go to <strong>github.com &#8594; Settings &#8594; Developer settings &#8594; Personal access tokens &#8594; Tokens (classic)</strong><br>
+    2. Click <strong>Generate new token (classic)</strong><br>
+    3. Give it a name, select <strong>repo</strong> scope, click Generate<br>
+    4. Copy the token and paste below</p>
+    <div class="sync-status-row" id="sync-status-row">
+      <span class="sync-dot" id="sync-modal-dot" style="position:static;border:none;width:9px;height:9px"></span>
+      <span id="sync-status-text">Not configured</span>
+    </div>
+    <input class="sync-token-input" id="sync-token-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" oninput="onTokenInput()">
+    <button class="btn-primary" onclick="saveToken()" style="margin-top:8px">Save &amp; Connect</button>
+    <button class="btn-primary" onclick="testSync()" style="margin-top:8px;background:#34C759;box-shadow:0 4px 14px rgba(52,199,89,.3)">&#9654; Test Sync Now</button>
+    <button class="btn-primary" onclick="clearToken()" style="margin-top:8px;background:var(--red);box-shadow:0 4px 14px rgba(255,59,48,.25)">&#128465; Remove Token</button>
   </div>
 </div></div>
 
@@ -407,13 +454,19 @@ function renderDashboard(){
         </div>
         <div class="today-amount">${fmt(s.todaySales)}</div>
         <div class="today-pay-row">
-          <div class="today-pay-item">&#x20B9; Cash Payment<span class="pv">${fmt(s.todayCash)}</span></div>
-          <div class="today-pay-item">&#128241; Online Payment<span class="pv">${fmt(s.todayOnline)}</span></div>
+          <div class="today-pay-item">
+            <span style="font-size:11px;color:var(--txt2)">Cash Payment</span>
+            <span style="font-size:14px;font-weight:700;color:var(--blue)">${fmt(s.todayCash)}</span>
+          </div>
+          <div class="today-pay-item">
+            <span style="font-size:11px;color:var(--txt2)">Online Payment</span>
+            <span style="font-size:14px;font-weight:700;color:var(--purple)">${fmt(s.todayOnline)}</span>
+          </div>
         </div>
       </div>
       <div class="today-right">
         <div class="chart-label">7-Day Overview</div>
-        <div class="mini-chart">${days.map(d=>{const h=Math.max(4,Math.round((d.total/mx)*48));return`<div class="bar-col"><div class="bar-fill${d.isToday?" act":""}" style="height:${h}px"></div><div class="bar-lbl">${d.lbl}</div></div>`}).join("")}</div>
+        <div class="mini-chart">${days.map(d=>{const h=Math.max(4,Math.round((d.total/mx)*68));return`<div class="bar-col"><div class="bar-fill${d.isToday?" act":""}" style="height:${h}px"></div><div class="bar-lbl">${d.lbl}</div></div>`}).join("")}</div>
       </div>
     </div>`;
   document.getElementById("kpi-row-wrap").innerHTML=`
@@ -485,10 +538,10 @@ function renderReportList(){
 }
 
 function advCard(r){
-  return`<div class="adv-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:2px">${r.receiptNumber}</div><div style="font-size:15px;font-weight:600">${r.customerName}${r.phone?" · "+r.phone:""}</div></div><div style="font-size:16px;font-weight:700;color:var(--green)">${fmt(r.advanceAmount)}</div></div>${r.itemName?`<div style="font-size:12px;color:var(--txt2);margin-top:4px">&#128230; ${r.itemName}${r.rate?" · ₹"+r.rate+"/unit":""}</div>`:""}<div style="font-size:11px;color:var(--txt2);margin-top:6px">${fmtDate(r.date)} · ${fmtTime(r.date)}</div></div>`;
+  return`<div class="adv-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:2px">${r.receiptNumber}</div><div style="font-size:15px;font-weight:600">${r.customerName}${r.phone?" · "+r.phone:""}</div></div><div style="font-size:16px;font-weight:700;color:var(--green)">${fmt(r.advanceAmount)}</div></div>${r.itemName?`<div style="font-size:10px;color:var(--txt2);margin-top:4px">&#128230; ${r.itemName}${r.rate?" · ₹"+r.rate+"/unit":""}</div>`:""}<div style="font-size:10px;color:var(--txt2);margin-top:6px">${fmtDate(r.date)} · ${fmtTime(r.date)}</div></div>`;
 }
 function dueCard(t){
-  return`<div class="due-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:15px;font-weight:600">${t.party}</div>${t.phone?`<div style="font-size:12px;color:var(--txt2)">${t.phone}</div>`:""}</div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--red)">${fmt(t.dueAmount)}</div><span style="font-size:10px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:4px">DUE</span></div></div><div style="font-size:11px;color:var(--txt2);margin-top:6px">${t.notes?t.notes+" · ":""}${fmtDate(t.date)}</div><div style="display:flex;gap:14px;margin-top:8px"><div><div style="font-size:10px;color:var(--txt2)">Total</div><div style="font-size:13px;font-weight:700">${fmt(t.totalAmount)}</div></div>${t.cashPayment>0?`<div><div style="font-size:10px;color:var(--txt2)">Cash Paid</div><div style="font-size:13px;font-weight:700;color:var(--blue)">${fmt(t.cashPayment)}</div></div>`:""}</div></div>`;
+  return`<div class="due-card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:15px;font-weight:600">${t.party}</div>${t.phone?`<div style="font-size:10px;color:var(--txt2)">${t.phone}</div>`:""}</div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--red)">${fmt(t.dueAmount)}</div><span style="font-size:9px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:4px">DUE</span></div></div><div style="font-size:11px;color:var(--txt2);margin-top:6px">${t.notes?t.notes+" · ":""}${fmtDate(t.date)}</div><div style="display:flex;gap:14px;margin-top:8px"><div><div style="font-size:9px;color:var(--txt2)">Total</div><div style="font-size:13px;font-weight:700">${fmt(t.totalAmount)}</div></div>${t.cashPayment>0?`<div><div style="font-size:9px;color:var(--txt2)">Cash Paid</div><div style="font-size:13px;font-weight:700;color:var(--blue)">${fmt(t.cashPayment)}</div></div>`:""}</div></div>`;
 }
 
 let lineItems=[];
@@ -518,7 +571,7 @@ function saveSale(){
   if(!party){alert("Please enter party name");return}
   const total=lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0)*(parseFloat(li.rate)||0),0);
   DB.addTx({id:uuid(),type:"sale",category:lineItems[0]?.name||"Other",party,phone:document.getElementById("s-phone").value.trim(),quantity:lineItems.reduce((s,li)=>s+(parseFloat(li.qty)||0),0),unit:"MT",ratePerUnit:lineItems[0]?.rate||0,totalAmount:total,date:new Date(document.getElementById("s-date").value).toISOString(),notes:document.getElementById("s-notes").value.trim(),cashPayment:parseFloat(document.getElementById("s-cash").value)||0,onlinePayment:parseFloat(document.getElementById("s-online").value)||0,dueAmount:parseFloat(document.getElementById("s-due").value)||0,lineItems:lineItems.filter(li=>li.name).map(li=>`${li.name} ${li.qty}${li.unit}`)});
-  closeModal("sale");renderDashboard();
+  closeModal("sale");renderDashboard();githubPush();
 }
 
 function initPurchaseForm(){
@@ -532,7 +585,7 @@ function savePurchase(){
   if(!party){alert("Please enter supplier name");return}
   const q=parseFloat(document.getElementById("p-qty").value)||0,r=parseFloat(document.getElementById("p-rate").value)||0;
   DB.addTx({id:uuid(),type:"purchase",category:document.getElementById("p-category").value,party,phone:document.getElementById("p-phone").value.trim(),quantity:q,unit:document.getElementById("p-unit").value,ratePerUnit:r,totalAmount:q*r,date:new Date(document.getElementById("p-date").value).toISOString(),notes:"",cashPayment:parseFloat(document.getElementById("p-cash").value)||0,onlinePayment:parseFloat(document.getElementById("p-online").value)||0,dueAmount:0,lineItems:[]});
-  closeModal("purchase");renderDashboard();
+  closeModal("purchase");renderDashboard();githubPush();
 }
 
 function initAdvanceForm(){
@@ -547,7 +600,7 @@ function saveAdvance(){
   const amount=parseFloat(document.getElementById("a-amount").value)||0;
   if(!amount){alert("Please enter advance amount");return}
   DB.addAdv({id:uuid(),date:new Date(document.getElementById("a-date").value).toISOString(),receiptNumber:document.getElementById("a-receipt").value.trim(),customerName:name,phone:document.getElementById("a-phone").value.trim(),itemName:document.getElementById("a-item").value.trim(),rate:parseFloat(document.getElementById("a-rate").value)||0,advanceAmount:amount,cashPayment:parseFloat(document.getElementById("a-cash").value)||0,onlinePayment:parseFloat(document.getElementById("a-online").value)||0,isSettled:false});
-  closeModal("advance");renderDashboard();
+  closeModal("advance");renderDashboard();githubPush();
 }
 
 function exportCSV(){
@@ -557,6 +610,136 @@ function exportCSV(){
   const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");
   const a=document.createElement("a");a.href="data:text/csv;charset=utf-8,\ufeff"+encodeURIComponent(csv);a.download="steelshop_"+today()+".csv";a.click();
 }
+
+
+// ══════════════════════════════════════════════════════════════════
+//  GITHUB AUTO-SYNC  (push + live poll every 30s + focus refresh)
+// ══════════════════════════════════════════════════════════════════
+const GH_REPO = "Indian8898/Indian-Steel-Sale-Purchase";
+const GH_FILE = "data.json";
+let syncBusy = false;
+let lastSha  = localStorage.getItem("gh_last_sha") || "";
+
+function ghHeaders(token){
+  return {"Authorization":"token "+token,"Content-Type":"application/json","Accept":"application/vnd.github+json"};
+}
+function showToast(msg,dur=2200){
+  const t=document.getElementById("sync-toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),dur);
+}
+function setSyncDot(state){
+  const d=document.getElementById("sync-dot");
+  const i=document.getElementById("sync-icon");
+  if(d) d.className="sync-dot"+(state?" "+state:"");
+  if(i) i.className=state==="busy"?"sync-spinning":"";
+  const md=document.getElementById("sync-modal-dot");
+  const mt=document.getElementById("sync-status-text");
+  if(md) md.className="sync-dot"+(state?" "+state:"");
+  if(mt){
+    if(state==="ok")   mt.textContent="Synced to GitHub ✓";
+    else if(state==="busy") mt.textContent="Syncing…";
+    else if(state==="err")  mt.textContent="Sync failed — check token";
+    else mt.textContent="Not configured";
+  }
+}
+
+// ── PUSH local data → GitHub ──────────────────────────────────────
+async function githubPush(){
+  const token=localStorage.getItem("gh_token");
+  if(!token||syncBusy) return;
+  syncBusy=true; setSyncDot("busy");
+  try{
+    const payload=JSON.stringify({transactions:DB.transactions,advances:DB.advances});
+    const b64=btoa(unescape(encodeURIComponent(payload)));
+    // need current sha for update
+    let sha=lastSha;
+    if(!sha){
+      try{
+        const r=await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/"+GH_FILE,{headers:ghHeaders(token)});
+        if(r.ok){const j=await r.json();sha=j.sha;}
+      }catch(e){}
+    }
+    const body={message:"sync "+Date.now(),content:b64};
+    if(sha) body.sha=sha;
+    const res=await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/"+GH_FILE,
+      {method:"PUT",headers:ghHeaders(token),body:JSON.stringify(body)});
+    if(res.ok){
+      const j=await res.json();
+      lastSha=j.content.sha;
+      localStorage.setItem("gh_last_sha",lastSha);
+      setSyncDot("ok"); showToast("✓ Synced to GitHub");
+    } else {
+      setSyncDot("err"); showToast("Sync failed: "+res.status);
+    }
+  }catch(e){setSyncDot("err");showToast("Sync error — check connection");}
+  syncBusy=false;
+}
+
+// ── PULL GitHub → local (only if SHA changed) ─────────────────────
+async function githubPull(silent=false){
+  const token=localStorage.getItem("gh_token");
+  if(!token) return false;
+  if(!silent) setSyncDot("busy");
+  try{
+    const r=await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/"+GH_FILE,
+      {headers:ghHeaders(token),cache:"no-store"});
+    if(!r.ok){setSyncDot(lastSha?"err":"");return false;}
+    const file=await r.json();
+    // skip if no changes
+    if(file.sha===lastSha){setSyncDot("ok");return false;}
+    lastSha=file.sha;
+    localStorage.setItem("gh_last_sha",lastSha);
+    const data=JSON.parse(decodeURIComponent(escape(atob(file.content.replace(/\n/g,"")))));
+    if(data.transactions) DB.saveTx(data.transactions);
+    if(data.advances)     DB.saveAdv(data.advances);
+    setSyncDot("ok");
+    renderDashboard();
+    if(currentPage==="reports") renderReports();
+    if(!silent) showToast("✓ New data loaded from GitHub");
+    return true;
+  }catch(e){setSyncDot("err");return false;}
+}
+
+// ── Auto-poll every 30 seconds ────────────────────────────────────
+setInterval(()=>{
+  if(localStorage.getItem("gh_token")) githubPull(true);
+},30000);
+
+// ── Pull on page focus / tab switch ──────────────────────────────
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden && localStorage.getItem("gh_token")) githubPull(true);
+});
+
+// ── Setup modal helpers ───────────────────────────────────────────
+function openSyncSetup(){
+  const token=localStorage.getItem("gh_token")||"";
+  document.getElementById("sync-token-input").value=token;
+  setSyncDot(token?"ok":"");
+  document.getElementById("modal-sync").classList.add("open");
+}
+function onTokenInput(){}
+function saveToken(){
+  const t=document.getElementById("sync-token-input").value.trim();
+  if(!t){alert("Please paste your GitHub token");return;}
+  localStorage.setItem("gh_token",t);
+  lastSha=""; localStorage.removeItem("gh_last_sha");
+  showToast("Token saved — syncing…");
+  closeModal("sync");
+  githubPush();
+}
+function clearToken(){
+  localStorage.removeItem("gh_token");
+  localStorage.removeItem("gh_last_sha");
+  lastSha=""; setSyncDot(""); showToast("Sync disabled");
+  document.getElementById("sync-token-input").value="";
+}
+function testSync(){githubPull(false);}
+
+// ── Startup pull ──────────────────────────────────────────────────
+(async()=>{
+  if(localStorage.getItem("gh_token")){setSyncDot("busy");await githubPull(false);}
+})();
 
 if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}
 renderDashboard();
