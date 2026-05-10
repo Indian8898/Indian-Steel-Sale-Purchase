@@ -17,13 +17,14 @@
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--txt)}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--txt)}
 button{font-family:inherit;border:none;cursor:pointer;background:none}
 input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:none;background:none}
 #app{max-width:480px;margin:0 auto;height:100vh;height:100dvh;position:relative;background:var(--bg);display:flex;flex-direction:column}
 .page{display:none;flex-direction:column;flex:1;overflow:hidden}
 .page.active{display:flex}
-.page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px calc(var(--nav-h) + var(--safe-b) + 16px)}
+.page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scrollbar-width:none;padding:0 16px calc(var(--nav-h) + var(--safe-b) + 16px)}
+.page-scroll::-webkit-scrollbar{display:none}
 /* Header */
 .header{background:var(--bg);padding:calc(var(--safe-t) + 14px) 20px 10px;z-index:10;flex-shrink:0}
 .header-inner{display:flex;align-items:center;justify-content:space-between}
