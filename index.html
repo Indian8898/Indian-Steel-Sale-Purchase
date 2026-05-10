@@ -114,12 +114,12 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .stat-card.sel .sc-label{color:rgba(255,255,255,.85)}
 .sc-value{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* Bottom nav */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,480px);background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--sep);display:flex;align-items:flex-end;justify-content:space-between;padding:4px clamp(8px,3vw,16px) max(2px,var(--safe-b));z-index:100}
-.nav-btn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;gap:4px;font-size:clamp(10px,2.7vw,12px);font-weight:500;color:var(--txt2);height:var(--nav-h)}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,480px);background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--sep);display:flex;align-items:flex-end;justify-content:space-between;padding:4px clamp(8px,3vw,16px) min(var(--safe-b),10px);z-index:100}
+.nav-btn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0;gap:4px;font-size:clamp(10px,2.7vw,12px);font-weight:500;color:var(--txt2);height:var(--nav-h)}
 .nav-btn-bg{width:clamp(46px,13vw,56px);height:clamp(28px,8vw,32px);border-radius:999px;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .nav-btn.active .nav-btn-bg{background:rgba(0,122,255,.12)}
 .nav-btn.active{color:var(--blue)}
-.nav-fab-wrap{flex:1;display:flex;justify-content:center;align-items:center;height:var(--nav-h)}
+.nav-fab-wrap{flex:1;display:flex;justify-content:center;align-items:flex-end;height:var(--nav-h);padding-bottom:0}
 .nav-fab{width:clamp(50px,14vw,58px);height:clamp(50px,14vw,58px);border-radius:50%;background:linear-gradient(145deg,#007AFF,#2196F3);color:#fff;font-size:clamp(26px,7vw,30px);box-shadow:0 4px 18px rgba(0,122,255,.5);display:flex;align-items:center;justify-content:center;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .nav-fab:active{transform:scale(.92)}
 .nav-fab.open{transform:rotate(45deg)}
