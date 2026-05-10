@@ -106,13 +106,11 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
 .reports-header{background:var(--bg);padding:calc(var(--safe-t) + 14px) 20px 10px;z-index:10;flex-shrink:0}
 .reports-header-inner{display:flex;align-items:center;justify-content:space-between}
 .reports-title{font-size:22px;font-weight:700}
-/* Stat grid */
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
-.stat-card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer;transition:transform .15s}
-.stat-card.selected{color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.16);transform:scale(1.03)}
-.stat-card .label{font-size:12px;font-weight:500;opacity:.85;margin-bottom:6px}
-.stat-card .value{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stat-card.selected .label,.stat-card.selected .value{color:#fff}
+/* Report tab pills */
+.report-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-bottom:14px;padding-bottom:2px}
+.report-tabs::-webkit-scrollbar{display:none}
+.report-tab{flex-shrink:0;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;background:var(--card);color:var(--txt2);border:none;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:all .18s}
+.report-tab.sel{color:#fff}
 /* Bottom nav */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--sep);display:flex;align-items:center;justify-content:space-around;padding-bottom:var(--safe-b);z-index:100;height:var(--nav-h)}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;gap:4px;font-size:10px;font-weight:500;color:var(--txt2);height:100%}
@@ -294,8 +292,8 @@ input,select,textarea{font-family:inherit;font-size:14px;border:none;outline:non
     </div>
   </div>
   <div class="page-scroll">
-    <div class="stat-grid" id="report-cards"></div>
-    <div class="section-title" id="report-section-title">All Transactions</div>
+    <div class="report-tabs" id="report-tabs"></div>
+    <div class="section-title" id="report-section-title">Transactions</div>
     <div class="search-bar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input id="report-search" type="text" placeholder="Name, mobile, sale no, date..." oninput="renderReportList()">
@@ -1048,19 +1046,24 @@ function txCard(t){
 
 function emptyState(t,s){return`<div class="empty-state"><div class="emoji">&#128203;</div><p>${t}</p><span>${s}</span></div>`}
 
-const RCOLORS=["var(--blue)","var(--blue)","var(--orange)","var(--red)","var(--green)"];
+const RTABS=[
+  {lbl:"All",      color:"var(--blue)",   sh:"rgba(0,122,255,.3)"},
+  {lbl:"Sales",    color:"var(--blue)",   sh:"rgba(0,122,255,.3)"},
+  {lbl:"Purchase", color:"var(--orange)", sh:"rgba(255,149,0,.3)"},
+  {lbl:"Due",      color:"var(--red)",    sh:"rgba(255,59,48,.3)"},
+  {lbl:"Advance",  color:"var(--green)",  sh:"rgba(52,199,89,.3)"},
+];
 function renderReports(){
-  const s=stats();
-  const vals=[0,s.totalSales,s.totalPurchases,s.totalDue,s.totalAdvance];
-  const lbls=["","Sales","Purchases","Due Payments","Advance"];
-  document.getElementById("report-cards").innerHTML=[1,2,3,4].map(i=>`<div class="stat-card${reportFilter===i?" selected":""}" style="${reportFilter===i?`background:${RCOLORS[i]}`:"color:"+RCOLORS[i]}" onclick="setReportFilter(${i})"><div class="label">${lbls[i]}</div><div class="value">${fmt(vals[i])}</div></div>`).join("");
+  document.getElementById("report-tabs").innerHTML=RTABS.map((t,i)=>
+    `<button class="report-tab${reportFilter===i?" sel":""}" style="${reportFilter===i?"background:"+t.color+";box-shadow:0 3px 10px "+t.sh:""}" onclick="setReportFilter(${i})">${t.lbl}</button>`
+  ).join("");
   renderReportList();
 }
 function setReportFilter(f){reportFilter=f;renderReports()}
 function renderReportList(){
   const q=(document.getElementById("report-search")?.value||"").toLowerCase().trim();
-  const titles=["","Sales Transactions","Purchase Transactions","Due Payments","Advance Payments"];
-  document.getElementById("report-section-title").textContent=titles[reportFilter]||"Transactions";
+  const titles=["Transactions","Sales","Purchases","Due Payments","Advance Payments"];
+  document.getElementById("report-section-title").textContent=titles[reportFilter];
   const el=document.getElementById("report-list");
   if(reportFilter===4){
     let list=DB.advances;
