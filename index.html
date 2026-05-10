@@ -1349,9 +1349,18 @@ function onPayChange(field){
   const o=parseFloat(document.getElementById("s-online").value)||0;
   const c=parseFloat(document.getElementById("s-cash").value)||0;
   const d=parseFloat(document.getElementById("s-due").value)||0;
-  if(field==="cash"||field==="online"){const nd=Math.max(0,gt-c-o);document.getElementById("s-due").value=nd>0?Math.round(nd):"";}
-  else if(field==="due"){const nc=Math.max(0,gt-o-d);document.getElementById("s-cash").value=nc>0?Math.round(nc):"";}
+  if(field==="cash"){
+    const nd=Math.max(0,gt-c-o);
+    document.getElementById("s-due").value=nd>0?Math.round(nd):"";
+  }else if(field==="online"){
+    const nc=Math.max(0,gt-d-o);
+    document.getElementById("s-cash").value=nc>0?Math.round(nc):"";
+  }else if(field==="due"){
+    const nc=Math.max(0,gt-o-d);
+    document.getElementById("s-cash").value=nc>0?Math.round(nc):"";
+  }
   updateDueNote();
+  updateSaleCards();
 }
 
 function updateDueNote(){
