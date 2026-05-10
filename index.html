@@ -1067,7 +1067,7 @@ function renderReportList(){
   if(reportFilter===2)list=list.filter(t=>t.type==="purchase");
   if(reportFilter===3)list=list.filter(t=>t.type==="sale"&&t.dueAmount>0);
   if(q)list=list.filter(t=>t.party.toLowerCase().includes(q)||(t.phone||"").includes(q)||(t.notes||"").toLowerCase().includes(q)||fmtDate(t.date).toLowerCase().includes(q)||(t.lineItems||[]).some(l=>l.toLowerCase().includes(q)));
-  el.innerHTML=list.length?list.map(reportFilter===3?dueCard:txCard).join(""):emptyState("No transactions found","Try a different search");
+  el.innerHTML=list.length?list.map(txCard).join(""):emptyState("No transactions found","Try a different search");
 }
 
 function advCard(r){
