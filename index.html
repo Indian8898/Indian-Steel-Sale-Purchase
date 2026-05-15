@@ -53,6 +53,7 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:var(--safe-
 /* Sync toast */
 .sync-toast{position:fixed;bottom:calc(var(--nav-total-h) + 8px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:20px;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .sync-toast.show{opacity:1}
+.browser-only{display:none!important}
 /* Sync setup modal content */
 .sync-info{font-size:12px;color:var(--txt2);line-height:1.6;margin-bottom:16px}
 .sync-info a{color:var(--blue)}
@@ -113,6 +114,7 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:var(--safe-
 /* Reports header */
 .reports-header{background:var(--bg);padding:calc(var(--safe-t) + 14px) 20px 10px;z-index:10;flex-shrink:0}
 .reports-header-inner{display:flex;align-items:center;justify-content:space-between}
+.reports-actions{display:flex;align-items:center;gap:8px}
 .reports-title{font-size:22px;font-weight:700}
 /* Report stat cards */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
@@ -188,6 +190,11 @@ body.standalone::after{background:rgba(255,255,255,.98)}
 body.standalone .bottom-nav{background:rgba(255,255,255,.98)}
 body.standalone .bottom-nav::before,body.standalone .bottom-nav::after{display:none}
 body.standalone .fab-menu{bottom:calc(var(--nav-total-h) + 6px)}
+body.browser-mode .browser-only{display:flex!important}
+body.browser-mode .bottom-nav{display:none}
+body.browser-mode .sync-toast{bottom:calc(var(--browser-bottom-offset) + 16px)}
+body.browser-mode .fab-menu{bottom:calc(var(--browser-bottom-offset) + 16px)}
+body.browser-mode .page-scroll{padding-bottom:max(var(--safe-b),12px)}
 @media(min-width:768px){
   #app{max-width:960px;display:grid;grid-template-columns:260px 1fr;min-height:100vh}
   body::after{display:none}
@@ -292,6 +299,9 @@ body.standalone .fab-menu{bottom:calc(var(--nav-total-h) + 6px)}
         <span class="header-title">Indian Steel</span>
       </div>
       <div class="header-right">
+        <button class="notif-btn browser-only" title="Add Entry" onclick="toggleFab()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
         <button class="notif-btn" title="Cloud Sync" onclick="openSyncSetup()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="notif-dot"></span>
@@ -317,7 +327,15 @@ body.standalone .fab-menu{bottom:calc(var(--nav-total-h) + 6px)}
   <div class="reports-header">
     <div class="reports-header-inner">
       <span class="reports-title">Reports</span>
-      <button onclick="window.print()" style="color:var(--blue);font-size:11px;font-weight:600">&#128424; Print</button>
+      <div class="reports-actions">
+        <button class="notif-btn browser-only" title="Home" onclick="showPage('home')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--blue)"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </button>
+        <button class="notif-btn browser-only" title="Add Entry" onclick="toggleFab()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+        <button onclick="window.print()" style="color:var(--blue);font-size:11px;font-weight:600">&#128424; Print</button>
+      </div>
     </div>
   </div>
   <div class="reports-cards-pad">
@@ -1063,6 +1081,8 @@ const DB={
 };
 if(window.matchMedia?.("(display-mode: standalone)").matches||window.navigator.standalone){
   document.body.classList.add("standalone");
+}else{
+  document.body.classList.add("browser-mode");
 }
 const isStandalone=()=>document.body.classList.contains("standalone");
 function updateBottomNavPosition(){
@@ -1077,9 +1097,12 @@ function updatePageScrollInset(){
   const scrollEl=document.querySelector(".page.active .page-scroll");
   const navEl=document.querySelector(".bottom-nav");
   if(!scrollEl||!navEl)return;
-  const navHeight=Math.ceil(navEl.getBoundingClientRect().height);
+  const navVisible=getComputedStyle(navEl).display!=="none";
+  const navHeight=navVisible?Math.ceil(navEl.getBoundingClientRect().height):0;
   const browserOffset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--browser-bottom-offset"))||0;
-  const clearance=Math.max(0,Math.round(navHeight+browserOffset+12));
+  const clearance=navVisible
+    ?Math.max(0,Math.round(navHeight+browserOffset+12))
+    :Math.max(0,Math.round(browserOffset+12));
   const needsInset=scrollEl.scrollHeight>scrollEl.clientHeight+12;
   scrollEl.style.paddingBottom=needsInset?`${clearance}px`:"0px";
 }
@@ -2415,7 +2438,7 @@ function testSync(){githubPull(false);}
 
 if("serviceWorker" in navigator && (location.protocol==="http:"||location.protocol==="https:")){
   try{
-    navigator.serviceWorker.register("./sw.js?v=39")
+    navigator.serviceWorker.register("./sw.js?v=40")
       .then(reg=>reg.update())
       .catch(()=>{});
   }catch(e){}
