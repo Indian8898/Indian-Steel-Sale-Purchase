@@ -16,8 +16,9 @@
   --purple:#5856D6;--bg:#F2F2F7;--card:#fff;--sep:rgba(0,0,0,.08);
   --txt:#000;--txt2:#8E8E93;--nav-h:clamp(58px,8dvh,72px);
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
-  --nav-float-b:0px;
-  --nav-total-h:calc(var(--nav-h) + var(--safe-b));
+  --browser-bottom-offset:0px;
+  --nav-float-b:var(--browser-bottom-offset);
+  --nav-total-h:calc(var(--nav-h) + max(var(--safe-b),var(--browser-bottom-offset)));
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--txt)}
@@ -121,7 +122,7 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:var(--safe-
 .stat-card.sel .sc-label{color:rgba(255,255,255,.85)}
 .sc-value{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* Bottom nav */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(calc(100% - 24px),356px);height:var(--nav-h);background:rgba(255,255,255,.96);backdrop-filter:blur(28px) saturate(1.1);-webkit-backdrop-filter:blur(28px) saturate(1.1);border:1px solid rgba(0,0,0,.06);border-radius:999px 999px 0 0;display:flex;align-items:center;justify-content:space-between;padding:6px 6px calc(max(var(--safe-b),4px) + 2px);box-shadow:0 10px 24px rgba(0,0,0,.10);z-index:100}
+.bottom-nav{position:fixed;bottom:var(--nav-float-b);left:50%;transform:translateX(-50%);width:min(calc(100% - 24px),356px);height:var(--nav-h);background:rgba(255,255,255,.96);backdrop-filter:blur(28px) saturate(1.1);-webkit-backdrop-filter:blur(28px) saturate(1.1);border:1px solid rgba(0,0,0,.06);border-radius:999px 999px 0 0;display:flex;align-items:center;justify-content:space-between;padding:6px 6px calc(max(var(--safe-b),4px) + 2px);box-shadow:0 10px 24px rgba(0,0,0,.10);z-index:100}
 .bottom-nav::before,.bottom-nav::after{display:none}
 .nav-btn,.nav-add{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:999px;color:#4b4b4b;font-size:clamp(11px,2.9vw,13px);font-weight:700;line-height:1;position:relative;transition:background .18s ease,color .18s ease,transform .18s ease}
 .nav-btn-bg,.nav-fab{width:30px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:transparent;color:inherit;box-shadow:none;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
@@ -1063,6 +1064,34 @@ const DB={
 if(window.matchMedia?.("(display-mode: standalone)").matches||window.navigator.standalone){
   document.body.classList.add("standalone");
 }
+const isStandalone=()=>document.body.classList.contains("standalone");
+function updateBottomNavPosition(){
+  const vv=window.visualViewport;
+  let browserOffset=0;
+  if(vv&&!isStandalone()){
+    browserOffset=Math.max(0,Math.round(window.innerHeight-vv.height-vv.offsetTop));
+  }
+  document.documentElement.style.setProperty("--browser-bottom-offset",`${browserOffset}px`);
+}
+function updatePageScrollInset(){
+  const scrollEl=document.querySelector(".page.active .page-scroll");
+  const navEl=document.querySelector(".bottom-nav");
+  if(!scrollEl||!navEl)return;
+  const navHeight=Math.ceil(navEl.getBoundingClientRect().height);
+  const browserOffset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--browser-bottom-offset"))||0;
+  const clearance=Math.max(0,Math.round(navHeight+browserOffset+12));
+  const needsInset=scrollEl.scrollHeight>scrollEl.clientHeight+12;
+  scrollEl.style.paddingBottom=needsInset?`${clearance}px`:"0px";
+}
+function syncViewportChrome(){
+  updateBottomNavPosition();
+  requestAnimationFrame(updatePageScrollInset);
+}
+window.addEventListener("resize",syncViewportChrome);
+window.addEventListener("orientationchange",syncViewportChrome);
+window.visualViewport?.addEventListener("resize",syncViewportChrome);
+window.visualViewport?.addEventListener("scroll",syncViewportChrome);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)syncViewportChrome();});
 
 function stats(){
   const tx=DB.transactions,adv=DB.advances,ttx=tx.filter(t=>isToday(t.date));
@@ -1098,6 +1127,7 @@ function showPage(p){
   currentPage=p;
   if(p==="home")renderDashboard();
   if(p==="reports")renderReports();
+  syncViewportChrome();
 }
 
 let fabOpen=false;
@@ -1151,6 +1181,7 @@ function renderDashboard(){
     </div>`;
   const all=DB.transactions.slice(0,20);
   document.getElementById("recent-list").innerHTML=all.length?all.map(txCard).join(""):emptyState("No transactions yet","Tap + to add your first sale");
+  syncViewportChrome();
 }
 
 function txCard(t){
@@ -1192,6 +1223,7 @@ function renderReports(){
     </button>`;
   }).join("");
   renderReportList();
+  syncViewportChrome();
 }
 function setReportFilter(f){reportFilter=f;renderReports()}
 function renderReportList(){
@@ -1203,6 +1235,7 @@ function renderReportList(){
     let list=DB.advances;
     if(q)list=list.filter(r=>r.customerName.toLowerCase().includes(q)||(r.phone||"").includes(q)||r.receiptNumber.toLowerCase().includes(q)||(r.itemName||"").toLowerCase().includes(q));
     el.innerHTML=list.length?list.map(advCard).join(""):emptyState("No advance records","Add advance payments via +");
+    syncViewportChrome();
     return;
   }
   let list=DB.transactions;
@@ -1211,6 +1244,7 @@ function renderReportList(){
   if(reportFilter===3)list=list.filter(t=>t.type==="sale"&&t.dueAmount>0);
   if(q)list=list.filter(t=>t.party.toLowerCase().includes(q)||(t.phone||"").includes(q)||(t.notes||"").toLowerCase().includes(q)||fmtDate(t.date).toLowerCase().includes(q)||(t.lineItems||[]).some(l=>l.toLowerCase().includes(q)));
   el.innerHTML=list.length?list.map(reportFilter===3?dueCard:txCard).join(""):emptyState("No transactions found","Try a different search");
+  syncViewportChrome();
 }
 
 function advCard(r){
@@ -2381,13 +2415,14 @@ function testSync(){githubPull(false);}
 
 if("serviceWorker" in navigator && (location.protocol==="http:"||location.protocol==="https:")){
   try{
-    navigator.serviceWorker.register("./sw.js?v=38")
+    navigator.serviceWorker.register("./sw.js?v=39")
       .then(reg=>reg.update())
       .catch(()=>{});
   }catch(e){}
 }
 loadSaleProducts();
 renderDashboard();
+syncViewportChrome();
 </script>
 </body>
 </html>
