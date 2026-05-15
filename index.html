@@ -8,13 +8,17 @@
 <meta name="apple-mobile-web-app-title" content="SteelShop">
 <meta name="theme-color" content="#F2F2F7">
 <link rel="manifest" href="manifest.json">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <title>Steel Shop Manager</title>
 <style>
 :root{
   --blue:#007AFF;--orange:#FF9500;--red:#FF3B30;--green:#34C759;
   --purple:#5856D6;--bg:#F2F2F7;--card:#fff;--sep:rgba(0,0,0,.08);
-  --txt:#000;--txt2:#8E8E93;--nav-h:clamp(42px,11vw,50px);
+  --txt:#000;--txt2:#8E8E93;--nav-h:clamp(50px,12vw,58px);
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+  --nav-shell-pad:clamp(8px,1.2dvh,12px);
+  --nav-bottom-pad:max(var(--safe-b),clamp(8px,1.1dvh,12px));
+  --nav-total-h:calc(var(--nav-h) + var(--nav-shell-pad) + var(--nav-bottom-pad));
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;color:var(--txt)}
@@ -24,10 +28,10 @@ input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 #app{max-width:480px;margin:0 auto;height:100vh;height:100dvh;position:relative;background:var(--bg);display:flex;flex-direction:column}
-body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;background:rgba(255,255,255,.95);pointer-events:none;z-index:99}
+body::after{content:"";display:none}
 .page{display:none;flex-direction:column;flex:1;overflow:hidden}
 .page.active{display:flex}
-.page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scrollbar-width:none;padding:0 16px calc(var(--nav-h) + var(--safe-b) + 16px)}
+.page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scrollbar-width:none;padding:0 16px calc(var(--nav-total-h) + 12px)}
 .page-scroll::-webkit-scrollbar{display:none}
 /* Header */
 .header{background:var(--bg);padding:calc(var(--safe-t) + 14px) 20px 10px;z-index:10;flex-shrink:0}
@@ -47,7 +51,7 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;backgroun
 @keyframes spin{to{transform:rotate(360deg)}}
 .sync-spinning{animation:spin 1s linear infinite}
 /* Sync toast */
-.sync-toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 20px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:20px;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.sync-toast{position:fixed;bottom:calc(var(--nav-total-h) + 12px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:20px;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .sync-toast.show{opacity:1}
 /* Sync setup modal content */
 .sync-info{font-size:12px;color:var(--txt2);line-height:1.6;margin-bottom:16px}
@@ -118,20 +122,20 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;backgroun
 .stat-card.sel .sc-label{color:rgba(255,255,255,.85)}
 .sc-value{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* Bottom nav */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,480px);background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--sep);display:flex;align-items:flex-end;justify-content:space-between;padding:2px clamp(8px,3vw,16px) min(var(--safe-b),6px);z-index:100}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,480px);height:var(--nav-total-h);background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--sep);display:flex;align-items:center;justify-content:space-between;padding:var(--nav-shell-pad) clamp(8px,3vw,16px) var(--nav-bottom-pad);z-index:100}
 .bottom-nav::before,.bottom-nav::after{content:"";position:absolute;left:0;right:0;background:rgba(255,255,255,.95);pointer-events:none;display:none}
-.nav-btn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0;gap:2px;font-size:clamp(10px,2.7vw,12px);font-weight:500;color:var(--txt2);height:var(--nav-h);position:relative;top:-4px}
+.nav-btn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;gap:2px;font-size:clamp(10px,2.7vw,12px);font-weight:500;color:var(--txt2);height:var(--nav-h);position:relative;top:0}
 .nav-btn-bg{width:clamp(42px,12vw,52px);height:clamp(24px,7vw,30px);border-radius:999px;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .nav-btn.active .nav-btn-bg{background:rgba(0,122,255,.12)}
 .nav-btn.active{color:var(--blue)}
-.nav-fab-wrap{flex:1;display:flex;justify-content:center;align-items:flex-end;height:var(--nav-h);padding-bottom:0;position:relative;top:-6px}
+.nav-fab-wrap{flex:1;display:flex;justify-content:center;align-items:center;height:var(--nav-h);padding-bottom:0;position:relative;top:0}
 .nav-fab{width:clamp(48px,13vw,56px);height:clamp(48px,13vw,56px);border-radius:50%;background:linear-gradient(145deg,#007AFF,#2196F3);color:#fff;font-size:clamp(24px,6.5vw,28px);box-shadow:0 4px 18px rgba(0,122,255,.5);display:flex;align-items:center;justify-content:center;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .nav-fab:active{transform:scale(.92)}
 .nav-fab.open{transform:rotate(45deg)}
 /* FAB overlay */
 .fab-overlay{position:fixed;inset:0;z-index:200;background:rgba(15,23,42,.34);backdrop-filter:blur(18px) saturate(1.08);-webkit-backdrop-filter:blur(18px) saturate(1.08);opacity:0;pointer-events:none;transition:opacity .25s}
 .fab-overlay.visible{opacity:1;pointer-events:all}
-.fab-menu{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 18px);left:50%;transform:translateX(-50%) translateY(20px);width:calc(100% - 48px);max-width:400px;display:flex;flex-direction:column;gap:10px;z-index:201;opacity:0;pointer-events:none;transition:all .25s}
+.fab-menu{position:fixed;bottom:calc(var(--nav-total-h) + 12px);left:50%;transform:translateX(-50%) translateY(20px);width:calc(100% - 48px);max-width:400px;display:flex;flex-direction:column;gap:10px;z-index:201;opacity:0;pointer-events:none;transition:all .25s}
 .fab-menu.visible{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
 .fab-action{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 6px 20px rgba(0,0,0,.12);text-align:left}
 .fab-action-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -173,25 +177,15 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:0;backgroun
 .empty-state span{font-size:11px}
 @media print{.bottom-nav,.fab-overlay,.fab-menu,.modal-bg{display:none!important}body{background:#fff}}
 @media (display-mode: standalone){
-  body::after{height:calc(var(--safe-b) + 22px)}
-  .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 18px)}
-  .bottom-nav{align-items:center;padding:10px clamp(12px,4vw,18px) calc(var(--safe-b) + 6px);min-height:calc(var(--nav-h) + var(--safe-b) + 26px)}
-  .bottom-nav::before,.bottom-nav::after{display:block}
-  .bottom-nav::before{top:-18px;height:18px}
-  .bottom-nav::after{bottom:calc(-1 * var(--safe-b) - 6px);height:calc(var(--safe-b) + 6px)}
-  .nav-btn{justify-content:center;height:calc(var(--nav-h) + 8px);top:0}
-  .nav-fab-wrap{align-items:flex-start;height:calc(var(--nav-h) + 8px);top:0}
-  .nav-fab{position:relative;top:-12px}
+  .page-scroll{padding-bottom:calc(var(--nav-total-h) + 12px)}
+  .bottom-nav{background:rgba(255,255,255,.98)}
+  .bottom-nav::before,.bottom-nav::after{display:none}
+  .fab-menu{bottom:calc(var(--nav-total-h) + 12px)}
 }
-body.standalone::after{height:calc(var(--safe-b) + 22px)}
-body.standalone .page-scroll{padding-bottom:calc(var(--nav-h) + var(--safe-b) + 18px)}
-body.standalone .bottom-nav{align-items:center;padding:10px clamp(12px,4vw,18px) calc(var(--safe-b) + 6px);min-height:calc(var(--nav-h) + var(--safe-b) + 26px)}
-body.standalone .bottom-nav::before,body.standalone .bottom-nav::after{display:block}
-body.standalone .bottom-nav::before{top:-18px;height:18px}
-body.standalone .bottom-nav::after{bottom:calc(-1 * var(--safe-b) - 6px);height:calc(var(--safe-b) + 6px)}
-body.standalone .nav-btn{justify-content:center;height:calc(var(--nav-h) + 8px);top:0}
-body.standalone .nav-fab-wrap{align-items:flex-start;height:calc(var(--nav-h) + 8px);top:0}
-body.standalone .nav-fab{position:relative;top:-12px}
+body.standalone .page-scroll{padding-bottom:calc(var(--nav-total-h) + 12px)}
+body.standalone .bottom-nav{background:rgba(255,255,255,.98)}
+body.standalone .bottom-nav::before,body.standalone .bottom-nav::after{display:none}
+body.standalone .fab-menu{bottom:calc(var(--nav-total-h) + 12px)}
 @media(min-width:768px){
   #app{max-width:960px;display:grid;grid-template-columns:260px 1fr;min-height:100vh}
   .bottom-nav{position:fixed;left:0;bottom:0;top:0;width:260px;height:auto;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:40px 0 20px;border-top:none;border-right:0.5px solid var(--sep);max-width:260px;transform:none;background:var(--card)}
@@ -295,7 +289,7 @@ body.standalone .nav-fab{position:relative;top:-12px}
         <span class="header-title">Indian Steel</span>
       </div>
       <div class="header-right">
-        <button class="notif-btn" title="Export CSV" onclick="exportCSV()">
+        <button class="notif-btn" title="Cloud Sync" onclick="openSyncSetup()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#636366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="notif-dot"></span>
         </button>
@@ -388,7 +382,7 @@ body.standalone .nav-fab{position:relative;top:-12px}
         </div>
         <div class="sale-mini-val" id="s-date-display">Today</div>
       </button>
-      <button class="sale-mini-card" onclick="openSalePanel('saleno')">
+      <button class="sale-mini-card" ontouchend="openSaleNoPanel(event)" onpointerup="openSaleNoPanel(event)" onclick="openSaleNoPanel(event)">
         <div class="sale-mini-label">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg>
           Sale No.
@@ -567,11 +561,41 @@ body.standalone .nav-fab{position:relative;top:-12px}
 <!-- Sync toast -->
 <div class="sync-toast" id="sync-toast"></div>
 
-<!-- MODAL: GITHUB SYNC SETUP -->
+<!-- MODAL: CLOUD SYNC SETUP -->
 <div class="modal-bg" id="modal-sync"><div class="modal-sheet">
-  <div class="modal-header"><h2>&#9729; GitHub Sync</h2><button class="modal-close" onclick="closeModal('sync')">Done</button></div>
+  <div class="modal-header"><h2>&#9729; Cloud Sync</h2><button class="modal-close" onclick="closeModal('sync')">Done</button></div>
   <div class="modal-body">
-    <p class="sync-info">Auto-sync saves your data to GitHub every time you add a sale, purchase or advance. Any device with the app will load the latest data automatically.<br><br>
+    <div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:8px">Google Drive</div>
+    <div class="sync-info">
+      Auto-sync saves your data to a hidden file in your Google Drive app data folder.<br><br>
+      <strong>Important:</strong> Google Drive sign-in works only on your hosted <strong>HTTPS</strong> app, like GitHub Pages. It will not connect from the local <strong>file://</strong> preview.<br><br>
+      <strong>Step-by-step setup:</strong><br>
+      1. Open your hosted app URL, not the local file preview.<br>
+      2. Go to <strong>console.cloud.google.com</strong> and create/select a project.<br>
+      3. Enable <strong>Google Drive API</strong> for that project.<br>
+      4. Open <strong>OAuth consent screen</strong> and complete the basic app details.<br>
+      5. Open <strong>Credentials</strong> and create an <strong>OAuth Client ID</strong> for a <strong>Web application</strong>.<br>
+      6. In <strong>Authorized JavaScript origins</strong>, add your GitHub Pages origin, for example:<br>
+      <strong>https://indian8898.github.io</strong><br>
+      7. Copy the generated <strong>Client ID</strong>.<br>
+      8. Paste that Client ID below and tap <strong>Save Client ID</strong>.<br>
+      9. Tap <strong>Connect Google Drive</strong> and sign in to your Google account.<br>
+      10. Tap <strong>Sync from Drive Now</strong> once to test.
+    </div>
+    <div class="sync-status-row">
+      <span class="sync-dot" id="drive-sync-modal-dot" style="position:static;border:none;width:9px;height:9px"></span>
+      <span id="drive-sync-status-text">Not configured</span>
+    </div>
+    <input class="sync-token-input" id="drive-client-id-input" type="text" placeholder="Google OAuth Client ID">
+    <button class="btn-primary" onclick="saveDriveClientId()" style="margin-top:8px;background:#5E5CE6;box-shadow:0 4px 14px rgba(94,92,230,.28)">Save Client ID</button>
+    <button class="btn-primary" onclick="connectGoogleDrive()" style="margin-top:8px;background:#34A853;box-shadow:0 4px 14px rgba(52,168,83,.28)">Connect Google Drive</button>
+    <button class="btn-primary" onclick="testDriveSync()" style="margin-top:8px;background:#4285F4;box-shadow:0 4px 14px rgba(66,133,244,.28)">Sync from Drive Now</button>
+    <button class="btn-primary" onclick="clearDriveConfig()" style="margin-top:8px;background:var(--red);box-shadow:0 4px 14px rgba(255,59,48,.25)">Remove Drive Setup</button>
+
+    <div style="height:1px;background:var(--sep);margin:18px 0"></div>
+
+    <div style="font-size:14px;font-weight:700;color:var(--txt);margin-bottom:8px">GitHub</div>
+    <p class="sync-info">GitHub sync saves your data to a JSON file in your repository every time you add a sale, purchase or advance. Any device with the app can load the latest data automatically.<br><br>
     You need a <strong>GitHub Personal Access Token</strong>:<br>
     1. Go to <strong>github.com &#8594; Settings &#8594; Developer settings &#8594; Personal access tokens &#8594; Tokens (classic)</strong><br>
     2. Click <strong>Generate new token (classic)</strong><br>
@@ -585,6 +609,7 @@ body.standalone .nav-fab{position:relative;top:-12px}
     <button class="btn-primary" onclick="saveToken()" style="margin-top:8px">Save &amp; Connect</button>
     <button class="btn-primary" onclick="testSync()" style="margin-top:8px;background:#34C759;box-shadow:0 4px 14px rgba(52,199,89,.3)">&#9654; Test Sync Now</button>
     <button class="btn-primary" onclick="clearToken()" style="margin-top:8px;background:var(--red);box-shadow:0 4px 14px rgba(255,59,48,.25)">&#128465; Remove Token</button>
+    <button class="btn-primary" onclick="exportCSV()" style="margin-top:8px;background:#636366;box-shadow:0 4px 14px rgba(99,99,102,.25)">Export CSV</button>
   </div>
 </div></div>
 
@@ -612,7 +637,7 @@ body.standalone .nav-fab{position:relative;top:-12px}
     <div class="sale-ov-body" style="padding:16px">
       <div style="background:#F5F5FA;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center;gap:4px">
         <span style="font-size:20px;color:var(--txt2)">#</span>
-        <input id="s-saleno-input" type="number" inputmode="numeric" pattern="[0-9]*" style="font-size:24px;font-weight:700;width:70px;background:none;border:none;outline:none;text-align:center;font-family:inherit;color:var(--txt)" placeholder="1">
+        <input id="s-saleno-input" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocapitalize="off" autocorrect="off" enterkeyhint="done" style="font-size:24px;font-weight:700;width:70px;background:none;border:none;outline:none;text-align:center;font-family:inherit;color:var(--txt)" placeholder="1" onfocus="this.select()">
         <span id="s-saleno-suffix" style="font-size:17px;color:var(--txt2)">-25/26</span>
       </div>
     </div>
@@ -993,14 +1018,40 @@ body.standalone .nav-fab{position:relative;top:-12px}
 const uuid=()=>([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16));
 const fmt=n=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n||0);
 const today=()=>new Date().toISOString().split("T")[0];
-const isToday=d=>new Date(d).toDateString()===new Date().toDateString();
-const fmtDate=d=>new Date(d).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
-const fmtTime=d=>new Date(d).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+const safeDate=d=>{const v=new Date(d);return Number.isNaN(v.getTime())?new Date():v};
+const isToday=d=>safeDate(d).toDateString()===new Date().toDateString();
+const fmtDate=d=>safeDate(d).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+const fmtTime=d=>safeDate(d).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
 const dayLetter=d=>["S","M","T","W","T","F","S"][d.getDay()];
+function readJSON(key,fallback){
+  try{
+    const raw=localStorage.getItem(key);
+    if(raw==null||raw==="") return fallback;
+    const parsed=JSON.parse(raw);
+    return parsed==null?fallback:parsed;
+  }catch(e){
+    localStorage.removeItem(key);
+    return fallback;
+  }
+}
+const toNum=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
+const toStr=v=>v==null?"":String(v);
+function normalizeTx(t){
+  if(!t||typeof t!=="object")return null;
+  const type=toStr(t.type).toLowerCase();
+  if(type!=="sale"&&type!=="purchase")return null;
+  const quantity=toNum(t.quantity),ratePerUnit=toNum(t.ratePerUnit);
+  const totalAmount=toNum(t.totalAmount)||(quantity*ratePerUnit);
+  return {...t,type,party:toStr(t.party)||"Unknown",phone:toStr(t.phone),category:toStr(t.category)||"Other",quantity,unit:toStr(t.unit)||"Kg",ratePerUnit,totalAmount,date:safeDate(t.date).toISOString(),notes:toStr(t.notes),cashPayment:toNum(t.cashPayment),onlinePayment:toNum(t.onlinePayment),dueAmount:toNum(t.dueAmount),lineItems:Array.isArray(t.lineItems)?t.lineItems.map(toStr).filter(Boolean):[]};
+}
+function normalizeAdv(a){
+  if(!a||typeof a!=="object")return null;
+  return {...a,receiptNumber:toStr(a.receiptNumber),customerName:toStr(a.customerName)||"Unknown",phone:toStr(a.phone),itemName:toStr(a.itemName),rate:toNum(a.rate),advanceAmount:toNum(a.advanceAmount),cashPayment:toNum(a.cashPayment),onlinePayment:toNum(a.onlinePayment),date:safeDate(a.date).toISOString(),isSettled:!!a.isSettled};
+}
 
 const DB={
-  get transactions(){return JSON.parse(localStorage.getItem("ss_tx")||"[]")},
-  get advances(){return JSON.parse(localStorage.getItem("ss_adv")||"[]")},
+  get transactions(){const a=readJSON("ss_tx",[]);return Array.isArray(a)?a.map(normalizeTx).filter(Boolean):[]},
+  get advances(){const a=readJSON("ss_adv",[]);return Array.isArray(a)?a.map(normalizeAdv).filter(Boolean):[]},
   saveTx(a){localStorage.setItem("ss_tx",JSON.stringify(a))},
   saveAdv(a){localStorage.setItem("ss_adv",JSON.stringify(a))},
   addTx(t){const a=this.transactions;a.unshift(t);this.saveTx(a)},
@@ -1184,9 +1235,10 @@ let sOnlineAcct="Sakira", sCashAcct="Sakira";
 let sUnitTarget="";
 let pUnitTarget="";
 let addProductTarget="sale";
+let lastSaleNoOpenAt=0;
 
 function loadSaleProducts(){
-  const saved=JSON.parse(localStorage.getItem("ss_prod_catalog")||"null");
+  const saved=readJSON("ss_prod_catalog",null);
   if(Array.isArray(saved)&&saved.length){
     SALE_PRODS=[...new Set(saved.map(v=>String(v||"").trim()).filter(Boolean))];
   }else{
@@ -1289,20 +1341,32 @@ function updateSaleCards(){
   if(btn){btn.disabled=!canSave;btn.style.color=canSave?"var(--blue)":"#C7C7CC";}
 }
 
+function openSaleNoPanel(event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const now=Date.now();
+  if(now-lastSaleNoOpenAt<250) return false;
+  lastSaleNoOpenAt=now;
+
+  const n=DB.transactions.filter(t=>t.type==="sale").length+1;
+  document.getElementById("s-saleno-suffix").textContent=`-${sFY(sDate)}`;
+  const input=document.getElementById("s-saleno-input");
+  input.value=sNoOvr||String(n);
+  document.getElementById("sov-saleno").classList.add("open");
+  input.focus({preventScroll:true});
+  input.click();
+  input.select();
+  return false;
+}
+
 function openSalePanel(panel){
   if(panel==="date"){
     document.getElementById("s-date-input").value=sDate.toISOString().split("T")[0];
     document.getElementById("sov-date").classList.add("open");
   }else if(panel==="saleno"){
-    const n=DB.transactions.filter(t=>t.type==="sale").length+1;
-    document.getElementById("s-saleno-suffix").textContent=`-${sFY(sDate)}`;
-    const input=document.getElementById("s-saleno-input");
-    input.value=sNoOvr||String(n);
-    document.getElementById("sov-saleno").classList.add("open");
-    setTimeout(()=>{
-      input.focus();
-      input.select();
-    },80);
+    openSaleNoPanel();
   }else if(panel==="customer"){
     document.getElementById("s-cust-name").value=sCustName;
     document.getElementById("s-cust-mobile").value=sCustMobile;
@@ -1530,7 +1594,7 @@ function saveSale(){
   const cashRaw=parseFloat(document.getElementById("s-cash").value);
   const cash=isNaN(cashRaw)?Math.max(0,totalAmount-online-due):cashRaw;
   DB.addTx({id:uuid(),type:"sale",category:"Other",party:sCustName,phone:sCustMobile,quantity:totalQty,unit:valid[0]?.[1]?.unit||"Kg",ratePerUnit:totalQty>0?totalAmount/totalQty:0,totalAmount,date:sDate.toISOString(),notes:"Sale #"+sSaleNo(),cashPayment:cash,onlinePayment:online,dueAmount:due,lineItems:chips});
-  closeModal("sale");renderDashboard();githubPush();
+  closeModal("sale");renderDashboard();cloudPush();
 }
 
 // ─── PURCHASE FORM (card-based) ─────────────────────────────────────────────
@@ -1723,7 +1787,7 @@ function savePurchase(){
   const cashRaw=parseFloat(document.getElementById("p-cash").value);
   const cash=isNaN(cashRaw)?Math.max(0,totalAmount-online):cashRaw;
   DB.addTx({id:uuid(),type:"purchase",category:"Other",party:pSupplierName,phone:pSupplierMobile,quantity:totalQty,unit:valid[0]?.[1]?.unit||"Kg",ratePerUnit:totalQty>0?totalAmount/totalQty:0,totalAmount,date:pDate.toISOString(),notes:"Purchase #"+pBillNo(),cashPayment:cash,onlinePayment:online,dueAmount:0,lineItems:chips});
-  closeModal("purchase");renderDashboard();githubPush();
+  closeModal("purchase");renderDashboard();cloudPush();
 }
 
 // ─── ADVANCE FORM (card-based) ──────────────────────────────────────────────
@@ -1869,7 +1933,7 @@ function saveAdvance(){
   const online=parseFloat(document.getElementById("a-online")?.value)||0;
   const cash=Math.max(0,amount-online);
   DB.addAdv({id:uuid(),date:aDate.toISOString(),receiptNumber:aReceiptNo(),customerName:aCustName,phone:aCustMobile,itemName:aItemName,rate:parseFloat(aItemRate)||0,advanceAmount:amount,cashPayment:Math.round(cash),onlinePayment:online,isSettled:false});
-  closeModal("advance");renderDashboard();githubPush();
+  closeModal("advance");renderDashboard();cloudPush();
 }
 
 function exportCSV(){
@@ -1880,6 +1944,291 @@ function exportCSV(){
   const a=document.createElement("a");a.href="data:text/csv;charset=utf-8,\ufeff"+encodeURIComponent(csv);a.download="steelshop_"+today()+".csv";a.click();
 }
 
+function getSyncPayload(){
+  return {
+    transactions: DB.transactions,
+    advances: DB.advances,
+    productCatalog: SALE_PRODS
+  };
+}
+
+function applySyncPayload(data){
+  if(data.transactions) DB.saveTx(data.transactions);
+  if(data.advances) DB.saveAdv(data.advances);
+  if(Array.isArray(data.productCatalog) && data.productCatalog.length){
+    SALE_PRODS=[...new Set(data.productCatalog.map(v=>normalizeProductName(v)).filter(Boolean))];
+    saveSaleProducts();
+  }
+  renderDashboard();
+  if(currentPage==="reports") renderReports();
+}
+
+
+// ══════════════════════════════════════════════════════════════════
+//  GOOGLE DRIVE AUTO-SYNC
+// ══════════════════════════════════════════════════════════════════
+const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.appdata";
+const DRIVE_FILE_NAME = "steelshop_data.json";
+let driveBusy = false;
+let driveAccessToken = "";
+let driveTokenExpiry = 0;
+let driveFileId = localStorage.getItem("gd_file_id") || "";
+let driveLastModified = localStorage.getItem("gd_last_modified") || "";
+let driveTokenClient = null;
+let driveTokenClientId = "";
+let driveTokenResolve = null;
+let driveTokenReject = null;
+
+function driveClientId(){
+  return (localStorage.getItem("gd_client_id") || "").trim();
+}
+
+function isLocalFilePreview(){
+  return location.protocol === "file:";
+}
+
+function setDriveStatus(state, message){
+  const dot=document.getElementById("drive-sync-modal-dot");
+  const text=document.getElementById("drive-sync-status-text");
+  if(dot) dot.className="sync-dot"+(state?" "+state:"");
+  if(text){
+    if(message) text.textContent=message;
+    else if(state==="ok") text.textContent="Synced to Google Drive ✓";
+    else if(state==="busy") text.textContent="Syncing with Google Drive…";
+    else if(state==="err") text.textContent="Drive sync needs attention";
+    else text.textContent="Not configured";
+  }
+}
+
+function ensureDriveClient(){
+  const clientId = driveClientId();
+  if(!clientId) throw new Error("missing_drive_client_id");
+  if(isLocalFilePreview()) throw new Error("drive_requires_https_origin");
+  if(!window.google || !google.accounts || !google.accounts.oauth2) throw new Error("google_identity_not_loaded");
+  if(!driveTokenClient || driveTokenClientId !== clientId){
+    driveTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: clientId,
+      scope: DRIVE_SCOPE,
+      callback: resp => {
+        if(resp && resp.access_token){
+          driveAccessToken = resp.access_token;
+          driveTokenExpiry = Date.now() + Math.max((resp.expires_in || 3600) - 60, 60) * 1000;
+          const resolve = driveTokenResolve;
+          driveTokenResolve = null;
+          driveTokenReject = null;
+          if(resolve) resolve(resp.access_token);
+        }else{
+          const reject = driveTokenReject;
+          driveTokenResolve = null;
+          driveTokenReject = null;
+          if(reject) reject(new Error(resp?.error || "drive_token_error"));
+        }
+      },
+      error_callback: err => {
+        const reject = driveTokenReject;
+        driveTokenResolve = null;
+        driveTokenReject = null;
+        if(reject) reject(new Error(err?.type || "drive_popup_error"));
+      }
+    });
+    driveTokenClientId = clientId;
+  }
+}
+
+async function requestDriveToken(interactive=false){
+  if(driveAccessToken && Date.now() < driveTokenExpiry) return driveAccessToken;
+  ensureDriveClient();
+  return await new Promise((resolve,reject)=>{
+    driveTokenResolve = resolve;
+    driveTokenReject = reject;
+    driveTokenClient.requestAccessToken({ prompt: interactive ? "consent" : "" });
+  });
+}
+
+async function driveListFiles(token){
+  const q = encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`);
+  const url = `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id,name,modifiedTime)&pageSize=10&orderBy=modifiedTime desc&q=${q}`;
+  const res = await fetch(url, {
+    headers: { Authorization: "Bearer " + token },
+    cache: "no-store"
+  });
+  if(!res.ok) throw new Error("drive_list_failed_" + res.status);
+  const json = await res.json();
+  return json.files || [];
+}
+
+async function driveCreateFile(token){
+  const res = await fetch("https://www.googleapis.com/drive/v3/files?fields=id,modifiedTime", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name: DRIVE_FILE_NAME,
+      parents: ["appDataFolder"],
+      mimeType: "application/json"
+    })
+  });
+  if(!res.ok) throw new Error("drive_create_failed_" + res.status);
+  return await res.json();
+}
+
+async function driveWriteFile(token, fileId, payload){
+  const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media&fields=id,modifiedTime`, {
+    method: "PATCH",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+  if(!res.ok) throw new Error("drive_write_failed_" + res.status);
+  return await res.json();
+}
+
+async function drivePush(interactive=false){
+  if(driveBusy || !driveClientId()) return false;
+  if(isLocalFilePreview()){
+    setDriveStatus("err","Google Drive sync works on the hosted HTTPS app");
+    return false;
+  }
+  driveBusy = true;
+  setDriveStatus("busy");
+  try{
+    const token = await requestDriveToken(interactive);
+    const files = await driveListFiles(token);
+    let file = files[0];
+    if(!file){
+      file = await driveCreateFile(token);
+    }
+    const saved = await driveWriteFile(token, file.id, getSyncPayload());
+    driveFileId = saved.id || file.id;
+    driveLastModified = saved.modifiedTime || file.modifiedTime || "";
+    localStorage.setItem("gd_file_id", driveFileId);
+    localStorage.setItem("gd_last_modified", driveLastModified);
+    setDriveStatus("ok");
+    showToast("✓ Synced to Google Drive");
+    return true;
+  }catch(e){
+    setDriveStatus("err", isLocalFilePreview() ? "Google Drive sync needs hosted HTTPS" : "Drive sync failed — reconnect");
+    if(interactive) showToast("Google Drive sync failed");
+    return false;
+  }finally{
+    driveBusy = false;
+  }
+}
+
+async function drivePull(silent=false, interactive=false){
+  if(!driveClientId()) return false;
+  if(isLocalFilePreview()){
+    setDriveStatus("err","Google Drive sync works on the hosted HTTPS app");
+    return false;
+  }
+  if(!silent) setDriveStatus("busy");
+  try{
+    const token = await requestDriveToken(interactive);
+    const files = await driveListFiles(token);
+    const file = files[0];
+    if(!file){
+      setDriveStatus("");
+      return false;
+    }
+    driveFileId = file.id;
+    localStorage.setItem("gd_file_id", driveFileId);
+    if(file.modifiedTime === driveLastModified){
+      setDriveStatus("ok");
+      return false;
+    }
+    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`, {
+      headers: { Authorization: "Bearer " + token },
+      cache: "no-store"
+    });
+    if(!res.ok) throw new Error("drive_read_failed_" + res.status);
+    const data = await res.json();
+    driveLastModified = file.modifiedTime || "";
+    localStorage.setItem("gd_last_modified", driveLastModified);
+    applySyncPayload(data);
+    setDriveStatus("ok");
+    if(!silent) showToast("✓ New data loaded from Google Drive");
+    return true;
+  }catch(e){
+    setDriveStatus("err", isLocalFilePreview() ? "Google Drive sync needs hosted HTTPS" : "Drive sync failed — reconnect");
+    return false;
+  }
+}
+
+async function connectGoogleDrive(){
+  const input = document.getElementById("drive-client-id-input");
+  const clientId = (input?.value || driveClientId()).trim();
+  if(!clientId){
+    alert("Please enter your Google OAuth Client ID");
+    return;
+  }
+  localStorage.setItem("gd_client_id", clientId);
+  driveAccessToken = "";
+  driveTokenExpiry = 0;
+  driveFileId = "";
+  driveLastModified = "";
+  localStorage.removeItem("gd_file_id");
+  localStorage.removeItem("gd_last_modified");
+  if(isLocalFilePreview()){
+    setDriveStatus("err","Use the GitHub Pages HTTPS app to connect Google Drive");
+    showToast("Open the hosted app to connect Google Drive");
+    return;
+  }
+  const pulled = await drivePull(false, true);
+  if(!driveFileId) await drivePush(true);
+  else if(!pulled) setDriveStatus("ok");
+  closeModal("sync");
+}
+
+function saveDriveClientId(){
+  const input = document.getElementById("drive-client-id-input");
+  const clientId = (input?.value || "").trim();
+  if(!clientId){
+    alert("Please enter your Google OAuth Client ID");
+    return;
+  }
+  localStorage.setItem("gd_client_id", clientId);
+  driveAccessToken = "";
+  driveTokenExpiry = 0;
+  driveTokenClient = null;
+  driveTokenClientId = "";
+  driveFileId = "";
+  driveLastModified = "";
+  localStorage.removeItem("gd_file_id");
+  localStorage.removeItem("gd_last_modified");
+  setDriveStatus("", isLocalFilePreview() ? "Client ID saved — connect on hosted HTTPS app" : "Client ID saved");
+  showToast("Google Drive client ID saved");
+}
+
+function clearDriveConfig(){
+  localStorage.removeItem("gd_client_id");
+  localStorage.removeItem("gd_file_id");
+  localStorage.removeItem("gd_last_modified");
+  driveAccessToken = "";
+  driveTokenExpiry = 0;
+  driveFileId = "";
+  driveLastModified = "";
+  driveTokenClient = null;
+  driveTokenClientId = "";
+  setDriveStatus("");
+  const input=document.getElementById("drive-client-id-input");
+  if(input) input.value="";
+  showToast("Google Drive sync disabled");
+}
+
+async function testDriveSync(){
+  const changed = await drivePull(false, true);
+  if(!driveFileId && driveClientId()) await drivePush(true);
+  else if(!changed && driveFileId) showToast("Google Drive is already up to date");
+}
+
+async function cloudPush(){
+  githubPush();
+  drivePush();
+}
 
 // ══════════════════════════════════════════════════════════════════
 //  GITHUB AUTO-SYNC  (push + live poll every 30s + focus refresh)
@@ -1919,7 +2268,7 @@ async function githubPush(){
   if(!token||syncBusy) return;
   syncBusy=true; setSyncDot("busy");
   try{
-    const payload=JSON.stringify({transactions:DB.transactions,advances:DB.advances});
+    const payload=JSON.stringify(getSyncPayload());
     const b64=btoa(unescape(encodeURIComponent(payload)));
     // need current sha for update
     let sha=lastSha;
@@ -1959,12 +2308,15 @@ async function githubPull(silent=false){
     if(file.sha===lastSha){setSyncDot("ok");return false;}
     lastSha=file.sha;
     localStorage.setItem("gh_last_sha",lastSha);
-    const data=JSON.parse(decodeURIComponent(escape(atob(file.content.replace(/\n/g,"")))));
-    if(data.transactions) DB.saveTx(data.transactions);
-    if(data.advances)     DB.saveAdv(data.advances);
+    let data;
+    try{
+      data=JSON.parse(decodeURIComponent(escape(atob(file.content.replace(/\n/g,"")))));
+    }catch(e){
+      setSyncDot("err");
+      return false;
+    }
+    applySyncPayload(data);
     setSyncDot("ok");
-    renderDashboard();
-    if(currentPage==="reports") renderReports();
     if(!silent) showToast("✓ New data loaded from GitHub");
     return true;
   }catch(e){setSyncDot("err");return false;}
@@ -1973,18 +2325,28 @@ async function githubPull(silent=false){
 // ── Auto-poll every 30 seconds ────────────────────────────────────
 setInterval(()=>{
   if(localStorage.getItem("gh_token")) githubPull(true);
+  if(driveClientId()) drivePull(true);
 },30000);
 
 // ── Pull on page focus / tab switch ──────────────────────────────
 document.addEventListener("visibilitychange",()=>{
   if(!document.hidden && localStorage.getItem("gh_token")) githubPull(true);
+  if(!document.hidden && driveClientId()) drivePull(true);
 });
 
 // ── Setup modal helpers ───────────────────────────────────────────
 function openSyncSetup(){
   const token=localStorage.getItem("gh_token")||"";
+  const driveId=driveClientId();
+  const driveInput=document.getElementById("drive-client-id-input");
+  if(driveInput) driveInput.value=driveId;
   document.getElementById("sync-token-input").value=token;
   setSyncDot(token?"ok":"");
+  if(driveId){
+    setDriveStatus(isLocalFilePreview() ? "err" : "ok", isLocalFilePreview() ? "Saved — connect on hosted HTTPS app" : "Google Drive configured");
+  }else{
+    setDriveStatus("");
+  }
   document.getElementById("modal-sync").classList.add("open");
 }
 function onTokenInput(){}
@@ -2008,12 +2370,18 @@ function testSync(){githubPull(false);}
 // ── Startup pull ──────────────────────────────────────────────────
 (async()=>{
   if(localStorage.getItem("gh_token")){setSyncDot("busy");await githubPull(false);}
+  if(driveClientId()){
+    setDriveStatus(isLocalFilePreview() ? "err" : "busy", isLocalFilePreview() ? "Google Drive sync works on the hosted HTTPS app" : "");
+    if(!isLocalFilePreview()) await drivePull(false);
+  }
 })();
 
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("./sw.js?v=32")
-    .then(reg=>reg.update())
-    .catch(()=>{});
+if("serviceWorker" in navigator && (location.protocol==="http:"||location.protocol==="https:")){
+  try{
+    navigator.serviceWorker.register("./sw.js?v=34")
+      .then(reg=>reg.update())
+      .catch(()=>{});
+  }catch(e){}
 }
 loadSaleProducts();
 renderDashboard();
